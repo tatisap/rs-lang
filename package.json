@@ -1,0 +1,24 @@
+{
+  "name": "rs-lang",
+  "version": "1.0.0",
+  "description": "RSSchool final task",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tatisap/rs-lang.git"
+  },
+  "keywords": [
+    "rsschool",
+    "rs-lang",
+    "final-task"
+  ],
+  "author": "Tatsiana Sapun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tatisap/rs-lang/issues"
+  },
+  "homepage": "https://github.com/tatisap/rs-lang#readme"
+}
