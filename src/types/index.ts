@@ -29,6 +29,12 @@ export interface IUserTokens {
   name: string;
 }
 
+export interface ITeamMember {
+  name: string;
+  github: string;
+  description: string;
+}
+
 export enum Numbers {
   Zero = 0,
   One = 1,
