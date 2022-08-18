@@ -2,13 +2,21 @@ import teamInfo from '../../data/team.json';
 import appDescription from '../../data/app-description.json';
 import { ITeamMember } from '../../types';
 import CommonView from '../common/view';
-import { PAGE_TITLES } from '../../constants';
+import { PAGE_TITLES } from '../../constants/index';
 
 export default class MainPageView {
   private elementCreator: CommonView;
 
   constructor() {
     this.elementCreator = new CommonView();
+  }
+
+  private createPageIntroElement(description: string): HTMLDivElement {
+    return this.elementCreator.createUIElement({
+      tag: 'p',
+      classNames: ['page__intro'],
+      innerText: description,
+    });
   }
 
   private createTeamMemberElement(teamMember: ITeamMember): HTMLLIElement {
@@ -29,6 +37,7 @@ export default class MainPageView {
       this.elementCreator.createUIElement<HTMLSpanElement>({
         tag: 'span',
         classNames: ['member_name'],
+        innerText: teamMember.name,
       }),
       githubLink
     );
@@ -36,6 +45,7 @@ export default class MainPageView {
       this.elementCreator.createUIElement<HTMLParagraphElement>({
         tag: 'p',
         classNames: ['member__description'],
+        innerText: teamMember.description,
       });
     const memberElement: HTMLLIElement = this.elementCreator.createUIElement<HTMLLIElement>({
       tag: 'li',
@@ -54,14 +64,24 @@ export default class MainPageView {
       tag: 'ul',
       classNames: ['team__list'],
     });
-    teamList.append(...team.map(this.createTeamMemberElement));
+    teamList.append(...team.map(this.createTeamMemberElement, this));
     teamContainer.append(
       this.elementCreator.createUIElement({
         tag: 'h2',
         classNames: ['page__title', 'team__title'],
         innerText: PAGE_TITLES.about,
-      })
+      }),
+      teamList
     );
     return teamContainer;
+  }
+
+  public renderPage(): void {
+    const pageContainer: HTMLElement = document.getElementById('app') as HTMLElement;
+    pageContainer.classList.add('page_about');
+    pageContainer.append(
+      this.createPageIntroElement(appDescription),
+      this.createTeamElement(teamInfo)
+    );
   }
 }
