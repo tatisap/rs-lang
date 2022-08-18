@@ -1,0 +1,82 @@
+.page.page_about {
+  .page__intro {
+    @include image($main-page-img);
+    padding: 0 10% 38%;
+    background-position: bottom center;
+    background-size: 60%;
+    font-size: 1.5rem;
+    text-align: center;
+    line-height: 150%;
+    @media (max-width: 768px) {
+      padding-bottom: 45%;
+      background-size: 70%;
+      font-size: 3vw;
+    }
+  }
+  .team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .team__list {
+      @extend %normalized-list;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      width: 100%;
+      .member {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .member__img {
+          width: 200px;
+          height: 200px;
+          @media (max-width: 768px) {
+            width: 30vw;
+            height: 30vw;
+          }
+        }
+        .member__title {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          margin: 0;
+          font-size: 1.5rem;
+          font-weight: 400;
+          @media (max-width: 768px) {
+            font-size: 1.2rem;
+          }
+          & a {
+            @extend %interactive;
+            @include image($github);
+            width: 30px;
+            height: 30px;
+            &:hover {
+              border-radius: 30px;
+              background-color: $orange-tab-color;
+              transform: scale(1.1);
+            }
+          }
+        }
+        .member__description {
+          margin: 0;
+          padding: 10px;
+          text-align: center;
+          @media (max-width: 768px) {
+            font-size: 0.8rem;
+          }
+        }
+        &:nth-child(1) .member__img {
+          @include image($tati);
+        }
+        &:nth-child(2) .member__img {
+          @include image($irina);
+        }
+        &:nth-child(3) .member__img {
+          @include image($vadim);
+        }
+      }
+    }
+  }
+}
