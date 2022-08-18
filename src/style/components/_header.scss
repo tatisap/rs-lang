@@ -1,0 +1,77 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: $grey-background-color;
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+  .menu {
+    @extend %normalized-button;
+    @extend %interactive;
+    @include image($menu);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 115px;
+    height: 60px;
+    &::after {
+      content: 'Меню';
+      font-size: 1.2rem;
+    }
+    &:hover {
+      transform: scale(1.1);
+    }
+    @media (max-width: 768px) {
+      width: 60px;
+      &::after {
+        content: '';
+      }
+    }
+  }
+  .logo {
+    @include image($language);
+    margin: 0;
+    padding-left: 6.5rem;
+    font: {
+      family: $fedoka;
+      size: 3rem;
+    };
+    line-height: 150%;
+    @media (max-width: 768px) {
+      padding-left: 4rem;
+      font-size: 2rem;
+    }
+  }
+  .auth {
+    @extend %normalized-button;
+    @extend %interactive;
+    @include image($logout);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 120px;
+    height: 60px;
+    &::after {
+      content: 'Выйти';
+      font-size: 1.2rem;
+    }
+    &:hover {
+      transform: scale(1.1);
+    }
+    &.auth_unauthorized {
+      @include image($auth);
+      &::after {
+        content: 'Войти';
+      }
+    }
+    @media (max-width: 768px) {
+      width: 60px;
+      &::after,
+      &.auth_unauthorized::after {
+        content: '';
+      }
+    }
+  }
+}
