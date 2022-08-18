@@ -39,7 +39,7 @@ const commonConfig = {
         exclude: /node_modules/,
       },
       {
-        test: /\.svg$/i,
+        test: /\.(png|svg)$/i,
         type: 'asset/resource',
       },
       {
