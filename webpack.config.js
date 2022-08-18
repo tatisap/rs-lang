@@ -42,6 +42,10 @@ const commonConfig = {
         test: /\.svg$/i,
         type: 'asset/resource',
       },
+      {
+        test: /\.(woff|woff2|eot|ttf)$/i,
+        type: 'asset/resource',
+      },
     ],
   },
   resolve: {
