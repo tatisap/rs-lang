@@ -39,3 +39,9 @@ export enum Numbers {
   Zero = 0,
   One = 1,
 }
+
+export interface IElement {
+  tag: string;
+  classNames: string[];
+  innerText?: string;
+}
