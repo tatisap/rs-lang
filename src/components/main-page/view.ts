@@ -1,6 +1,8 @@
 import teamInfo from '../../data/team.json';
 import appDescription from '../../data/app-description.json';
 import { ITeamMember } from '../../types';
+import CommonView from '../common/view';
+import { PAGE_TITLES } from '../../constants';
 
 export default class MainPageView {
   private elementCreator: CommonView;
@@ -35,7 +37,7 @@ export default class MainPageView {
         tag: 'p',
         classNames: ['member__description'],
       });
-    const memberElement: HTMLLIElement = this.elementCreator.createElement<HTMLLIElement>({
+    const memberElement: HTMLLIElement = this.elementCreator.createUIElement<HTMLLIElement>({
       tag: 'li',
       classNames: ['team__member', 'member'],
     });
@@ -43,12 +45,23 @@ export default class MainPageView {
     return memberElement;
   }
 
-  private createTeamElement(team: ITeamMember[]): HTMLUListElement {
-    const teamContainer: HTMLUListElement = this.elementCreator.createElement<HTMLUListElement>({
+  private createTeamElement(team: ITeamMember[]): HTMLDivElement {
+    const teamContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['team'],
+    });
+    const teamList: HTMLUListElement = this.elementCreator.createUIElement<HTMLUListElement>({
       tag: 'ul',
       classNames: ['team__list'],
     });
-    teamContainer.append(...team.map(this.createTeamMemberElement));
+    teamList.append(...team.map(this.createTeamMemberElement));
+    teamContainer.append(
+      this.elementCreator.createUIElement({
+        tag: 'h2',
+        classNames: ['page__title', 'team__title'],
+        innerText: PAGE_TITLES.about,
+      })
+    );
     return teamContainer;
   }
 }
