@@ -30,6 +30,6 @@ export interface IUserTokens {
 }
 
 export enum Numbers {
-  zero = 0,
-  one = 1,
+  Zero = 0,
+  One = 1,
 }
