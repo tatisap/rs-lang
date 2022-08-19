@@ -29,6 +29,13 @@
         size: 1.8rem;
       }
     }
+    .modal__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+    }
     .close-button {
       @extend %normalized-button;
       @extend %interactive;
@@ -40,12 +47,6 @@
       height: 30px;
       &:hover {
         transform: rotate(180deg);
-      }
-    }
-    .redirection {
-      a {
-        @extend %normalized-link;
-        border-bottom: 1px solid $black;
       }
     }
   }
