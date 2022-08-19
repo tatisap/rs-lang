@@ -11,7 +11,7 @@ export default class MainPageView {
     this.elementCreator = new CommonView();
   }
 
-  private createPageIntroElement(description: string): HTMLDivElement {
+  private createPageIntroElement(description: string): HTMLParagraphElement {
     return this.elementCreator.createUIElement({
       tag: 'p',
       classNames: ['page__intro'],
@@ -36,7 +36,7 @@ export default class MainPageView {
     title.append(
       this.elementCreator.createUIElement<HTMLSpanElement>({
         tag: 'span',
-        classNames: ['member_name'],
+        classNames: ['member__name'],
         innerText: teamMember.name,
       }),
       githubLink
