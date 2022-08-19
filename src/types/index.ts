@@ -45,3 +45,15 @@ export interface IElement {
   classNames: string[];
   innerText?: string;
 }
+
+export interface IInput extends Omit<IElement, 'tag'> {
+  type: string;
+  name: string;
+  placeholder: string;
+}
+
+export interface ILabel extends Omit<IElement, 'tag'> {
+  htmlFor: string;
+}
+
+export type AuthMode = 'signIn' | 'signUp';
