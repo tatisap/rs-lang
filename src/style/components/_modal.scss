@@ -1,0 +1,52 @@
+.modal__wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: $blackout;
+  .modal {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 400px;
+    height: fit-content;
+    padding: 30px;
+    border-radius: 5px;
+    background-color: $app-background-color;
+    color: inherit;
+    .modal__title {
+      margin: 0;
+      font: {
+        family: $balsamiq;
+        size: 1.8rem;
+      }
+    }
+    .close-button {
+      @extend %normalized-button;
+      @extend %interactive;
+      @include image($close);
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 30px;
+      height: 30px;
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
+    .redirection {
+      a {
+        @extend %normalized-link;
+        border-bottom: 1px solid $black;
+      }
+    }
+  }
+}
