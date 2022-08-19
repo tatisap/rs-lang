@@ -54,7 +54,7 @@
       &:nth-child(3) {
         @include image($vocabulary);
         & .nav__link::after {
-          content:  'Словарь';
+          content: 'Словарь';
         }
       }
       &:nth-child(4) {
