@@ -8,3 +8,13 @@ html {
 *::after {
   box-sizing: inherit;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  background-color: $grey-background-color;
+  font-family: $lexend;
+  color: $black;
+}
