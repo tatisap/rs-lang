@@ -1,12 +1,12 @@
-import CommonView from '../../common/view';
+import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import { PAGE_TITLES, GAMES, BOOK_SECTIONS, PAGINATION_BUTTONS } from '../../../constants';
 import { IBookSectionInfo, Numbers } from '../../../types';
 
 export default class StudentBookView {
-  readonly elementCreator: CommonView;
+  readonly elementCreator: UIElementsConstructor;
 
   constructor() {
-    this.elementCreator = new CommonView();
+    this.elementCreator = new UIElementsConstructor();
   }
 
   public renderPage(section = BOOK_SECTIONS.beginner, page = Numbers.One): void {

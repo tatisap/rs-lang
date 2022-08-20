@@ -1,14 +1,14 @@
 import teamInfo from '../../data/team.json';
 import appDescription from '../../data/app-description.json';
 import { ITeamMember } from '../../types';
-import CommonView from '../common/view';
+import UIElementsConstructor from '../../utils/ui-elements-creator';
 import { PAGE_TITLES } from '../../constants/index';
 
 export default class MainPageView {
-  private elementCreator: CommonView;
+  private elementCreator: UIElementsConstructor;
 
   constructor() {
-    this.elementCreator = new CommonView();
+    this.elementCreator = new UIElementsConstructor();
   }
 
   private createPageIntroElement(description: string): HTMLParagraphElement {
