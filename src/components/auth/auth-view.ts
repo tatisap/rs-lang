@@ -3,6 +3,7 @@ import {
   AUTH_MODAL_MODES,
   BUTTON_TEXT,
   DEFAULT_AUTH_MODAL_MODE,
+  DISPLAY_MODES,
   MODAL_TITLES,
   REDIRECTION_LINK_TEXT,
 } from '../../constants';
@@ -121,11 +122,11 @@ export default class AuthView {
   }
 
   public openErrorMessage(): void {
-    this.errorElement.style.display = 'block';
+    this.errorElement.style.display = DISPLAY_MODES.block;
   }
 
   public closeErrorMessage(): void {
-    this.errorElement.style.display = 'none';
+    this.errorElement.style.display = DISPLAY_MODES.none;
   }
 
   public setDefaultMode(): void {

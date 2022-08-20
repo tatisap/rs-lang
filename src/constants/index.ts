@@ -74,6 +74,11 @@ export const AUTH_ERROR_MESSAGE = {
   later: 'Ошибка, повторите попытку позже',
 };
 
+export const DISPLAY_MODES = {
+  none: 'none',
+  block: 'block',
+};
+
 export const PAGE_TITLES = {
   about: 'Наша команда',
   studentBook: 'Учебник',
