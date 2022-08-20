@@ -55,7 +55,20 @@ export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
   statusCode: StatusCode;
-  content?: IUser | IUserTokens;
+  content: IUser | IUserTokens | ISignUpError | string;
+}
+
+export interface IAuthStatus {
+  isSuccess: boolean;
+  errorMessage?: string;
+}
+
+export type ErrorPath = 'email' | 'password';
+
+export interface ISignUpError {
+  error: {
+    errors: { path: ErrorPath[] }[];
+  };
 }
 
 export enum Numbers {
@@ -77,6 +90,7 @@ export enum StatusCode {
   Unauthorized,
   Forbidden = 403,
   NotFound,
+  ExpectationFailed = 417,
   UnprocessableEntity = 422,
   TooManyRequests = 429,
   InternalServerError = 500,
