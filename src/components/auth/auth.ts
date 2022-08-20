@@ -20,7 +20,7 @@ export default class Auth {
       if (!this.controller.isUserAuthorized()) this.authButton.classList.add('auth_unauthorized');
     });
 
-    this.authButton.addEventListener('click', (): void => this.switchAuthButton());
+    this.authButton.addEventListener('click', (): void => this.handleAuth());
 
     this.view.modalWindow.closeButton.addEventListener('click', (): void => {
       this.view.closeModal();
@@ -39,7 +39,7 @@ export default class Auth {
     return this;
   }
 
-  public switchAuthButton(): void {
+  public handleAuth(): void {
     if (this.authButton.classList.contains('auth_unauthorized')) {
       this.view.openModal().renderContent();
     } else {
