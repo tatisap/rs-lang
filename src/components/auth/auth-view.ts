@@ -26,7 +26,7 @@ export default class AuthView {
   constructor() {
     this.mode = DEFAULT_AUTH_MODAL_MODE;
     this.elementCreator = new CommonView();
-    this.modalWindow = new ModalWindow(MODAL_TITLES[DEFAULT_AUTH_MODAL_MODE]).init();
+    this.modalWindow = new ModalWindow(MODAL_TITLES[DEFAULT_AUTH_MODAL_MODE]);
     this.errorElement = this.createAuthErrorElement();
     this.authForm = this.createAuthFormElement(DEFAULT_AUTH_MODAL_MODE);
     this.redirectionLink = this.createRedirectionLinkElement();
@@ -105,6 +105,7 @@ export default class AuthView {
     this.modalWindow.setModalTitle(MODAL_TITLES[this.mode]);
     this.initAuthForm(this.mode);
     this.initRedirectionLink(this.mode);
+    this.closeErrorMessage();
     this.modalWindow.addContent(this.authForm, this.redirectionLink);
   }
 
@@ -115,6 +116,16 @@ export default class AuthView {
 
   public closeModal(): void {
     this.modalWindow.close();
+    this.setDefaultMode();
+    this.clearAuthForm();
+  }
+
+  public openErrorMessage(): void {
+    this.errorElement.style.display = 'block';
+  }
+
+  public closeErrorMessage(): void {
+    this.errorElement.style.display = 'none';
   }
 
   public setDefaultMode(): void {
