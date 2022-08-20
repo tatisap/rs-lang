@@ -1,5 +1,11 @@
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
-import { PAGE_TITLES, GAMES, BOOK_SECTIONS, PAGINATION_BUTTONS } from '../../../constants';
+import {
+  PAGE_TITLES,
+  GAMES,
+  BOOK_SECTIONS,
+  PAGINATION_BUTTONS,
+  MAX_PAGES_IN_BOOK_SECTION,
+} from '../../../constants';
 import { IBookSectionInfo, Numbers } from '../../../types';
 
 export default class StudentBookView {
@@ -23,7 +29,7 @@ export default class StudentBookView {
   }
 
   private createPageTitle(): HTMLHeadingElement {
-    const pageTtitle = this.elementCreator.createUIElement<HTMLHeadingElement>({
+    const pageTtitle: HTMLHeadingElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h2',
       classNames: ['page__title'],
       innerText: PAGE_TITLES.studentBook,
@@ -32,17 +38,18 @@ export default class StudentBookView {
   }
 
   private createGameLink(gameClass: string, gameName: string, gameLink: string): HTMLAnchorElement {
-    const gameLinkElement = this.elementCreator.createUIElement<HTMLAnchorElement>({
-      tag: 'a',
-      classNames: ['games__game-link', gameClass],
-      innerText: gameName,
-    });
+    const gameLinkElement: HTMLAnchorElement =
+      this.elementCreator.createUIElement<HTMLAnchorElement>({
+        tag: 'a',
+        classNames: ['games__game-link', gameClass],
+        innerText: gameName,
+      });
     gameLinkElement.setAttribute('href', gameLink);
     return gameLinkElement;
   }
 
   private createGamesContainer(): HTMLDivElement {
-    const gamesContainer = this.elementCreator.createUIElement<HTMLDivElement>({
+    const gamesContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__games', 'games'],
     });
@@ -54,7 +61,7 @@ export default class StudentBookView {
   }
 
   private createBookSection(sectionName: string): HTMLDivElement {
-    const bookSection = this.elementCreator.createUIElement<HTMLDivElement>({
+    const bookSection: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['sections__book-section', sectionName.toLowerCase()],
       innerText: sectionName,
@@ -63,13 +70,13 @@ export default class StudentBookView {
   }
 
   private createBookSectionsContainer(sectionClass: string): HTMLDivElement {
-    const sectionsContainer = this.elementCreator.createUIElement<HTMLDivElement>({
+    const sectionsContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__sections', 'sections'],
     });
     const sections: IBookSectionInfo[] = Object.values(BOOK_SECTIONS);
-    sections.forEach((sectionInfo) => {
-      const bookSection = this.createBookSection(sectionInfo.text);
+    sections.forEach((sectionInfo: IBookSectionInfo): void => {
+      const bookSection: HTMLDivElement = this.createBookSection(sectionInfo.text);
       if (sectionInfo.className === sectionClass) {
         bookSection.classList.add('active');
       }
@@ -79,26 +86,29 @@ export default class StudentBookView {
   }
 
   private createPaginationButton(buttonClass: string, page: number): HTMLButtonElement {
-    const paginationButton = this.elementCreator.createUIElement<HTMLButtonElement>({
-      tag: 'button',
-      classNames: ['pagination__button', buttonClass],
-    });
+    const paginationButton: HTMLButtonElement =
+      this.elementCreator.createUIElement<HTMLButtonElement>({
+        tag: 'button',
+        classNames: ['pagination__button', buttonClass],
+      });
     if (page === Numbers.One && buttonClass === PAGINATION_BUTTONS.previous.className) {
       paginationButton.setAttribute('disabled', '');
     }
-    if (page === Numbers.Thirty && buttonClass === PAGINATION_BUTTONS.next.className) {
+    if (page === MAX_PAGES_IN_BOOK_SECTION && buttonClass === PAGINATION_BUTTONS.next.className) {
       paginationButton.setAttribute('disabled', '');
     }
     return paginationButton;
   }
 
   private createPaginationContainer(currentPage: number): HTMLDivElement {
-    const paginationContainer = this.elementCreator.createUIElement<HTMLDivElement>({
-      tag: 'div',
-      classNames: ['page__pagination', 'pagination'],
-    });
+    const paginationContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>(
+      {
+        tag: 'div',
+        classNames: ['page__pagination', 'pagination'],
+      }
+    );
 
-    const currentPageElement = this.elementCreator.createUIElement<HTMLDivElement>({
+    const currentPageElement: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['pagination__current-page'],
       innerText: `${currentPage}`,
@@ -113,7 +123,7 @@ export default class StudentBookView {
   }
 
   private createWordsContainer(sectionColor: string): HTMLDivElement {
-    const wordsContainer = this.elementCreator.createUIElement<HTMLDivElement>({
+    const wordsContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__words', 'words'],
     });
