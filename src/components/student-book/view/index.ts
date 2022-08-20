@@ -86,7 +86,7 @@ export default class StudentBookView {
     if (page === Numbers.One && buttonClass === PAGINATION_BUTTONS.previous.className) {
       paginationButton.setAttribute('disabled', '');
     }
-    if (page === Numbers.Twenty && buttonClass === PAGINATION_BUTTONS.next.className) {
+    if (page === Numbers.Thirty && buttonClass === PAGINATION_BUTTONS.next.className) {
       paginationButton.setAttribute('disabled', '');
     }
     return paginationButton;
