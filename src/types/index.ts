@@ -38,10 +38,17 @@ export interface ITeamMember {
 export enum Numbers {
   Zero = 0,
   One = 1,
+  Twenty = 20,
 }
 
 export interface IElement {
   tag: string;
   classNames: string[];
   innerText?: string;
+}
+
+export interface IBookSectionInfo {
+  text: string;
+  className: string;
+  color: string;
 }
