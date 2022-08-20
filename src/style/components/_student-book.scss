@@ -1,0 +1,166 @@
+.page__games {
+  display: flex;
+  column-gap: 10px;
+  width: fit-content;
+  margin: 5px auto;
+
+  .games__game-link {
+    @extend %normalized-link;
+    @extend %interactive;
+    position: relative;
+    display: block;
+    padding: 10px 10px 10px 37px;
+    font-family: $balsamiq;
+    font-size: 20px;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 0px;
+      width: 40px;
+      height: 40px;
+      @include image($game);
+    }
+    &:hover,
+    &:active {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.page__sections {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  font-size: 24px;
+
+  .sections__book-section {
+    @extend %interactive;
+    min-width: 45px;
+    height: 45px;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: center;
+    &:hover {
+      border: 2px solid $black;
+    }
+    &:active {
+      transform: scale(0.9);
+      transition: 0s;
+    }
+    &.active {
+      box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+    }
+  }
+
+  .a1 {
+    @include book-section($red-tab-color);
+  }
+
+  .a2 {
+    @include book-section($orange-tab-color);
+  }
+
+  .b1 {
+    @include book-section($yellow-tab-color);
+  }
+
+  .b2 {
+    @include book-section($green-tab-color);
+  }
+
+  .c1 {
+    @include book-section($blue-tab-color);
+  }
+
+  .c2 {
+    @include book-section($indigo-tab-color);
+  }
+
+  .superhero {
+    @include book-section($violet-tab-color);
+  }
+}
+
+.page__words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  min-height: 50vh;
+  margin: 20px 0 0 0;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.page__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  margin: 20px 0;
+
+  .pagination__current-page {
+    width: 32px;
+    height: 28px;
+    font-family: $balsamiq;
+    text-align: center;
+    font-size: 28px;
+  }
+
+  .pagination__button {
+    @extend %interactive;
+    position: relative;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 2px solid $black;
+    border-radius: 100px;
+    background-color: transparent;
+    color: inherit;
+    &:hover {
+      transform: scale(1.05);
+    }
+    &:active {
+      transform: scale(0.9);
+      transition: 0s;
+    }
+    &:disabled {
+      border: 2px solid $placeholder-text-color;
+      cursor: default;
+      transform: none;
+    }
+    &.button-previous,
+    &.button-next {
+      &::before{
+        @extend %interactive;
+        position: absolute;
+        top: -1px;
+        width: 16px;
+        height: 19px;
+        font-family: $fedoka;
+        font-size: 19px;
+        color: $black;
+      }
+      &:disabled::before{
+        color: $placeholder-text-color;
+        cursor: default;
+      }
+    }
+    &.button-previous {
+      &::before{
+        content: '<';
+        left: 3px;
+      }
+    }
+    &.button-next {
+      &::before{
+        content: '>';
+        left: 4px;
+      }
+    }
+  }
+}
