@@ -26,7 +26,6 @@ export default class ModalWindow {
       tag: 'button',
       classNames: ['close-button'],
     });
-    this.closeButton.addEventListener('click', (): void => this.close());
     this.titleElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h3',
       classNames: ['modal__title'],
@@ -40,11 +39,17 @@ export default class ModalWindow {
     this.modalWrapper.append(modalElement);
   }
 
+  public init(): ModalWindow {
+    this.closeButton.addEventListener('click', (): void => this.close());
+    return this;
+  }
+
   public open(): void {
     document.body.append(this.modalWrapper);
   }
 
   public close(): void {
+    this.clear();
     this.modalWrapper.remove();
   }
 
