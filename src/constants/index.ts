@@ -66,6 +66,10 @@ export const AUTH_MODAL_MODES: { [K in AuthMode]: AuthMode } = {
 
 export const DEFAULT_AUTH_MODAL_MODE = 'signIn';
 
-export const PAGE_TITLES = {
-  about: 'fff',
+export const AUTH_ERROR_MESSAGE = {
+  email: 'Некорректный email',
+  password: 'Длина пароля должна быть не менее 8 символов',
+  userExists: 'Пользователь с таким email уже существует',
+  invalidCredentials: 'Неверный логин или пароль',
+  later: 'Ошибка, повторите попытку позже',
 };
