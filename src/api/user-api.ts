@@ -1,5 +1,5 @@
 import { BASE_URL, PATHS, REQUEST_HEADERS } from '../constants';
-import { HttpMethods, IResponse, IUser, IUserTokens } from '../types';
+import { HttpMethods, IResponse, ISignUpError, IUser, IUserTokens, StatusCode } from '../types';
 
 export default class UserAPI {
   public async createUser(user: IUser): Promise<IResponse> {
@@ -11,7 +11,12 @@ export default class UserAPI {
       },
       body: JSON.stringify(user),
     });
-    const content: IUser = (await response.json()) as IUser;
+    let content: IUser | ISignUpError | string;
+    if (response.status === StatusCode.Ok || response.status === StatusCode.UnprocessableEntity) {
+      content = (await response.json()) as IUser | ISignUpError;
+    } else {
+      content = await response.text();
+    }
     return { statusCode: response.status, content };
   }
 
@@ -24,7 +29,12 @@ export default class UserAPI {
       },
       body: JSON.stringify(credentials),
     });
-    const content: IUserTokens = (await response.json()) as IUserTokens;
+    let content: IUserTokens | string;
+    if (response.status === StatusCode.Ok) {
+      content = (await response.json()) as IUserTokens;
+    } else {
+      content = await response.text();
+    }
     return { statusCode: response.status, content };
   }
 }
