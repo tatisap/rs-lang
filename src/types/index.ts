@@ -35,11 +35,6 @@ export interface ITeamMember {
   description: string;
 }
 
-export enum Numbers {
-  Zero = 0,
-  One = 1,
-}
-
 export interface IElement {
   tag: string;
   classNames: string[];
@@ -57,3 +52,32 @@ export interface ILabel extends Omit<IElement, 'tag'> {
 }
 
 export type AuthMode = 'signIn' | 'signUp';
+
+export interface IResponse {
+  statusCode: StatusCode;
+  content?: IUser | IUserTokens;
+}
+
+export enum Numbers {
+  Zero = 0,
+  One = 1,
+}
+
+export enum HttpMethods {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}
+
+export enum StatusCode {
+  Ok = 200,
+  NoContent = 204,
+  BadRequest = 400,
+  Unauthorized,
+  Forbidden = 403,
+  NotFound,
+  UnprocessableEntity = 422,
+  TooManyRequests = 429,
+  InternalServerError = 500,
+}
