@@ -3,3 +3,8 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
+
+@mixin book-section($color) {
+  border: 2px solid $color;
+  background-color: $color;
+}

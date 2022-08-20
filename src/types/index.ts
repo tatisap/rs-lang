@@ -95,3 +95,10 @@ export enum StatusCode {
   TooManyRequests = 429,
   InternalServerError = 500,
 }
+
+export interface IBookSectionInfo {
+  text: string;
+  className: string;
+  color: string;
+  group?: number;
+}

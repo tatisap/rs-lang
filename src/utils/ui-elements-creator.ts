@@ -1,6 +1,6 @@
 import { IElement, IInput, ILabel } from '../../../types';
 
-export default class CommonView {
+export default class UIElementsConstructor {
   public createUIElement = <T extends HTMLElement>(elementInfo: IElement): T => {
     const { tag, classNames, innerText } = elementInfo;
     const element: T = document.createElement(tag) as T;
