@@ -135,7 +135,7 @@
     }
     &.button-previous,
     &.button-next {
-      &::before{
+      &::before {
         @extend %interactive;
         position: absolute;
         top: -1px;
@@ -145,19 +145,19 @@
         font-size: 19px;
         color: $black;
       }
-      &:disabled::before{
+      &:disabled::before {
         color: $placeholder-text-color;
         cursor: default;
       }
     }
     &.button-previous {
-      &::before{
+      &::before {
         content: '<';
         left: 3px;
       }
     }
     &.button-next {
-      &::before{
+      &::before {
         content: '>';
         left: 4px;
       }
