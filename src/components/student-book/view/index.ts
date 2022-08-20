@@ -1,0 +1,123 @@
+import CommonView from '../../common/view';
+import { PAGE_TITLES, GAMES, BOOK_SECTIONS, PAGINATION_BUTTONS } from '../../../constants';
+import { IBookSectionInfo, Numbers } from '../../../types';
+
+export default class StudentBookView {
+  readonly elementCreator: CommonView;
+
+  constructor() {
+    this.elementCreator = new CommonView();
+  }
+
+  public renderPage(section = BOOK_SECTIONS.beginner, page = Numbers.One): void {
+    const pageContainer = document.getElementById('app') as HTMLElement;
+    pageContainer.classList.add('page_student-book');
+
+    pageContainer.append(
+      this.createPageTitle(),
+      this.createGamesContainer(),
+      this.createBookSectionsContainer(section.className),
+      this.createPaginationContainer(page),
+      this.createWordsContainer(section.color)
+    );
+  }
+
+  private createPageTitle(): HTMLHeadingElement {
+    const pageTtitle = this.elementCreator.createUIElement<HTMLHeadingElement>({
+      tag: 'h2',
+      classNames: ['page__title'],
+      innerText: PAGE_TITLES.studentBook,
+    });
+    return pageTtitle;
+  }
+
+  private createGameLink(gameClass: string, gameName: string, gameLink: string): HTMLAnchorElement {
+    const gameLinkElement = this.elementCreator.createUIElement<HTMLAnchorElement>({
+      tag: 'a',
+      classNames: ['games__game-link', gameClass],
+      innerText: gameName,
+    });
+    gameLinkElement.setAttribute('href', gameLink);
+    return gameLinkElement;
+  }
+
+  private createGamesContainer(): HTMLDivElement {
+    const gamesContainer = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['page__games', 'games'],
+    });
+    gamesContainer.append(
+      this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, GAMES.audiocall.link),
+      this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, GAMES.sprint.link)
+    );
+    return gamesContainer;
+  }
+
+  private createBookSection(sectionName: string): HTMLDivElement {
+    const bookSection = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['sections__book-section', sectionName.toLowerCase()],
+      innerText: sectionName,
+    });
+    return bookSection;
+  }
+
+  private createBookSectionsContainer(sectionClass: string): HTMLDivElement {
+    const sectionsContainer = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['page__sections', 'sections'],
+    });
+    const sections: IBookSectionInfo[] = Object.values(BOOK_SECTIONS);
+    sections.forEach((sectionInfo) => {
+      const bookSection = this.createBookSection(sectionInfo.text);
+      if (sectionInfo.className === sectionClass) {
+        bookSection.classList.add('active');
+      }
+      sectionsContainer.append(bookSection);
+    });
+    return sectionsContainer;
+  }
+
+  private createPaginationButton(buttonClass: string, page: number): HTMLButtonElement {
+    const paginationButton = this.elementCreator.createUIElement<HTMLButtonElement>({
+      tag: 'button',
+      classNames: ['pagination__button', buttonClass],
+    });
+    if (page === Numbers.One && buttonClass === PAGINATION_BUTTONS.previous.className) {
+      paginationButton.setAttribute('disabled', '');
+    }
+    if (page === Numbers.Twenty && buttonClass === PAGINATION_BUTTONS.next.className) {
+      paginationButton.setAttribute('disabled', '');
+    }
+    return paginationButton;
+  }
+
+  private createPaginationContainer(currentPage: number): HTMLDivElement {
+    const paginationContainer = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['page__pagination', 'pagination'],
+    });
+
+    const currentPageElement = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['pagination__current-page'],
+      innerText: `${currentPage}`,
+    });
+
+    paginationContainer.append(
+      this.createPaginationButton(PAGINATION_BUTTONS.previous.className, currentPage),
+      currentPageElement,
+      this.createPaginationButton(PAGINATION_BUTTONS.next.className, currentPage)
+    );
+    return paginationContainer;
+  }
+
+  private createWordsContainer(sectionColor: string): HTMLDivElement {
+    const wordsContainer = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['page__words', 'words'],
+    });
+    wordsContainer.style.backgroundColor = sectionColor;
+    return wordsContainer;
+  }
+}
