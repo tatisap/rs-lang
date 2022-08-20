@@ -45,3 +45,10 @@ export interface IElement {
   classNames: string[];
   innerText?: string;
 }
+
+export interface IBookSectionInfo {
+  text: string;
+  className: string;
+  color: string;
+  group?: number;
+}
