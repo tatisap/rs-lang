@@ -7,7 +7,7 @@ import {
   REDIRECTION_LINK_TEXT,
 } from '../../constants';
 import { AuthMode } from '../../types';
-import CommonView from '../common/view';
+import UIElementsConstructor from '../../utils/ui-elements-creator';
 import ModalWindow from '../modal-window';
 
 export default class AuthView {
@@ -15,7 +15,7 @@ export default class AuthView {
 
   public modalWindow: ModalWindow;
 
-  public elementCreator: CommonView;
+  public elementCreator: UIElementsConstructor;
 
   public errorElement: HTMLDivElement;
 
@@ -25,7 +25,7 @@ export default class AuthView {
 
   constructor() {
     this.mode = DEFAULT_AUTH_MODAL_MODE;
-    this.elementCreator = new CommonView();
+    this.elementCreator = new UIElementsConstructor();
     this.modalWindow = new ModalWindow(MODAL_TITLES[DEFAULT_AUTH_MODAL_MODE]);
     this.errorElement = this.createAuthErrorElement();
     this.authForm = this.createAuthFormElement(DEFAULT_AUTH_MODAL_MODE);

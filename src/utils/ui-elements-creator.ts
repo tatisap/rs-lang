@@ -1,4 +1,4 @@
-import { IElement, IInput, ILabel } from '../../../types';
+import { IElement, IInput, ILabel } from '../types';
 
 export default class UIElementsConstructor {
   public createUIElement = <T extends HTMLElement>(elementInfo: IElement): T => {

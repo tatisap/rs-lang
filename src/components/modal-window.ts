@@ -1,8 +1,8 @@
 import { NO_CONTENT } from '../constants';
-import CommonView from './common/view';
+import UIElementsConstructor from '../utils/ui-elements-creator';
 
 export default class ModalWindow {
-  private elementCreator: CommonView;
+  private elementCreator: UIElementsConstructor;
 
   public modalWrapper: HTMLDivElement;
 
@@ -13,7 +13,7 @@ export default class ModalWindow {
   public titleElement: HTMLHeadingElement;
 
   constructor(modalTitle: string) {
-    this.elementCreator = new CommonView();
+    this.elementCreator = new UIElementsConstructor();
     this.modalWrapper = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['modal__wrapper'],
