@@ -51,4 +51,5 @@ export interface IBookSectionInfo {
   text: string;
   className: string;
   color: string;
+  group?: number;
 }
