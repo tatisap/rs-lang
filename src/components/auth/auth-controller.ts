@@ -23,6 +23,7 @@ export default class AuthController {
     const serverResponse: IResponse = await this.api.createUser(user);
 
     if (serverResponse.statusCode === StatusCode.Ok) {
+      await this.signIn(credentials);
       return { isSuccess: true };
     }
 
