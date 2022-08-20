@@ -38,7 +38,6 @@ export interface ITeamMember {
 export enum Numbers {
   Zero = 0,
   One = 1,
-  Thirty = 30,
 }
 
 export interface IElement {

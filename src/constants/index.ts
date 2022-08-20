@@ -70,3 +70,5 @@ export const PAGINATION_BUTTONS = {
     className: 'button-next',
   },
 };
+
+export const MAX_PAGES_IN_BOOK_SECTION = 30;
