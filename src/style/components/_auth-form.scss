@@ -1,0 +1,65 @@
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  .auth-form__label {
+    font-size: 1.2rem;
+  }
+  .auth-form__input {
+    height: 50px;
+    padding: 10px;
+    border: 0;
+    border-radius: 10px;
+    background-color: $grey-background-color;
+    font: {
+      size: 1.2rem;
+      weight: 200;
+    }
+    &::placeholder {
+      font-family: $lexend;
+      font-weight: 200;
+    }
+  }
+  .auth-form__error {
+    @include image($error);
+    display: none;
+    height: fit-content;
+    padding: 10px 10px 10px 50px;
+    border-radius: 10px;
+    background-color: $red-tab-color;
+    background-size: 35px 35px;
+    background-position: 5px;
+    color: $error-text-color;
+    font: {
+      size: 1.2rem;
+      weight: 200;
+    }
+  }
+  .auth-form__submit {
+    @extend %normalized-button;
+    @extend %interactive;
+    position: relative;
+    align-self: center;
+    width: 200px;
+    height: 50px;
+    margin-top: 10px;
+    border: 1px solid $black;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background-color: $grey-background-color;
+    &:hover {
+      background-color: $black;
+      color: $app-background-color;
+    }
+  }
+}
+
+.redirection-link {
+  @extend %normalized-link;
+  @extend %interactive;
+  border-bottom: 1px solid $black;
+  &:hover {
+    transform: scale(1.05);
+  }
+}

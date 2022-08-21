@@ -35,15 +35,65 @@ export interface ITeamMember {
   description: string;
 }
 
+export interface IElement {
+  tag: string;
+  classNames: string[];
+  innerText?: string;
+}
+
+export interface IInput extends Omit<IElement, 'tag'> {
+  type: string;
+  name: string;
+  placeholder: string;
+}
+
+export interface ILabel extends Omit<IElement, 'tag'> {
+  htmlFor: string;
+}
+
+export type AuthMode = 'signIn' | 'signUp';
+
+export interface IResponse {
+  statusCode: StatusCode;
+  content?: IUser | IUserTokens | ISignUpError | string;
+}
+
+export interface IAuthStatus {
+  isSuccess: boolean;
+  errorMessage?: string;
+}
+
+export type ErrorPath = 'email' | 'password';
+
+export interface ISignUpError {
+  error: {
+    errors: { path: ErrorPath[] }[];
+  };
+}
+
 export enum Numbers {
   Zero = 0,
   One = 1,
 }
 
-export interface IElement {
-  tag: string;
-  classNames: string[];
-  innerText?: string;
+export enum HttpMethods {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}
+
+export enum StatusCode {
+  Ok = 200,
+  NoContent = 204,
+  BadRequest = 400,
+  Unauthorized,
+  Forbidden = 403,
+  NotFound,
+  ExpectationFailed = 417,
+  UnprocessableEntity = 422,
+  TooManyRequests = 429,
+  InternalServerError = 500,
 }
 
 export interface IBookSectionInfo {
