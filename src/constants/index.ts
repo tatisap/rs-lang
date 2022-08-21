@@ -57,6 +57,7 @@ export const NO_CONTENT = '';
 
 export const STORAGE_KEYS = {
   user: '77-user',
+  currentPage: '77-currentPage',
 };
 
 export const AUTH_MODAL_MODES: { [K in AuthMode]: AuthMode } = {
@@ -65,6 +66,7 @@ export const AUTH_MODAL_MODES: { [K in AuthMode]: AuthMode } = {
 };
 
 export const DEFAULT_AUTH_MODAL_MODE = 'signIn';
+export const DEFAULT_PAGE_NAME = 'main';
 
 export const AUTH_ERROR_MESSAGE = {
   email: 'Некорректный email',
