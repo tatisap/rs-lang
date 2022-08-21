@@ -55,7 +55,7 @@
   }
 }
 
-.redirection-link {
+.auth-form__redirection-link {
   @extend %normalized-link;
   @extend %interactive;
   border-bottom: 1px solid $black;
