@@ -75,8 +75,8 @@ export const AUTH_ERROR_MESSAGE = {
 };
 
 export const DISPLAY_MODES = {
-  none: 'none',
-  block: 'block',
+  contentNotVisible: 'none',
+  contentBlockVisible: 'block',
 };
 
 export const PAGE_TITLES = {

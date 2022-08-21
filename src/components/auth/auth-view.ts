@@ -122,11 +122,11 @@ export default class AuthView {
   }
 
   public openErrorMessage(): void {
-    this.errorElement.style.display = DISPLAY_MODES.block;
+    this.errorElement.style.display = DISPLAY_MODES.contentBlockVisible;
   }
 
   public closeErrorMessage(): void {
-    this.errorElement.style.display = DISPLAY_MODES.none;
+    this.errorElement.style.display = DISPLAY_MODES.contentNotVisible;
   }
 
   public setDefaultMode(): void {
