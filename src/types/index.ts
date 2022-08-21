@@ -55,7 +55,7 @@ export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
   statusCode: StatusCode;
-  content: IUser | IUserTokens | ISignUpError | string;
+  content?: IUser | IUserTokens | ISignUpError | string;
 }
 
 export interface IAuthStatus {

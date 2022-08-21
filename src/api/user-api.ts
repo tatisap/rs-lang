@@ -11,13 +11,14 @@ export default class UserAPI {
       },
       body: JSON.stringify(user),
     });
-    let content: IUser | ISignUpError | string;
+
     if (response.status === StatusCode.Ok || response.status === StatusCode.UnprocessableEntity) {
-      content = (await response.json()) as IUser | ISignUpError;
-    } else {
-      content = await response.text();
+      return {
+        statusCode: response.status,
+        content: (await response.json()) as IUser | ISignUpError,
+      };
     }
-    return { statusCode: response.status, content };
+    return { statusCode: response.status };
   }
 
   public async signIn(credentials: Omit<IUser, 'name'>): Promise<IResponse> {
@@ -29,12 +30,12 @@ export default class UserAPI {
       },
       body: JSON.stringify(credentials),
     });
-    let content: IUserTokens | string;
     if (response.status === StatusCode.Ok) {
-      content = (await response.json()) as IUserTokens;
-    } else {
-      content = await response.text();
+      return {
+        statusCode: response.status,
+        content: (await response.json()) as IUserTokens,
+      };
     }
-    return { statusCode: response.status, content };
+    return { statusCode: response.status };
   }
 }
