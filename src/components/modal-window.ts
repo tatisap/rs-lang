@@ -18,13 +18,13 @@ export default class ModalWindow {
       tag: 'div',
       classNames: ['modal__wrapper'],
     });
-    const modalElement = this.elementCreator.createUIElement<HTMLDivElement>({
+    const modalElement: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['modal'],
     });
     this.closeButton = this.elementCreator.createUIElement<HTMLButtonElement>({
       tag: 'button',
-      classNames: ['close-button'],
+      classNames: ['modal__close-button', 'close-button'],
     });
     this.titleElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h3',

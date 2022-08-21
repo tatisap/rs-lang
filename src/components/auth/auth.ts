@@ -39,7 +39,7 @@ export default class Auth {
     return this;
   }
 
-  public handleAuth(): void {
+  private handleAuth(): void {
     if (this.authButton.classList.contains('auth_unauthorized')) {
       this.view.openModal().renderContent();
     } else {
@@ -48,7 +48,7 @@ export default class Auth {
     }
   }
 
-  public async submitUserInfo(event: Event): Promise<void> {
+  private async submitUserInfo(event: Event): Promise<void> {
     event.preventDefault();
     this.view.closeErrorMessage();
 

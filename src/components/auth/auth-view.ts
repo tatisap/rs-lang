@@ -33,7 +33,7 @@ export default class AuthView {
     this.redirectionLink = this.createRedirectionLinkElement();
   }
 
-  public createAuthFormElement(mode: AuthMode): HTMLFormElement {
+  private createAuthFormElement(mode: AuthMode): HTMLFormElement {
     const form: HTMLFormElement = this.elementCreator.createUIElement<HTMLFormElement>({
       tag: 'form',
       classNames: ['auth-form', `auth-${this.mode.toLowerCase()}`],
@@ -71,31 +71,31 @@ export default class AuthView {
     return form;
   }
 
-  public createAuthErrorElement(): HTMLDivElement {
+  private createAuthErrorElement(): HTMLDivElement {
     return this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['auth-form__error'],
     });
   }
 
-  public createRedirectionLinkElement(): HTMLAnchorElement {
+  private createRedirectionLinkElement(): HTMLAnchorElement {
     return this.elementCreator.createUIElement<HTMLAnchorElement>({
       tag: 'a',
-      classNames: ['redirection-link'],
+      classNames: ['auth-form__redirection-link'],
     });
   }
 
-  public initAuthForm(mode: AuthMode): void {
+  private initAuthForm(mode: AuthMode): void {
     this.authForm.dataset.mode = mode;
     (this.authForm.querySelector('.auth-form__submit') as HTMLButtonElement).textContent =
       BUTTON_TEXT[mode];
   }
 
-  public clearAuthForm(): void {
+  private clearAuthForm(): void {
     this.authForm.reset();
   }
 
-  public initRedirectionLink(currentMode: AuthMode): void {
+  private initRedirectionLink(currentMode: AuthMode): void {
     const nextMode =
       currentMode === DEFAULT_AUTH_MODAL_MODE ? AUTH_MODAL_MODES.signUp : AUTH_MODAL_MODES.signIn;
     this.redirectionLink.dataset.nextMode = nextMode;
