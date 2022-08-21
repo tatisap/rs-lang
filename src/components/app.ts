@@ -36,9 +36,9 @@ export default class App {
   private menuHandler(event: Event): void {
     const menuItem: HTMLElement = event.target as HTMLElement;
     if (!menuItem.classList.contains('nav__item')) return;
+    const pageName: PageName = menuItem.dataset.pageName as PageName;
     this.menu.resetMenuItemsActiveState();
-    menuItem.classList.add('nav__item_active');
-    const pageName = menuItem.dataset.pageName as PageName;
+    this.menu.setMenuItemActiveState(pageName);
     this.openPage(pageName);
     this.saveCurrentPageName(pageName);
     this.menu.closeMenu();
