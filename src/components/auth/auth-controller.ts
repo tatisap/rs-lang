@@ -22,43 +22,44 @@ export default class AuthController {
     const user: IUser = { name: credentials.email, ...credentials };
     const serverResponse: IResponse = await this.api.createUser(user);
 
-    if (serverResponse.statusCode === StatusCode.Ok) {
-      await this.signIn(credentials);
-      return { isSuccess: true };
+    switch (serverResponse.statusCode) {
+      case StatusCode.Ok: {
+        await this.signIn(credentials);
+        return { isSuccess: true };
+      }
+      case StatusCode.UnprocessableEntity: {
+        const path: ErrorPath = (serverResponse.content as ISignUpError).error.errors[Numbers.Zero]
+          .path[Numbers.Zero];
+        return {
+          isSuccess: false,
+          errorMessage: AUTH_ERROR_MESSAGE[path],
+        };
+      }
+      case StatusCode.ExpectationFailed: {
+        return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.userExists };
+      }
+      default: {
+        return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.later };
+      }
     }
-
-    if (serverResponse.statusCode === StatusCode.UnprocessableEntity) {
-      const path: ErrorPath = (serverResponse.content as ISignUpError).error.errors[Numbers.Zero]
-        .path[Numbers.Zero];
-      return {
-        isSuccess: false,
-        errorMessage: AUTH_ERROR_MESSAGE[path],
-      };
-    }
-
-    if (serverResponse.statusCode === StatusCode.ExpectationFailed) {
-      return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.userExists };
-    }
-
-    return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.later };
   }
 
   public async signIn(credentials: Omit<IUser, 'name'>): Promise<IAuthStatus> {
     const serverResponse: IResponse = await this.api.signIn(credentials);
 
-    if (serverResponse.statusCode === StatusCode.Ok) {
-      this.saveConfidentialInfo(serverResponse.content as IUserTokens);
-      return { isSuccess: true };
+    switch (serverResponse.statusCode) {
+      case StatusCode.Ok: {
+        this.saveConfidentialInfo(serverResponse.content as IUserTokens);
+        return { isSuccess: true };
+      }
+      case StatusCode.Forbidden:
+      case StatusCode.NotFound: {
+        return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.invalidCredentials };
+      }
+      default: {
+        return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.later };
+      }
     }
-
-    if (
-      serverResponse.statusCode === StatusCode.Forbidden ||
-      serverResponse.statusCode === StatusCode.NotFound
-    ) {
-      return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.invalidCredentials };
-    }
-
-    return { isSuccess: false, errorMessage: AUTH_ERROR_MESSAGE.later };
   }
 
   public saveConfidentialInfo(info: IUserTokens): void {
