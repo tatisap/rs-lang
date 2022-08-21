@@ -1,5 +1,5 @@
-import { NO_CONTENT } from '../constants';
-import UIElementsConstructor from '../utils/ui-elements-creator';
+import { NO_CONTENT } from '../../constants';
+import UIElementsConstructor from '../../utils/ui-elements-creator';
 
 export default class ModalWindow {
   private elementCreator: UIElementsConstructor;
