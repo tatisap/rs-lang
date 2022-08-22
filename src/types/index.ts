@@ -102,3 +102,5 @@ export interface IBookSectionInfo {
   color: string;
   group?: number;
 }
+
+export type PageName = 'main' | 'studentBook';

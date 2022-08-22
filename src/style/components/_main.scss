@@ -25,47 +25,43 @@
     }
     .nav__item {
       @extend %interactive;
+      display: flex;
+      align-items: center;
       width: 100%;
       height: 60px;
+      padding-left: 65px;
+      &.nav__item_active,
       &:hover {
         border-radius: 10px;
         background-color: $app-background-color;
       }
-      .nav__link {
-        @extend %normalized-link;
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        padding-left: 70px;
-      }
       &:nth-child(1) {
         @include image($about);
-        & .nav__link::after {
+        &::after {
           content: 'Главная';
         }
       }
       &:nth-child(2) {
         @include image($student-book);
-        & .nav__link::after {
+        &::after {
           content: 'Учебник';
         }
       }
       &:nth-child(3) {
         @include image($vocabulary);
-        & .nav__link::after {
+        &::after {
           content: 'Словарь';
         }
       }
       &:nth-child(4) {
         @include image($game);
-        & .nav__link::after {
+        &::after {
           content: 'Игры';
         }
       }
       &:nth-child(5) {
         @include image($statistic);
-        & .nav__link::after {
+        &::after {
           content: 'Статистика';
         }
       }
