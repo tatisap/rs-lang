@@ -1,6 +1,7 @@
 import { DEFAULT_PAGE_NAME, NO_CONTENT, STORAGE_KEYS } from '../constants';
 import { PageName } from '../types';
 import Auth from './auth/auth';
+import GamesHomepage from './games-homepage';
 import MainPageView from './main-page/view';
 import Menu from './menu';
 import StudentBookView from './student-book/view';
@@ -13,6 +14,7 @@ export default class App {
   private pages: {
     main: MainPageView;
     studentBook: StudentBookView;
+    games: GamesHomepage;
   };
 
   constructor() {
@@ -21,6 +23,7 @@ export default class App {
     this.pages = {
       main: new MainPageView(),
       studentBook: new StudentBookView(),
+      games: new GamesHomepage(),
     };
   }
 

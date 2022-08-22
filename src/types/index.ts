@@ -104,3 +104,8 @@ export interface IBookSectionInfo {
 }
 
 export type PageName = 'main' | 'studentBook';
+
+export interface IGameInfo {
+  name: string;
+  className: string;
+}
