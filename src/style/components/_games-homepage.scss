@@ -22,31 +22,33 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 20px;
+      gap: 30px;
       .game-list__item {
         @extend %interactive;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 300px;
+        width: 250px;
         height: 60px;
         padding-left: 95px;
         border: 1px solid $black;
-        border-radius: 100px;
+        border-radius: 10px;
+        background-position: top left 30px;
         font: {
           size: 1.2rem;
           weight: 700;
         }
         &:hover {
-          background-color: $orange-tab-color;
+          border-radius: 100px;
+          background-position: top left 40px;
+          transform: scale(1.1);
         }
         &.audiocall-game {
           @include image($audio);
-          background-position: top left 30px;
+          
         }
         &.sprint-game {
           @include image($sprint);
-          background-position: top left 30px;
         }
       }
     }
