@@ -4,8 +4,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
     height: 100%;
+    @media (max-width: 768px) {
+      gap: 20px;
+    }
     .game-list__title {
       margin: 20px 0 0;
       font: {
@@ -51,7 +54,7 @@
       @include image($game-page-img);
       flex-grow: 1;
       width: 100%;
-      height: auto;
+      min-height: 40vh;
       background-position: center;
     }
   }
