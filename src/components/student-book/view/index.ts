@@ -5,14 +5,19 @@ import {
   BOOK_SECTIONS,
   PAGINATION_BUTTONS,
   MAX_PAGES_IN_BOOK_SECTION,
+  DISPLAY_MODES,
 } from '../../../constants';
 import { IBookSectionInfo, Numbers } from '../../../types';
+import StudentBookController from '../controller';
 
 export default class StudentBookView {
   readonly elementCreator: UIElementsConstructor;
 
+  readonly bookController: StudentBookController;
+
   constructor() {
     this.elementCreator = new UIElementsConstructor();
+    this.bookController = new StudentBookController();
   }
 
   public renderPage(section = BOOK_SECTIONS.beginner, page = Numbers.One): void {
@@ -23,7 +28,7 @@ export default class StudentBookView {
       this.createPageTitle(),
       this.createGamesContainer(),
       this.createBookSectionsContainer(section.className),
-      this.createPaginationContainer(page),
+      this.createPaginationContainer(section, page),
       this.createWordsContainer(section.color)
     );
   }
@@ -66,6 +71,9 @@ export default class StudentBookView {
       classNames: ['sections__book-section', sectionName.toLowerCase()],
       innerText: sectionName,
     });
+    bookSection.addEventListener('click', (event: Event): void => {
+      this.bookController.switchSection(event);
+    });
     return bookSection;
   }
 
@@ -97,10 +105,16 @@ export default class StudentBookView {
     if (page === MAX_PAGES_IN_BOOK_SECTION && buttonClass === PAGINATION_BUTTONS.next.className) {
       paginationButton.setAttribute('disabled', '');
     }
+    paginationButton.addEventListener('click', (event: Event): void => {
+      this.bookController.switchPage(event);
+    });
     return paginationButton;
   }
 
-  private createPaginationContainer(currentPage: number): HTMLDivElement {
+  private createPaginationContainer(
+    section: IBookSectionInfo,
+    currentPage: number
+  ): HTMLDivElement {
     const paginationContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>(
       {
         tag: 'div',
@@ -119,6 +133,10 @@ export default class StudentBookView {
       currentPageElement,
       this.createPaginationButton(PAGINATION_BUTTONS.next.className, currentPage)
     );
+
+    if (section === BOOK_SECTIONS.difficultWords) {
+      paginationContainer.style.display = DISPLAY_MODES.contentNotVisible;
+    }
     return paginationContainer;
   }
 
