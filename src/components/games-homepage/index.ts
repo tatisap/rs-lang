@@ -1,12 +1,20 @@
 import { GAMES, GAME_LIST_TITLE, PAGE_TITLES } from '../../constants';
-import { IGameInfo } from '../../types';
+import { GameName, IGameInfo } from '../../types';
 import UIElementsConstructor from '../../utils/ui-elements-creator';
+import AudioCallView from '../audiocall/audiocall-view';
 
 export default class GamesHomepage {
   private elementCreator: UIElementsConstructor;
 
+  private games: {
+    audiocall: AudioCallView;
+  };
+
   constructor() {
     this.elementCreator = new UIElementsConstructor();
+    this.games = {
+      audiocall: new AudioCallView(),
+    };
   }
 
   private createPageTitle(): HTMLHeadingElement {
@@ -70,5 +78,13 @@ export default class GamesHomepage {
     const pageContainer: HTMLElement = document.getElementById('app') as HTMLElement;
     pageContainer.classList.add('page_games');
     pageContainer.append(this.createPageTitle(), this.createGameListContainer());
+    (Object.keys(this.games) as GameName[]).forEach((gameName: GameName): void => {
+      (pageContainer.querySelector(`.${gameName}-game`) as HTMLLIElement).addEventListener(
+        'click',
+        async (): Promise<void> => {
+          await this.games[gameName].start();
+        }
+      );
+    });
   }
 }
