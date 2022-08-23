@@ -51,6 +51,10 @@ export interface ILabel extends Omit<IElement, 'tag'> {
   htmlFor: string;
 }
 
+export interface IMediaElement extends Omit<IElement, 'tag'> {
+  url: string;
+}
+
 export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
@@ -103,9 +107,22 @@ export interface IBookSectionInfo {
   group?: number;
 }
 
-export type PageName = 'main' | 'studentBook';
+export type PageName = 'main' | 'studentBook' | 'games';
+
+export type GameName = 'audiocall';
 
 export interface IGameInfo {
   name: string;
   className: string;
+}
+
+export interface IAudiocallAnswerOption {
+  value: string;
+  isCorrect: boolean;
+}
+
+export interface IAudiocallQuestionInfo {
+  audioUrl: string;
+  answerImageUrl: string;
+  answerOptions: IAudiocallAnswerOption[];
 }
