@@ -1,0 +1,63 @@
+.page_games {
+  .game-list__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    height: 100%;
+    @media (max-width: 768px) {
+      gap: 20px;
+    }
+    .game-list__title {
+      margin: 20px 0 0;
+      font: {
+        size: 1.3rem;
+        weight: 700;
+      }
+    }
+    .game-list {
+      @extend %normalized-list;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      .game-list__item {
+        @extend %interactive;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 250px;
+        height: 60px;
+        padding-left: 95px;
+        border: 1px solid $black;
+        border-radius: 10px;
+        background-position: top left 30px;
+        font: {
+          size: 1.2rem;
+          weight: 700;
+        }
+        &:hover {
+          border-radius: 100px;
+          background-position: top left 40px;
+          transform: scale(1.1);
+        }
+        &.audiocall-game {
+          @include image($audio);
+          
+        }
+        &.sprint-game {
+          @include image($sprint);
+        }
+      }
+    }
+    .game-list__image {
+      @include image($game-page-img);
+      flex-grow: 1;
+      width: 100%;
+      min-height: 40vh;
+      background-position: center;
+    }
+  }
+}

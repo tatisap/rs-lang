@@ -1,5 +1,6 @@
 .main {
   position: relative;
+  flex-grow: 1;
   background-color: $app-background-color;
 }
 
@@ -71,7 +72,6 @@
 
 .main__section {
   max-width: 1440px;
-  min-height: 400px;
   margin: 0 auto;
   padding: 20px;
   @media (max-width: 768px) {

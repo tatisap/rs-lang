@@ -23,6 +23,7 @@
   ],
   "rules": {
     "prettier/prettier": "error",
-    "no-console": ["error", { "allow": ["log"] }]
+    "no-console": ["error", { "allow": ["log"] }],
+    "class-methods-use-this": "off"
   }
 }

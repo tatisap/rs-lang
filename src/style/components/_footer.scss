@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 20px;
+  padding: 10px 20px;
   background-color: $grey-background-color;
   @media (max-width: 768px) {
     padding: 10px;
@@ -32,8 +32,8 @@
       @extend %interactive;
       @include image($rsschool);
       display: block;
-      width: 130px;
-      height: 60px;
+      width: 90px;
+      height: 40px;
       &:hover,
       &:active {
         @extend %interactive;
