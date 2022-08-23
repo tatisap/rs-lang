@@ -1,0 +1,83 @@
+.audiocall {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  .question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    animation: fade-in 2s;
+    .question__audio-wrapper {
+      @include image($audio);
+      width: 80px;
+      height: 80px;
+      border-radius: 80px;
+      background-color: $app-background-color;
+      &.question__audio-wrapper_audio-playing {
+        animation: pulsing 1s infinite;
+      }
+    }
+    .question__option-list {
+      @extend %normalized-list;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      .question__option {
+        @extend %interactive;
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: $app-background-color;
+        font: {
+          size: 1rem;
+          weight: 700;
+        };
+        text-align: center;
+        &:hover {
+          background-color: $violet-tab-color;
+        }
+      }
+    }
+    .question__skip-button {
+      @extend %normalized-button;
+      @extend %interactive;
+      @include image($arrow-right);
+      width: 100px;
+      height: 50px;
+      border-radius: 10px;
+      background-color: $app-background-color;
+      background-position: center;
+      &:hover {
+        border-radius: 50px;
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+@keyframes fade-in {
+  0% { 
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulsing {
+  0% {
+    transform: scale(0.9)
+  }
+  50% {
+    transform: scale(1.0);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
