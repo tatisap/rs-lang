@@ -43,7 +43,7 @@ export default class UIElementsConstructor {
       tag: 'div',
       ...imageInfo,
     });
-    image.style.backgroundImage = imageInfo.url;
+    image.style.backgroundImage = `url(${imageInfo.url})`;
     return image;
   }
 }
