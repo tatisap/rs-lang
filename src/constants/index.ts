@@ -163,4 +163,4 @@ export const AUDIOCALL_AUDIO_BUTTON_PLACEMENT = {
   inAnswer: 'answer',
 };
 
-export const AUDIOCALL_INCORRECT_ANSWERS_NUMBER = 4;
+export const AUDIOCALL_OPTIONS_NUMBER = 5;
