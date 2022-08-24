@@ -117,12 +117,17 @@ export interface IGameInfo {
 }
 
 export interface IAudiocallAnswerOption {
-  value: string;
+  wordTranslation: string;
   isCorrect: boolean;
 }
 
-export interface IAudiocallQuestionInfo {
+export interface IAudiocallCorrectAnswer {
   audioUrl: string;
-  answerImageUrl: string;
+  imageUrl: string;
+  word: string;
+}
+
+export interface IAudiocallQuestionInfo {
+  correctAnswer: IAudiocallCorrectAnswer;
   answerOptions: IAudiocallAnswerOption[];
 }
