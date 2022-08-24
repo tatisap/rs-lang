@@ -125,6 +125,7 @@ export interface IAudiocallCorrectAnswer {
   audioUrl: string;
   imageUrl: string;
   word: string;
+  wordTranslation: string;
 }
 
 export interface IAudiocallQuestionInfo {
