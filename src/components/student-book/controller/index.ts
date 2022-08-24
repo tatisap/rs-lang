@@ -15,7 +15,7 @@ export default class StudentBookController {
     return chosenSectionInfo[Numbers.Zero];
   }
 
-  private openFirstPage(): void {
+  private resetPaginationButtons(): void {
     (
       document.querySelector('.pagination__button.button-previous') as HTMLButtonElement
     ).setAttribute('disabled', '');
@@ -34,7 +34,7 @@ export default class StudentBookController {
     const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
     wordsContainer.style.backgroundColor = chosenSectionInfo.color;
 
-    this.openFirstPage();
+    this.resetPaginationButtons();
 
     const sectionButtons = document.querySelectorAll(
       '.sections__book-section'
