@@ -1,10 +1,6 @@
 import WordsAPI from '../../api/words-api';
-import {
-  AUDIOCALL_INCORRECT_ANSWERS_NUMBER,
-  BASE_URL,
-  MAX_PAGES_IN_BOOK_SECTION,
-} from '../../constants';
-import { IAudiocallAnswerOption, IAudiocallQuestionInfo, IWord } from '../../types';
+import { AUDIOCALL_OPTIONS_NUMBER, BASE_URL, MAX_PAGES_IN_BOOK_SECTION } from '../../constants';
+import { IAudiocallAnswerOption, IAudiocallQuestionInfo, IWord, Numbers } from '../../types';
 import Randomizer from '../../utils/randomizer';
 
 export default class AudiocallController {
@@ -39,7 +35,7 @@ export default class AudiocallController {
       questionWordInfo,
       ...this.randomizer.getRandomItemsFromArray(
         wordsInfoArray.filter((wordInfo: IWord): boolean => questionWordInfo !== wordInfo),
-        AUDIOCALL_INCORRECT_ANSWERS_NUMBER
+        AUDIOCALL_OPTIONS_NUMBER - Numbers.One
       ),
     ]);
     return {
@@ -47,6 +43,7 @@ export default class AudiocallController {
         audioUrl: `${BASE_URL}/${questionWordInfo.audio}`,
         imageUrl: `${BASE_URL}/${questionWordInfo.image}`,
         word: questionWordInfo.word,
+        wordTranslation: questionWordInfo.wordTranslate,
       },
       answerOptions: wordsForAnswerOptions.map((wordInfo: IWord): IAudiocallAnswerOption => {
         return {
