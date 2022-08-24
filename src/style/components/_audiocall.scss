@@ -70,6 +70,31 @@
         &:hover {
           background-color: $violet-tab-color;
         }
+        &.question__option_unselected {
+          background-color: $grey-background-color;
+          opacity: 0.5;
+        }
+        &.question__option_incorrect.question__option_selected {
+          text-decoration: line-through;
+          background-color: $grey-background-color;
+          opacity: 0.5;
+        }
+        &.question__option_correct {
+          background-color: $green-tab-color;
+          opacity: 1;
+          &.question__option_selected {
+            position: relative;
+            &::after {
+              @include image($check);
+              position: absolute;
+              top: -5px;
+              left: -5px;
+              width: 20px;
+              height: 20px;
+              content: '';
+            }
+          }
+        }
       }
     }
     .question__skip-button {
