@@ -51,6 +51,15 @@ export interface ILabel extends Omit<IElement, 'tag'> {
   htmlFor: string;
 }
 
+export interface IImageElement extends Omit<IElement, 'tag'> {
+  src: string;
+  alt: string;
+}
+
+export interface IAudioElement extends Omit<IElement, 'tag'> {
+  src: string;
+}
+
 export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
