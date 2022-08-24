@@ -1,4 +1,4 @@
-import { IElement, IInput, ILabel } from '../types';
+import { IAudioElement, IElement, IImageElement, IInput, ILabel } from '../types';
 
 export default class UIElementsConstructor {
   public createUIElement = <T extends HTMLElement>(elementInfo: IElement): T => {
@@ -27,5 +27,23 @@ export default class UIElementsConstructor {
     });
     label.htmlFor = labelInfo.htmlFor;
     return label;
+  }
+
+  public createImage(imageInfo: IImageElement): HTMLImageElement {
+    const image: HTMLImageElement = this.createUIElement<HTMLImageElement>({
+      tag: 'img',
+      ...imageInfo,
+    });
+    image.src = imageInfo.src;
+    return image;
+  }
+
+  public createAudio(audioInfo: IAudioElement): HTMLAudioElement {
+    const audio: HTMLAudioElement = this.createUIElement<HTMLAudioElement>({
+      tag: 'audio',
+      ...audioInfo,
+    });
+    audio.src = audioInfo.src;
+    return audio;
   }
 }
