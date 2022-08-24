@@ -74,7 +74,6 @@ export interface ISignUpError {
 export enum Numbers {
   Zero = 0,
   One = 1,
-  Two = 2,
 }
 
 export enum HttpMethods {

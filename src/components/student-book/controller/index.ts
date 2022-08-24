@@ -75,19 +75,21 @@ export default class StudentBookController {
     let currentPage: number = +(currentPageContainer.textContent as string);
 
     if (chosenButton.classList.contains('button-previous')) {
-      if (currentPage === Numbers.Two) {
-        previousPageButton.setAttribute('disabled', '');
-      } else if (currentPage === MAX_PAGES_IN_BOOK_SECTION) {
+      if (currentPage === MAX_PAGES_IN_BOOK_SECTION) {
         nextPageButton.removeAttribute('disabled');
       }
       currentPage -= Numbers.One;
+      if (currentPage === Numbers.One) {
+        previousPageButton.setAttribute('disabled', '');
+      }
     } else if (chosenButton.classList.contains('button-next')) {
-      if (currentPage === MAX_PAGES_IN_BOOK_SECTION - Numbers.One) {
-        nextPageButton.setAttribute('disabled', '');
-      } else if (currentPage === Numbers.One) {
+      if (currentPage === Numbers.One) {
         previousPageButton.removeAttribute('disabled');
       }
       currentPage += Numbers.One;
+      if (currentPage === MAX_PAGES_IN_BOOK_SECTION) {
+        nextPageButton.setAttribute('disabled', '');
+      }
     }
     currentPageContainer.textContent = `${currentPage}`;
 
