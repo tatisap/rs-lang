@@ -8,4 +8,10 @@ export default class WordsAPI {
     const data: IWord[] = await response.json();
     return data;
   }
+
+  public async getWord(id: string): Promise<IWord[]> {
+    const response = await fetch(`${BASE_URL}/${PATHS.words}/${id}`);
+    const data: IWord[] = await response.json();
+    return data;
+  }
 }
