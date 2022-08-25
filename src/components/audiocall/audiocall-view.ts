@@ -1,8 +1,10 @@
-import { NO_CONTENT } from '../../constants';
-import { IAudiocallQuestionInfo, Numbers } from '../../types';
+import { GAMES, NO_CONTENT } from '../../constants';
+import { GameName, IAudiocallQuestionInfo, IGameQuestionResult, Numbers } from '../../types';
 import UIElementsConstructor from '../../utils/ui-elements-creator';
 import AudiocallController from './audiocall-controller';
 import AudiocallQuestion from './question-card';
+import GameStartingPage from './game-starting-page';
+import GameFinalPage from './game-final-page';
 
 export default class AudioCallView {
   private elementCreator: UIElementsConstructor;
@@ -11,25 +13,53 @@ export default class AudioCallView {
 
   private controller: AudiocallController;
 
+  private startingPage: GameStartingPage;
+
+  private finalPage: GameFinalPage;
+
+  private gameResults: IGameQuestionResult[];
+
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.controller = new AudiocallController();
     this.container = this.createGameContainer();
+    this.startingPage = new GameStartingPage();
+    this.finalPage = new GameFinalPage();
+    this.gameResults = [];
   }
 
   public async start(): Promise<void> {
     this.openGameContainer();
-    const questionInfoList: IAudiocallQuestionInfo[] = await this.controller.getQuestionList(1, 29);
-    new AudiocallQuestion(questionInfoList[0], 0).makeQuestion(this.container);
-    this.container.addEventListener('question-closed', (): void => {
-      const nextQuestionNumber: number =
-        Number(
-          (this.container.firstElementChild as HTMLDivElement).dataset.questionNumber as string
-        ) + Numbers.One;
+    this.startingPage.open(GAMES.audiocall.className as GameName, this.container);
+    this.container.addEventListener('level-selected', async (event: Event): Promise<void> => {
       this.clearGameContainer();
-      new AudiocallQuestion(questionInfoList[nextQuestionNumber], nextQuestionNumber).makeQuestion(
-        this.container
+      const level = Number((event as CustomEvent).detail?.selectedLevel as string);
+      const questionInfoList: IAudiocallQuestionInfo[] = await this.controller.getQuestionList(
+        level
       );
+      new AudiocallQuestion(questionInfoList[0], 0).makeQuestion(this.container);
+      this.container.addEventListener('question-closed', (): void => {
+        const questionNumber = Number(
+          (this.container.firstElementChild as HTMLDivElement).dataset.questionNumber as string
+        );
+        this.gameResults.push({
+          correctAnswer: questionInfoList[questionNumber].correctAnswer,
+          isCorrect:
+            (this.container.querySelector('.question') as HTMLDivElement).dataset
+              .isUserAnswerCorrect === 'true',
+        });
+        this.clearGameContainer();
+
+        if (questionNumber === questionInfoList.length - Numbers.One) {
+          this.finalPage.renderResults(this.container, this.gameResults);
+        } else {
+          const nextQuestionNumber: number = questionNumber + Numbers.One;
+          new AudiocallQuestion(
+            questionInfoList[nextQuestionNumber],
+            nextQuestionNumber
+          ).makeQuestion(this.container);
+        }
+      });
     });
   }
 
