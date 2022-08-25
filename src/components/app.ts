@@ -5,11 +5,14 @@ import GamesHomepage from './games-homepage';
 import MainPageView from './main-page/view';
 import Menu from './menu';
 import StudentBookView from './student-book/view';
+import StudentBook from './student-book';
 
 export default class App {
   private menu: Menu;
 
   private auth: Auth;
+
+  private studentBook: StudentBook;
 
   private pages: {
     main: MainPageView;
@@ -20,6 +23,7 @@ export default class App {
   constructor() {
     this.menu = new Menu();
     this.auth = new Auth();
+    this.studentBook = new StudentBook();
     this.pages = {
       main: new MainPageView(),
       studentBook: new StudentBookView(),
@@ -30,6 +34,7 @@ export default class App {
   public start(): void {
     this.menu.init((event: Event): void => this.menuHandler(event));
     this.auth.init();
+    this.studentBook.init();
 
     const currentPage: PageName = this.getCurrentPageName();
     this.menu.setMenuItemActiveState(currentPage);
