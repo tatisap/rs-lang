@@ -161,6 +161,10 @@ export const GAME_TITLES = {
   selectionGame: 'Выберите игру:',
   selectionLevel: 'Выберите уровень:',
   results: 'Результаты:',
+  resultList: {
+    correct: 'Верно',
+    incorrect: 'Неверно',
+  },
 };
 
 export const GAME_ANSWER_RESULT_STATUS = {

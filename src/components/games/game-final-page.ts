@@ -45,7 +45,11 @@ export default class GameFinalPage {
     });
   }
 
-  private createResultList(modifier: string, listInfo: IGameCorrectAnswer[]): HTMLUListElement {
+  private createResultList(modifier: string, listInfo: IGameCorrectAnswer[]): HTMLDivElement {
+    const resultListWrapper: HTMLDivElement = this.elementCreator.createUIElement({
+      tag: 'div',
+      classNames: ['result-list__wrapper'],
+    });
     const resultList: HTMLUListElement = this.elementCreator.createUIElement<HTMLUListElement>({
       tag: 'ul',
       classNames: ['result-list', `result-list_${modifier}`],
@@ -59,7 +63,19 @@ export default class GameFinalPage {
     } else {
       resultList.style.display = DISPLAY_MODES.contentNotVisible;
     }
-    return resultList;
+    resultListWrapper.append(
+      this.elementCreator.createUIElement<HTMLHeadingElement>({
+        tag: 'h4',
+        classNames: ['result-list__title'],
+        innerText: `${
+          modifier === GAME_ANSWER_RESULT_STATUS.correct
+            ? GAME_TITLES.resultList.correct
+            : GAME_TITLES.resultList.incorrect
+        } - ${listInfo.length}`,
+      }),
+      resultList
+    );
+    return resultListWrapper;
   }
 
   private createResultListItem(answerInfo: IGameCorrectAnswer): HTMLLIElement {

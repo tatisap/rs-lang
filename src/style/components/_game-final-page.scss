@@ -15,6 +15,9 @@
       weight: 700;
     };
   }
+  .result-list__title {
+    margin: 0 0 10px;
+  }
   .result-list {
     @extend %normalized-list;
     display: flex;
