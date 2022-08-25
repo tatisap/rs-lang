@@ -160,6 +160,11 @@ export const GAME_LIST_TITLE = 'Выберите игру:';
 export const GAME_SELECTION_LEVEL_TITLE = 'Выберите уровень:';
 export const GAME_RESULTS_TITLE = 'Результаты:';
 
+export const GAME_ANSWER_RESULT_STATUS = {
+  correct: 'correct',
+  incorrect: 'incorrect',
+};
+
 export const AUDIOCALL_AUDIO_BUTTON_PLACEMENT = {
   inQuestion: 'question',
   inAnswer: 'answer',
