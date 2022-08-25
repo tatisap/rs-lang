@@ -157,6 +157,8 @@ export const PAGINATION_BUTTONS = {
 export const MAX_PAGES_IN_BOOK_SECTION = 30;
 
 export const GAME_LIST_TITLE = 'Выберите игру:';
+export const GAME_SELECTION_LEVEL_TITLE = 'Выберите уровень:';
+export const GAME_RESULTS_TITLE = 'Результаты:';
 
 export const AUDIOCALL_AUDIO_BUTTON_PLACEMENT = {
   inQuestion: 'question',
