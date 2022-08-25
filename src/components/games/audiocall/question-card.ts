@@ -1,5 +1,5 @@
-import { AUDIOCALL_AUDIO_BUTTON_PLACEMENT, AUDIOCALL_OPTIONS_NUMBER } from '../../constants';
-import { IAudiocallQuestionInfo, Numbers } from '../../types';
+import { AUDIOCALL_AUDIO_BUTTON_PLACEMENT, AUDIOCALL_OPTIONS_NUMBER } from '../../../constants';
+import { IAudiocallQuestionInfo, Numbers } from '../../../types';
 import AudioElement from './audio-element';
 import QuestionCardConstructor from './question-card-constructor';
 
@@ -61,10 +61,14 @@ export default class AudiocallQuestion {
       }
     };
 
+    const removeKeyHandler = (): void => {
+      document.removeEventListener('keydown', keyHandler);
+      document.removeEventListener('new-page-opened', removeKeyHandler);
+    };
+
     document.addEventListener('keydown', keyHandler);
-    this.container.addEventListener('question-closed', (): void =>
-      document.removeEventListener('keydown', keyHandler)
-    );
+    document.addEventListener('new-page-opened', removeKeyHandler);
+    this.container.addEventListener('question-closed', removeKeyHandler);
   }
 
   private moveAudioWrapperToAnswer(): void {

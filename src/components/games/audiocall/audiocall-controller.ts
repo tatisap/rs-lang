@@ -1,7 +1,7 @@
-import WordsAPI from '../../api/words-api';
-import { AUDIOCALL_OPTIONS_NUMBER, BASE_URL, MAX_PAGES_IN_BOOK_SECTION } from '../../constants';
-import { IAudiocallAnswerOption, IAudiocallQuestionInfo, IWord, Numbers } from '../../types';
-import Randomizer from '../../utils/randomizer';
+import WordsAPI from '../../../api/words-api';
+import { AUDIOCALL_OPTIONS_NUMBER, BASE_URL, MAX_PAGES_IN_BOOK_SECTION } from '../../../constants';
+import { IAudiocallAnswerOption, IAudiocallQuestionInfo, IWord, Numbers } from '../../../types';
+import Randomizer from '../../../utils/randomizer';
 
 export default class AudiocallController {
   private api: WordsAPI;

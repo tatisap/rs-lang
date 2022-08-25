@@ -19,7 +19,7 @@ export default class GameStartingPage {
   }
 
   public open(gameName: GameName, gameContainer: HTMLDivElement): void {
-    this.container.innerHTML = NO_CONTENT;
+    this.clearContainer();
     const isUserAuthorized = !!localStorage.getItem(STORAGE_KEYS.user);
     const levels: number[] = Object.values(BOOK_SECTIONS).map(
       (_, index: number): number => index + Numbers.One
@@ -106,5 +106,9 @@ export default class GameStartingPage {
       classNames: ['level-selection__option'],
       innerText: `${level}`,
     });
+  }
+
+  private clearContainer(): void {
+    this.container.innerHTML = NO_CONTENT;
   }
 }

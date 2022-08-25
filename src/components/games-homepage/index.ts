@@ -1,6 +1,6 @@
 import { GAMES } from '../../constants';
 import { GameName } from '../../types';
-import GameSwitcher from '../audiocall/game-switcher';
+import GameSwitcher from '../games/game-switcher';
 import GamesHomepageConstructor from './games-homepage-constructor';
 
 export default class GamesHomepage {

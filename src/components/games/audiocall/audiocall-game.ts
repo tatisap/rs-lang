@@ -3,8 +3,8 @@ import { GameName, IAudiocallQuestionInfo, IGameQuestionResult, Numbers } from '
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudiocallController from './audiocall-controller';
 import AudiocallQuestion from './question-card';
-import GameStartingPage from './game-starting-page';
-import GameFinalPage from './game-final-page';
+import GameStartingPage from '../game-starting-page';
+import GameFinalPage from '../game-final-page';
 
 export default class AudioCallGame {
   private elementCreator: UIElementsConstructor;
