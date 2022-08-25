@@ -79,6 +79,7 @@ export const AUTH_ERROR_MESSAGE = {
 export const DISPLAY_MODES = {
   contentNotVisible: 'none',
   contentBlockVisible: 'block',
+  contentFlexVisible: 'flex',
 };
 
 export const PAGE_TITLES = {

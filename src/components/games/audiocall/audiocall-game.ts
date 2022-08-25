@@ -1,4 +1,4 @@
-import { GAMES, NO_CONTENT } from '../../../constants';
+import { DISPLAY_MODES, GAMES, NO_CONTENT } from '../../../constants';
 import { GameName, IAudiocallQuestionInfo, IGameQuestionResult, Numbers } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudiocallController from './audiocall-controller';
@@ -30,6 +30,7 @@ export default class AudioCallGame {
 
   public async start(level?: number, levelPage?: number): Promise<void> {
     this.openGameContainer();
+    this.hideFooter();
 
     if (level && levelPage) {
       await this.questionSwitcher(level, levelPage);
@@ -98,5 +99,10 @@ export default class AudioCallGame {
 
   private closeGameContainer(): void {
     this.container.remove();
+  }
+
+  private hideFooter(): void {
+    (document.querySelector('footer') as HTMLElement).style.display =
+      DISPLAY_MODES.contentNotVisible;
   }
 }
