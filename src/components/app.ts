@@ -50,6 +50,7 @@ export default class App {
   private openPage(pageName: PageName): void {
     (document.querySelector('#app') as HTMLElement).innerHTML = NO_CONTENT;
     this.pages[pageName].renderPage();
+    document.dispatchEvent(new Event('new-page-opened'));
   }
 
   private saveCurrentPageName(pageName: PageName): void {
