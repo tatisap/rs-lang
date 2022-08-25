@@ -1,5 +1,11 @@
 import { DISPLAY_MODES, GAMES, NO_CONTENT } from '../../../constants';
-import { GameName, IAudiocallQuestionInfo, IGameQuestionResult, Numbers } from '../../../types';
+import {
+  GameName,
+  IAudiocallQuestionInfo,
+  IGameQuestionResult,
+  Numbers,
+  StringifiedBoolean,
+} from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudiocallController from './audiocall-controller';
 import AudiocallQuestion from './question-card';
@@ -64,7 +70,7 @@ export default class AudioCallGame {
         correctAnswer: questionInfoList[questionNumber].correctAnswer,
         isCorrect:
           (this.container.querySelector('.question') as HTMLDivElement).dataset
-            .isUserAnswerCorrect === 'true',
+            .isUserAnswerCorrect === StringifiedBoolean.True,
       });
 
       this.clearGameContainer();
@@ -102,7 +108,7 @@ export default class AudioCallGame {
   }
 
   private hideFooter(): void {
-    (document.querySelector('footer') as HTMLElement).style.display =
+    (document.querySelector('.footer') as HTMLElement).style.display =
       DISPLAY_MODES.contentNotVisible;
   }
 }

@@ -80,6 +80,11 @@ export enum Numbers {
   One = 1,
 }
 
+export enum StringifiedBoolean {
+  True = 'true',
+  False = 'false',
+}
+
 export enum HttpMethods {
   GET = 'GET',
   POST = 'POST',
@@ -98,6 +103,11 @@ export enum StatusCode {
   UnprocessableEntity = 422,
   TooManyRequests = 429,
   InternalServerError = 500,
+}
+
+export enum KeyboardCode {
+  Space = 'Space',
+  Enter = 'Enter',
 }
 
 export interface IBookSectionInfo {

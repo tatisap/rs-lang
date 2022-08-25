@@ -1,5 +1,5 @@
 import { AUDIOCALL_AUDIO_BUTTON_PLACEMENT, AUDIOCALL_OPTIONS_NUMBER } from '../../../constants';
-import { IAudiocallQuestionInfo, Numbers } from '../../../types';
+import { IAudiocallQuestionInfo, KeyboardCode, Numbers } from '../../../types';
 import AudioElement from './audio-element';
 import QuestionCardConstructor from './question-card-constructor';
 
@@ -49,10 +49,10 @@ export default class AudiocallQuestion {
     const keyHandler = (event: KeyboardEvent): void => {
       event.preventDefault();
       switch (event.code) {
-        case 'Space':
+        case KeyboardCode.Space:
           this.audioElement.playAudio();
           break;
-        case 'Enter':
+        case KeyboardCode.Enter:
           this.skipButtonHandler();
           break;
         default:
