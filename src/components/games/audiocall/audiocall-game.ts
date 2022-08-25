@@ -37,7 +37,8 @@ export default class AudioCallGame {
       this.startingPage.open(GAMES.audiocall.className as GameName, this.container);
       this.container.addEventListener('level-selected', async (event: Event): Promise<void> => {
         this.clearGameContainer();
-        const selectedLevel = Number((event as CustomEvent).detail?.selectedLevel as string);
+        const selectedLevel: number =
+          Number((event as CustomEvent).detail?.selectedLevel as string) - Numbers.One;
         await this.questionSwitcher(selectedLevel);
       });
     }
