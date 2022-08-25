@@ -100,7 +100,7 @@ export interface IBookSectionInfo {
   text: string;
   className: string;
   color: string;
-  group?: number;
+  group: number;
 }
 
 export type PageName = 'main' | 'studentBook';
