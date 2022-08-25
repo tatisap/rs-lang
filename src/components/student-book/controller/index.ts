@@ -7,12 +7,12 @@ import {
 import { IBookSectionInfo, Numbers } from '../../../types';
 
 export default class StudentBookController {
-  private getSectionInfo(section: string | number): IBookSectionInfo {
-    const chosenSectionInfo: IBookSectionInfo[] = Object.values(BOOK_SECTIONS).filter(
+  private getSectionInfo(section: string): IBookSectionInfo {
+    const chosenSectionInfo = Object.values(BOOK_SECTIONS).find(
       (sectionInfo: IBookSectionInfo): boolean =>
-        sectionInfo.text === section || sectionInfo.group === section
-    );
-    return chosenSectionInfo[Numbers.Zero];
+        sectionInfo.text === section || sectionInfo.group === +section
+    ) as IBookSectionInfo;
+    return chosenSectionInfo;
   }
 
   private resetPaginationButtons(): void {
@@ -113,7 +113,7 @@ export default class StudentBookController {
   }
 
   public getSection(): IBookSectionInfo {
-    const sectionGroup: number = +(localStorage.getItem(STORAGE_KEYS.bookSection) as string);
+    const sectionGroup = localStorage.getItem(STORAGE_KEYS.bookSection) as string;
     const sectionInfo: IBookSectionInfo = this.getSectionInfo(sectionGroup);
     return sectionInfo || BOOK_SECTIONS.beginner;
   }
