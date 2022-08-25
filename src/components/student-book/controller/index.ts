@@ -27,32 +27,37 @@ export default class StudentBookController {
     ).textContent = `${Numbers.One}`;
   }
 
-  public switchSection(event: Event): IBookSectionInfo {
-    const chosenSectionName = (event.target as HTMLDivElement).textContent as string;
-    const chosenSectionInfo: IBookSectionInfo = this.getSectionInfo(chosenSectionName);
-
-    const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
-    wordsContainer.style.backgroundColor = chosenSectionInfo.color;
-
-    this.resetPaginationButtons();
-
+  private updateSectionButtonsStyle(sectionText: string): void {
     const sectionButtons = document.querySelectorAll(
       '.sections__book-section'
     ) as NodeListOf<HTMLDivElement>;
     sectionButtons.forEach((sectionButton: HTMLDivElement): void => {
-      if (sectionButton.textContent === chosenSectionInfo.text) {
+      if (sectionButton.textContent === sectionText) {
         sectionButton.classList.add('active');
       } else if (sectionButton.classList.contains('active')) {
         sectionButton.classList.remove('active');
       }
     });
+  }
 
+  private switchPaginationVisibility(sectionName: string): void {
     const paginationContainer = document.querySelector('.page__pagination') as HTMLDivElement;
-    if (chosenSectionName === BOOK_SECTIONS.difficultWords.text) {
+    if (sectionName === BOOK_SECTIONS.difficultWords.text) {
       paginationContainer.style.display = DISPLAY_MODES.contentNotVisible;
     } else {
       paginationContainer.style.display = DISPLAY_MODES.contentFlexVisible;
     }
+  }
+
+  public switchSection(event: Event): IBookSectionInfo {
+    const chosenSectionName = (event.target as HTMLDivElement).textContent as string;
+    const chosenSectionInfo: IBookSectionInfo = this.getSectionInfo(chosenSectionName);
+    const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
+
+    wordsContainer.style.backgroundColor = chosenSectionInfo.color;
+    this.resetPaginationButtons();
+    this.updateSectionButtonsStyle(chosenSectionInfo.text);
+    this.switchPaginationVisibility(chosenSectionName);
 
     return chosenSectionInfo;
   }
