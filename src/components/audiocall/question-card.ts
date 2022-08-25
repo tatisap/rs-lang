@@ -107,6 +107,7 @@ export default class AudiocallQuestion {
   }
 
   private processUserChoice(chosenOption?: HTMLLIElement): void {
+    if (this.skipButton.classList.contains('question__skip-button_answer-opened')) return;
     const options: HTMLLIElement[] = Array.from(
       this.optionsListElement.children
     ) as HTMLLIElement[];
@@ -126,9 +127,9 @@ export default class AudiocallQuestion {
     });
 
     if (chosenOption?.dataset.value === this.questionInfo.correctAnswer.wordTranslation) {
-      (document.querySelector('.question') as HTMLDivElement).classList.add('question_correct');
+      this.container.classList.add('question_correct');
     } else {
-      (document.querySelector('.question') as HTMLDivElement).classList.add('question_incorrect');
+      this.container.classList.add('question_incorrect');
     }
     this.openAnswer();
   }
