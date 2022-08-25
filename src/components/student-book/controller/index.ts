@@ -1,13 +1,8 @@
-import {
-  BOOK_SECTIONS,
-  DISPLAY_MODES,
-  MAX_PAGES_IN_BOOK_SECTION,
-  STORAGE_KEYS,
-} from '../../../constants';
+import { BOOK_SECTIONS, DISPLAY_MODES, MAX_PAGES_IN_BOOK_SECTION } from '../../../constants';
 import { IBookSectionInfo, Numbers } from '../../../types';
 
 export default class StudentBookController {
-  private getSectionInfo(section: string): IBookSectionInfo {
+  public getSectionInfo(section: string): IBookSectionInfo {
     const chosenSectionInfo = Object.values(BOOK_SECTIONS).find(
       (sectionInfo: IBookSectionInfo): boolean =>
         sectionInfo.text === section || sectionInfo.group === +section
@@ -99,31 +94,5 @@ export default class StudentBookController {
     currentPageContainer.textContent = `${currentPage}`;
 
     return { page: currentPage, section: currentSectionInfo };
-  }
-
-  public saveSection(): void {
-    const currentSectionName = (
-      document.querySelector('.sections__book-section.active') as HTMLDivElement
-    ).textContent as string;
-    const currentSectionInfo: IBookSectionInfo = this.getSectionInfo(currentSectionName);
-    localStorage.setItem(STORAGE_KEYS.bookSection, `${currentSectionInfo.group}`);
-  }
-
-  public savePage(): void {
-    const currentPageContainer = document.querySelector(
-      '.pagination__current-page'
-    ) as HTMLDivElement;
-    const currentPage: number = +(currentPageContainer.textContent as string);
-    localStorage.setItem(STORAGE_KEYS.bookPage, `${currentPage}`);
-  }
-
-  public getSection(): IBookSectionInfo {
-    const sectionGroup = localStorage.getItem(STORAGE_KEYS.bookSection) as string;
-    const sectionInfo: IBookSectionInfo = this.getSectionInfo(sectionGroup);
-    return sectionInfo || BOOK_SECTIONS.beginner;
-  }
-
-  public getPage(): number {
-    return +(localStorage.getItem(STORAGE_KEYS.bookPage) as string) || Numbers.One;
   }
 }
