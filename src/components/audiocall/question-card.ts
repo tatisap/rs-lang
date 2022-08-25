@@ -1,5 +1,6 @@
 import { AUDIOCALL_AUDIO_BUTTON_PLACEMENT, AUDIOCALL_OPTIONS_NUMBER } from '../../constants';
 import { IAudiocallQuestionInfo, Numbers } from '../../types';
+import AudioElement from './audio-element';
 import QuestionCardConstructor from './question-card-constructor';
 
 export default class AudiocallQuestion {
@@ -11,9 +12,7 @@ export default class AudiocallQuestion {
 
   private answerElement: HTMLDivElement;
 
-  private audioWrapper: HTMLDivElement;
-
-  private audioElement: HTMLAudioElement;
+  private audioElement: AudioElement;
 
   private optionsListElement: HTMLUListElement;
 
@@ -22,11 +21,7 @@ export default class AudiocallQuestion {
   constructor(questionInfo: IAudiocallQuestionInfo, questionNumber: number) {
     this.uiConstructor = new QuestionCardConstructor();
     this.container = this.uiConstructor.createContainer(questionNumber);
-    this.audioWrapper = this.uiConstructor.createAudioWrapper(
-      AUDIOCALL_AUDIO_BUTTON_PLACEMENT.inQuestion,
-      questionInfo.correctAnswer.audioUrl
-    );
-    this.audioElement = this.audioWrapper.firstElementChild as HTMLAudioElement;
+    this.audioElement = new AudioElement(questionInfo.correctAnswer.audioUrl);
     this.optionsListElement = this.uiConstructor.createOptionList(questionInfo.answerOptions);
     this.answerElement = this.uiConstructor.createAnswer(questionInfo.correctAnswer);
     this.skipButton = this.uiConstructor.createSkipButton();
@@ -34,17 +29,18 @@ export default class AudiocallQuestion {
   }
 
   public makeQuestion(gameField: HTMLElement): void {
+    this.audioElement.init().addClassWithModifier(AUDIOCALL_AUDIO_BUTTON_PLACEMENT.inQuestion);
     this.addHandlersToElements();
-    this.container.append(this.audioWrapper, this.optionsListElement, this.skipButton);
+    this.container.append(
+      this.audioElement.getAudioElement(),
+      this.optionsListElement,
+      this.skipButton
+    );
     gameField.append(this.container);
-    this.playAudio();
+    this.audioElement.playAudio();
   }
 
   private addHandlersToElements(): void {
-    this.audioWrapper.addEventListener('click', async (): Promise<void> => {
-      await this.playAudio();
-    });
-    this.audioElement.addEventListener('ended', () => this.disableSoundAnimation());
     this.optionsListElement.addEventListener('click', (event: MouseEvent): void =>
       this.userRawChoiceHandler(event)
     );
@@ -54,7 +50,7 @@ export default class AudiocallQuestion {
       event.preventDefault();
       switch (event.code) {
         case 'Space':
-          this.playAudio();
+          this.audioElement.playAudio();
           break;
         case 'Enter':
           this.skipButtonHandler();
@@ -71,25 +67,12 @@ export default class AudiocallQuestion {
     );
   }
 
-  private async playAudio(): Promise<void> {
-    this.enableSoundAnimation();
-    await this.audioElement.play();
-  }
-
-  private enableSoundAnimation(): void {
-    this.audioWrapper.classList.add('audio-wrapper_audio-playing');
-  }
-
-  private disableSoundAnimation(): void {
-    this.audioWrapper.classList.remove('audio-wrapper_audio-playing');
-  }
-
   private moveAudioWrapperToAnswer(): void {
-    this.audioWrapper.classList.remove('question__audio-wrapper');
-    this.audioWrapper.classList.add('answer__audio-wrapper');
-    this.audioElement.classList.remove('question__audio');
-    this.audioElement.classList.add('answer__audio');
-    (this.answerElement.firstElementChild as HTMLDivElement).after(this.audioWrapper);
+    this.audioElement.removeClassWithModifier(AUDIOCALL_AUDIO_BUTTON_PLACEMENT.inQuestion);
+    this.audioElement.addClassWithModifier(AUDIOCALL_AUDIO_BUTTON_PLACEMENT.inAnswer);
+    (this.answerElement.firstElementChild as HTMLDivElement).after(
+      this.audioElement.getAudioElement()
+    );
   }
 
   private openAnswer(): void {
@@ -126,11 +109,10 @@ export default class AudiocallQuestion {
       }
     });
 
-    if (chosenOption?.dataset.value === this.questionInfo.correctAnswer.wordTranslation) {
-      this.container.classList.add('question_correct');
-    } else {
-      this.container.classList.add('question_incorrect');
-    }
+    this.container.dataset.isUserAnswerCorrect = `${
+      chosenOption?.dataset.value === this.questionInfo.correctAnswer.wordTranslation
+    }`;
+
     this.openAnswer();
   }
 

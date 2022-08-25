@@ -1,4 +1,4 @@
-import { IAudiocallAnswerOption, IAudiocallCorrectAnswer, Numbers } from '../../types';
+import { IAudiocallAnswerOption, IGameCorrectAnswer, Numbers } from '../../types';
 import UIElementsConstructor from '../../utils/ui-elements-creator';
 
 export default class QuestionCardConstructor {
@@ -15,19 +15,6 @@ export default class QuestionCardConstructor {
     });
     questionContainer.dataset.questionNumber = `${questionNumber}`;
     return questionContainer;
-  }
-
-  public createAudioWrapper(placement: string, audioUrl: string): HTMLDivElement {
-    const audioWrapper: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
-      tag: 'div',
-      classNames: [`${placement}__audio-wrapper`, 'audio-wrapper'],
-    });
-    const audio: HTMLAudioElement = this.elementCreator.createAudio({
-      classNames: [`${placement}__audio`, 'audio'],
-      url: audioUrl,
-    });
-    audioWrapper.append(audio);
-    return audioWrapper;
   }
 
   public createOption(option: IAudiocallAnswerOption, index: number): HTMLLIElement {
@@ -49,7 +36,7 @@ export default class QuestionCardConstructor {
     return optionList;
   }
 
-  public createAnswer(answerInfo: IAudiocallCorrectAnswer): HTMLDivElement {
+  public createAnswer(answerInfo: IGameCorrectAnswer): HTMLDivElement {
     const answerContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['question__answer', 'answer'],
