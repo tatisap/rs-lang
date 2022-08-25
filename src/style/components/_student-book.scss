@@ -118,11 +118,13 @@
         display: flex;
         gap: 20px;
 
-        .info__translate {
+        .title__translate,
+        .title__word,
+        .title__transcription {
           font-size: 32px;
         }
 
-        .info__link-icon {
+        .title__link-icon {
           display: flex;
           width: 40px;
           height: 40px;
@@ -138,7 +140,7 @@
         }
       }
 
-      .word-section__text {
+      .info__text {
         .text__english {
           font-size: 24px;
           font-weight: 500;
