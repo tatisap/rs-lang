@@ -38,7 +38,7 @@ export default class App {
 
     const currentPage: PageName = this.getCurrentPageName();
     this.menu.setMenuItemActiveState(currentPage);
-    this.openPageOnLoad(currentPage);
+    this.openPage(currentPage);
   }
 
   private menuHandler(event: Event): void {
@@ -47,21 +47,12 @@ export default class App {
     const pageName: PageName = menuItem.dataset.pageName as PageName;
     this.menu.resetMenuItemsActiveState();
     this.menu.setMenuItemActiveState(pageName);
-    this.openPageFromMenu(pageName);
+    this.openPage(pageName);
     this.saveCurrentPageName(pageName);
     this.menu.closeMenu();
   }
 
-  private openPageOnLoad(pageName: PageName): void {
-    (document.querySelector('#app') as HTMLElement).innerHTML = NO_CONTENT;
-    if (pageName === 'studentBook') {
-      this.pages[pageName].renderPage(this.studentBook.getSection(), this.studentBook.getPage());
-    } else {
-      this.pages[pageName].renderPage();
-    }
-  }
-
-  private openPageFromMenu(pageName: PageName): void {
+  private openPage(pageName: PageName): void {
     (document.querySelector('#app') as HTMLElement).innerHTML = NO_CONTENT;
     this.pages[pageName].renderPage();
   }

@@ -1,6 +1,6 @@
 import StudentBookController from './controller';
-import { IBookSectionInfo, Numbers } from '../../types';
-import { STORAGE_KEYS, BOOK_SECTIONS } from '../../constants';
+import { IBookSectionInfo } from '../../types';
+import { STORAGE_KEYS, PAGE_TITLES } from '../../constants';
 
 export default class StudentBook {
   private controller: StudentBookController;
@@ -11,8 +11,12 @@ export default class StudentBook {
 
   public init(): void {
     window.addEventListener('beforeunload', (): void => {
-      this.saveSection();
-      this.savePage();
+      const currentPage = (document.querySelector('.page__title') as HTMLHeadingElement)
+        .textContent as string;
+      if (currentPage === PAGE_TITLES.studentBook) {
+        this.saveSection();
+        this.savePage();
+      }
     });
   }
 
@@ -30,15 +34,5 @@ export default class StudentBook {
     ) as HTMLDivElement;
     const currentPage: number = +(currentPageContainer.textContent as string);
     localStorage.setItem(STORAGE_KEYS.bookPage, `${currentPage}`);
-  }
-
-  public getSection(): IBookSectionInfo {
-    const sectionGroup = localStorage.getItem(STORAGE_KEYS.bookSection) as string;
-    const sectionInfo: IBookSectionInfo = this.controller.getSectionInfo(sectionGroup);
-    return sectionInfo || BOOK_SECTIONS.beginner;
-  }
-
-  public getPage(): number {
-    return +(localStorage.getItem(STORAGE_KEYS.bookPage) as string) || Numbers.One;
   }
 }

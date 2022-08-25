@@ -1,4 +1,9 @@
-import { BOOK_SECTIONS, DISPLAY_MODES, MAX_PAGES_IN_BOOK_SECTION } from '../../../constants';
+import {
+  BOOK_SECTIONS,
+  DISPLAY_MODES,
+  MAX_PAGES_IN_BOOK_SECTION,
+  STORAGE_KEYS,
+} from '../../../constants';
 import { IBookSectionInfo, Numbers } from '../../../types';
 
 export default class StudentBookController {
@@ -94,5 +99,20 @@ export default class StudentBookController {
     currentPageContainer.textContent = `${currentPage}`;
 
     return { page: currentPage, section: currentSectionInfo };
+  }
+
+  public getSection(): IBookSectionInfo {
+    const sectionGroup = localStorage.getItem(STORAGE_KEYS.bookSection) as string;
+    const sectionInfo: IBookSectionInfo = this.getSectionInfo(sectionGroup);
+    return sectionInfo;
+  }
+
+  public getPage(): number {
+    return +(localStorage.getItem(STORAGE_KEYS.bookPage) as string);
+  }
+
+  public removeSectionAndPageFromStorage(): void {
+    localStorage.removeItem(STORAGE_KEYS.bookSection);
+    localStorage.removeItem(STORAGE_KEYS.bookPage);
   }
 }

@@ -20,7 +20,18 @@ export default class StudentBookView {
     this.bookController = new StudentBookController();
   }
 
-  public renderPage(section = BOOK_SECTIONS.beginner, page = Numbers.One): void {
+  public renderPage(): void {
+    const previousOpenedSection = this.bookController.getSection();
+    const previousOpenedPage = this.bookController.getPage();
+    if (previousOpenedSection && previousOpenedPage) {
+      this.updatePageContainer(previousOpenedSection, previousOpenedPage);
+      this.bookController.removeSectionAndPageFromStorage();
+    } else {
+      this.updatePageContainer();
+    }
+  }
+
+  private updatePageContainer(section = BOOK_SECTIONS.beginner, page = Numbers.One): void {
     const pageContainer = document.getElementById('app') as HTMLElement;
     pageContainer.classList.add('page_student-book');
 
