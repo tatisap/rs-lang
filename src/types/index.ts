@@ -116,19 +116,24 @@ export interface IGameInfo {
   className: string;
 }
 
-export interface IAudiocallAnswerOption {
-  wordTranslation: string;
-  isCorrect: boolean;
-}
-
-export interface IAudiocallCorrectAnswer {
+export interface IGameCorrectAnswer {
   audioUrl: string;
   imageUrl: string;
   word: string;
   wordTranslation: string;
 }
 
+export interface IAudiocallAnswerOption {
+  wordTranslation: string;
+  isCorrect: boolean;
+}
+
 export interface IAudiocallQuestionInfo {
-  correctAnswer: IAudiocallCorrectAnswer;
+  correctAnswer: IGameCorrectAnswer;
   answerOptions: IAudiocallAnswerOption[];
+}
+
+export interface IGameQuestionResult {
+  isCorrect: boolean;
+  correctAnswer: IGameCorrectAnswer;
 }
