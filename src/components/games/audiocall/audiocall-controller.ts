@@ -40,6 +40,7 @@ export default class AudiocallController {
     ]);
     return {
       correctAnswer: {
+        wordId: questionWordInfo.id,
         audioUrl: `${BASE_URL}/${questionWordInfo.audio}`,
         imageUrl: `${BASE_URL}/${questionWordInfo.image}`,
         word: questionWordInfo.word,

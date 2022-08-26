@@ -127,6 +127,7 @@ export interface IGameInfo {
 }
 
 export interface IGameCorrectAnswer {
+  wordId: string;
   audioUrl: string;
   imageUrl: string;
   word: string;
