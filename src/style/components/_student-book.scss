@@ -139,14 +139,14 @@
         margin: 0;
         font-size: 24px;
         gap: 10px;
-        .text__example,
-        .text__meaning {
+        .text-example__native,
+        .text-meaning__native {
           font-weight: 600;
         }
-        .text__example,
-        .text__meaning,
-        .text__text-meaning-translate,
-        .text__example-translate {
+        .text-example__native,
+        .text-meaning__native,
+        .text-meaning__translate,
+        .text-example__translate {
           margin: 0;
         }
       }

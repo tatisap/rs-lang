@@ -64,20 +64,22 @@ export default class WordCard {
     const textMeaningContainer: HTMLDivElement =
       this.elementCreator.createUIElement<HTMLDivElement>({
         tag: 'div',
-        classNames: ['info__text-meaning'],
+        classNames: ['info__text-meaning', 'text-meaning'],
       });
 
-    const textMeaning: HTMLElement = this.elementCreator.createUIElement<HTMLElement>({
-      tag: 'p',
-      classNames: ['text__meaning'],
-      innerHTML: this.word.textMeaning,
-    });
+    const textMeaning: HTMLParagraphElement =
+      this.elementCreator.createUIElement<HTMLParagraphElement>({
+        tag: 'p',
+        classNames: ['text-meaning__native'],
+        innerHTML: this.word.textMeaning,
+      });
 
-    const textMeaningTranslate: HTMLElement = this.elementCreator.createUIElement<HTMLElement>({
-      tag: 'p',
-      classNames: ['text__text-meaning-translate'],
-      innerHTML: this.word.textMeaningTranslate,
-    });
+    const textMeaningTranslate: HTMLParagraphElement =
+      this.elementCreator.createUIElement<HTMLParagraphElement>({
+        tag: 'p',
+        classNames: ['text-meaning__translate'],
+        innerHTML: this.word.textMeaningTranslate,
+      });
 
     textMeaningContainer.append(textMeaning, textMeaningTranslate);
 
@@ -88,20 +90,22 @@ export default class WordCard {
     const textExampleContainer: HTMLDivElement =
       this.elementCreator.createUIElement<HTMLDivElement>({
         tag: 'div',
-        classNames: ['info__text-example'],
+        classNames: ['info__text-example', 'text-example'],
       });
 
-    const textExample: HTMLElement = this.elementCreator.createUIElement<HTMLElement>({
-      tag: 'p',
-      classNames: ['text__example'],
-      innerHTML: this.word.textExample,
-    });
+    const textExample: HTMLParagraphElement =
+      this.elementCreator.createUIElement<HTMLParagraphElement>({
+        tag: 'p',
+        classNames: ['text-example__native'],
+        innerHTML: this.word.textExample,
+      });
 
-    const textExampleTranslate: HTMLElement = this.elementCreator.createUIElement<HTMLElement>({
-      tag: 'p',
-      classNames: ['text__example-translate'],
-      innerHTML: this.word.textExampleTranslate,
-    });
+    const textExampleTranslate: HTMLParagraphElement =
+      this.elementCreator.createUIElement<HTMLParagraphElement>({
+        tag: 'p',
+        classNames: ['text-example__translate'],
+        innerHTML: this.word.textExampleTranslate,
+      });
 
     textExampleContainer.append(textExample, textExampleTranslate);
 
