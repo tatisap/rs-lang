@@ -13,31 +13,46 @@ export default class GameStartingPage {
     this.container = this.createStartingPageContainer();
   }
 
-  public open(gameName: GameName, gameContainer: HTMLDivElement): void {
+  public open(gameName: GameName, gameContainer: HTMLDivElement, level?: string): void {
     this.clearContainer();
 
-    const levels: number[] = Object.values(BOOK_SECTIONS).map(
-      (_, index: number): number => index + Numbers.One
-    );
-    levels.pop();
-
-    const levelSelection: HTMLDivElement = this.createLevelSelection(levels);
-    levelSelection.addEventListener('click', this.levelSelectionHandler);
     this.container.append(
       this.createStartingPageTitle(gamesInfo[gameName].ruName),
-      this.createRules(gamesInfo[gameName].rules),
-      levelSelection
+      this.createRules(gamesInfo[gameName].rules)
     );
+
+    if (!level) {
+      const levels: number[] = Object.values(BOOK_SECTIONS).map(
+        (_, index: number): number => index + Numbers.One
+      );
+      levels.pop();
+
+      const levelSelection: HTMLDivElement = this.createLevelSelection(levels);
+      levelSelection.addEventListener('click', (event: Event): void =>
+        this.levelSelectionHandler(event)
+      );
+      this.container.append(levelSelection);
+    } else {
+      const startGameButton: HTMLButtonElement = this.createStartGameButton();
+      startGameButton.addEventListener('click', (event: Event): void =>
+        this.dispatchLevelSelectedEvent(event.target as HTMLButtonElement, level as string)
+      );
+      this.container.append(startGameButton);
+    }
     gameContainer.append(this.container);
   }
 
   private levelSelectionHandler(event: Event): void {
     const option: HTMLLIElement = event.target as HTMLLIElement;
     if (!option.classList.contains('level-selection__option')) return;
-    option.dispatchEvent(
+    this.dispatchLevelSelectedEvent(option, option.textContent as string);
+  }
+
+  private dispatchLevelSelectedEvent(target: HTMLElement, level: string): void {
+    target.dispatchEvent(
       new CustomEvent('level-selected', {
         bubbles: true,
-        detail: { selectedLevel: option.textContent },
+        detail: { selectedLevel: level },
       })
     );
   }
@@ -101,6 +116,14 @@ export default class GameStartingPage {
       tag: 'li',
       classNames: ['level-selection__option'],
       innerText: `${level}`,
+    });
+  }
+
+  private createStartGameButton(): HTMLButtonElement {
+    return this.elementCreator.createUIElement<HTMLButtonElement>({
+      tag: 'button',
+      classNames: ['game__start-game-button'],
+      innerText: GAME_TITLES.startGame,
     });
   }
 

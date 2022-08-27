@@ -48,4 +48,20 @@
       }
     }
   }
+  .game__start-game-button {
+    @extend %normalized-button;
+    @extend %interactive;
+    align-self: center;
+    width: 120px;
+    height: 40px;
+    border: 1px solid $black;
+    border-radius: 10px;
+    font: {
+      size: 1rem;
+      weight: 700;
+    };
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }

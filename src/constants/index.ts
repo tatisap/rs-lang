@@ -168,6 +168,7 @@ export const GAME_TITLES = {
     correct: 'Верно',
     incorrect: 'Неверно',
   },
+  startGame: 'Поехали!',
 };
 
 export const GAME_ANSWER_RESULT_STATUS = {
