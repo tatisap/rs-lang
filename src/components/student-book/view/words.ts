@@ -7,12 +7,10 @@ export default class WordCard {
 
   constructor(private word: IWord) {
     this.elementCreator = new UIElementsConstructor();
-    this.word = word;
   }
 
-  public renderWords(): void {
-    const pageContainer = document.querySelector('.words') as HTMLElement;
-    const wordContainer: HTMLElement = this.elementCreator.createUIElement<HTMLDivElement>({
+  public createWordCard(): HTMLDivElement {
+    const wordContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['words__word-section'],
     });
@@ -21,13 +19,13 @@ export default class WordCard {
       classNames: ['word-section__info'],
     });
 
-    pageContainer.append(wordContainer);
     wordContainer.append(this.createImage(), infoContainer);
     infoContainer.append(
       this.createWordTitle(),
       this.createTextMeaningElement(),
       this.createTextExampleElement()
     );
+    return wordContainer;
   }
 
   private createImage(): HTMLElement {
