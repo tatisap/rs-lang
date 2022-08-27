@@ -6,7 +6,7 @@ export default class UIElementsConstructor {
     const element: T = document.createElement(tag) as T;
     element.classList.add(...classNames);
     if (innerText) element.textContent = innerText;
-    if (innerHTML) element.textContent = innerHTML;
+    if (innerHTML) element.innerHTML = innerHTML;
     return element;
   };
 

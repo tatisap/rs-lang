@@ -87,22 +87,17 @@
 
 .page__words {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  min-height: 50vh;
-  margin: 20px 0 0 0;
-  padding: 20px;
+  max-width: 90%;
+  margin: 20px auto;
   border-radius: 5px;
 
   .words__word-section {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 60px;
     font-family: $lexend;
 
     .word-section__img {
-      max-width: 260px;
+      width: 260px;
       height: 260px;
       object-fit: cover;
       border-radius: 10px;
@@ -111,35 +106,48 @@
     .word-section__info {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      column-gap: 27px;
+      gap: 27px;
+
+      .info__title-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
 
       .info__title {
         display: flex;
         gap: 20px;
-
-        .title__translate,
-        .title__word,
-        .title__transcription {
-          font-size: 32px;
-        }
-
-        .title__link-audio {
-          display: flex;
-          width: 40px;
-          height: 40px;
-          @include image($audio);
-        }
+        font-size: 32px;
+        margin: 0;
+        padding: 13px 0 0;
       }
 
-      .info__text {
-        .text__english {
-          font-size: 24px;
-          font-weight: 500;
-        }
+      .link-icon__audio {
+        @extend %interactive;
+        @include image($audio);
+        border: none;
+        width: 40px;
+        height: 40px;
+        margin-top: 13px;
+        background-color: transparent;
+      }
 
-        .text__translate {
-          font-size: 24px;
+      .info__text-meaning,
+      .info__text-example {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        font-size: 24px;
+        gap: 10px;
+        .text__example,
+        .text__meaning {
+          font-weight: 600;
+        }
+        .text__example,
+        .text__meaning,
+        .text__text-meaning-translate,
+        .text__example-translate {
+          margin: 0;
         }
       }
     }

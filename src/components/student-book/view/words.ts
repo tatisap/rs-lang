@@ -10,6 +10,7 @@ export default class WordCard {
   }
 
   public createWordCard(): HTMLDivElement {
+    const pageWords: HTMLDivElement = <HTMLDivElement>document.querySelector('.words');
     const wordContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['words__word-section'],
@@ -19,6 +20,7 @@ export default class WordCard {
       classNames: ['word-section__info'],
     });
 
+    pageWords.append(wordContainer);
     wordContainer.append(this.createImage(`${BASE_URL}/${this.word.image}`), infoContainer);
     infoContainer.append(
       this.createWordTitle(),
