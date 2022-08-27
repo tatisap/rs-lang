@@ -1,6 +1,6 @@
 import WordsAPI from '../../../../api/words-api';
 import {
-  AUDIOCALL_OPTIONS_NUMBER,
+  AUDIOCALL_ANSWER_OPTIONS_NUMBER,
   BASE_URL,
   MAX_PAGES_IN_BOOK_SECTION,
 } from '../../../../constants';
@@ -39,7 +39,7 @@ export default class AudiocallController {
       questionWordInfo,
       ...this.randomizer.getRandomItemsFromArray(
         wordsInfoArray.filter((wordInfo: IWord): boolean => questionWordInfo !== wordInfo),
-        AUDIOCALL_OPTIONS_NUMBER - Numbers.One
+        AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
       ),
     ]);
     return {

@@ -1,4 +1,4 @@
-import { GAMES, GAME_TITLES, PAGE_TITLES } from '../../constants';
+import { GAMES, GAME_INFO_HEADINGS, PAGE_TITLES } from '../../constants';
 import { IGameInfo } from '../../types';
 import UIElementsConstructor from '../../utils/ui-elements-creator';
 
@@ -21,7 +21,7 @@ export default class GamesHomepageConstructor {
     return this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h3',
       classNames: ['game-list__title'],
-      innerText: GAME_TITLES.selectionGame,
+      innerText: GAME_INFO_HEADINGS.selectionGame,
     });
   }
 

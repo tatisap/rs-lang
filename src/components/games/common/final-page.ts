@@ -1,10 +1,10 @@
 import {
   DISPLAY_MODES,
-  GAME_ANSWER_RESULT_STATUS,
-  GAME_TITLES,
+  GAME_ANSWER_STATUS,
+  GAME_INFO_HEADINGS,
   NO_CONTENT,
 } from '../../../constants';
-import { IGameCorrectAnswer, IGameQuestionResult, Numbers } from '../../../types';
+import { IGameCorrectAnswer, IGameQuestionResult } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudioElement from '../../audio/audio-element';
 
@@ -29,8 +29,8 @@ export default class GameFinalPage {
 
     this.container.append(
       this.createFinalPageTitle(),
-      this.createResultList(GAME_ANSWER_RESULT_STATUS.correct, correctResults),
-      this.createResultList(GAME_ANSWER_RESULT_STATUS.incorrect, incorrectResults)
+      this.createResultList(GAME_ANSWER_STATUS.correct, correctResults),
+      this.createResultList(GAME_ANSWER_STATUS.incorrect, incorrectResults)
     );
     gameContainer.append(this.container);
   }
@@ -46,7 +46,7 @@ export default class GameFinalPage {
     return this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h3',
       classNames: ['final-page__title'],
-      innerText: GAME_TITLES.results,
+      innerText: GAME_INFO_HEADINGS.results,
     });
   }
 
@@ -59,7 +59,7 @@ export default class GameFinalPage {
       tag: 'ul',
       classNames: ['result-list', `result-list_${modifier}`],
     });
-    if (listInfo.length !== Numbers.Zero) {
+    if (listInfo.length) {
       resultList.append(
         ...listInfo.map(
           (answerInfo: IGameCorrectAnswer): HTMLLIElement => this.createResultListItem(answerInfo)
@@ -73,9 +73,9 @@ export default class GameFinalPage {
         tag: 'h4',
         classNames: ['result-list__title'],
         innerText: `${
-          modifier === GAME_ANSWER_RESULT_STATUS.correct
-            ? GAME_TITLES.resultList.correct
-            : GAME_TITLES.resultList.incorrect
+          modifier === GAME_ANSWER_STATUS.correct
+            ? GAME_INFO_HEADINGS.resultOptions.correct
+            : GAME_INFO_HEADINGS.resultOptions.incorrect
         } - ${listInfo.length}`,
       }),
       resultList

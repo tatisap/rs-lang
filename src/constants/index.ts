@@ -160,18 +160,18 @@ export const PAGINATION_BUTTONS = {
 
 export const MAX_PAGES_IN_BOOK_SECTION = 30;
 
-export const GAME_TITLES = {
+export const GAME_INFO_HEADINGS = {
   selectionGame: 'Выберите игру:',
   selectionLevel: 'Выберите уровень:',
   results: 'Результаты:',
-  resultList: {
+  resultOptions: {
     correct: 'Верно',
     incorrect: 'Неверно',
   },
   startGame: 'Поехали!',
 };
 
-export const GAME_ANSWER_RESULT_STATUS = {
+export const GAME_ANSWER_STATUS = {
   correct: 'correct',
   incorrect: 'incorrect',
 };
@@ -181,4 +181,4 @@ export const AUDIOCALL_AUDIO_BUTTON_PLACEMENT = {
   inAnswer: 'answer',
 };
 
-export const AUDIOCALL_OPTIONS_NUMBER = 5;
+export const AUDIOCALL_ANSWER_OPTIONS_NUMBER = 5;

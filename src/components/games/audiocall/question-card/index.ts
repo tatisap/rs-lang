@@ -1,4 +1,7 @@
-import { AUDIOCALL_AUDIO_BUTTON_PLACEMENT, AUDIOCALL_OPTIONS_NUMBER } from '../../../../constants';
+import {
+  AUDIOCALL_AUDIO_BUTTON_PLACEMENT,
+  AUDIOCALL_ANSWER_OPTIONS_NUMBER,
+} from '../../../../constants';
 import { IAudiocallQuestionInfo, KeyboardCode, Numbers } from '../../../../types';
 import AudioElement from '../../../audio/audio-element';
 import QuestionCardConstructor from './card-constructor';
@@ -131,7 +134,7 @@ export default class AudiocallQuestion {
 
       if (
         Number.isNaN(chosenOptionNumber) ||
-        chosenOptionNumber > AUDIOCALL_OPTIONS_NUMBER ||
+        chosenOptionNumber > AUDIOCALL_ANSWER_OPTIONS_NUMBER ||
         chosenOptionNumber < Numbers.One
       )
         return;

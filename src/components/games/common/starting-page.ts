@@ -1,4 +1,4 @@
-import { BOOK_SECTIONS, GAME_TITLES, NO_CONTENT } from '../../../constants';
+import { BOOK_SECTIONS, GAME_INFO_HEADINGS, NO_CONTENT } from '../../../constants';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import gamesInfo from '../../../data/games-info.json';
 import { GameName, Numbers } from '../../../types';
@@ -99,7 +99,7 @@ export default class GameStartingPage {
       this.elementCreator.createUIElement<HTMLHeadingElement>({
         tag: 'h4',
         classNames: ['level-section__title'],
-        innerText: GAME_TITLES.selectionLevel,
+        innerText: GAME_INFO_HEADINGS.selectionLevel,
       });
     const levelSelectionOptionList: HTMLUListElement =
       this.elementCreator.createUIElement<HTMLUListElement>({
@@ -123,7 +123,7 @@ export default class GameStartingPage {
     return this.elementCreator.createUIElement<HTMLButtonElement>({
       tag: 'button',
       classNames: ['game__start-game-button'],
-      innerText: GAME_TITLES.startGame,
+      innerText: GAME_INFO_HEADINGS.startGame,
     });
   }
 
