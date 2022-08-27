@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_NAME, NO_CONTENT, STORAGE_KEYS } from '../constants';
+import { DEFAULT_PAGE_NAME, DISPLAY_MODES, NO_CONTENT, STORAGE_KEYS } from '../constants';
 import { PageName } from '../types';
 import Auth from './auth/auth';
 import GamesHomepage from './games-homepage';
@@ -55,6 +55,8 @@ export default class App {
   private openPage(pageName: PageName): void {
     (document.querySelector('#app') as HTMLElement).innerHTML = NO_CONTENT;
     this.pages[pageName].renderPage();
+    this.makeFooterVisible();
+    document.dispatchEvent(new Event('new-page-opened'));
   }
 
   private saveCurrentPageName(pageName: PageName): void {
@@ -63,5 +65,10 @@ export default class App {
 
   private getCurrentPageName(): PageName {
     return (localStorage.getItem(STORAGE_KEYS.currentPage) as PageName) || DEFAULT_PAGE_NAME;
+  }
+
+  private makeFooterVisible(): void {
+    (document.querySelector('footer') as HTMLElement).style.display =
+      DISPLAY_MODES.contentFlexVisible;
   }
 }

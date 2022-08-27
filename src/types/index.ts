@@ -51,6 +51,10 @@ export interface ILabel extends Omit<IElement, 'tag'> {
   htmlFor: string;
 }
 
+export interface IMediaElement extends Omit<IElement, 'tag'> {
+  url: string;
+}
+
 export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
@@ -76,6 +80,11 @@ export enum Numbers {
   One = 1,
 }
 
+export enum StringifiedBoolean {
+  True = 'true',
+  False = 'false',
+}
+
 export enum HttpMethods {
   GET = 'GET',
   POST = 'POST',
@@ -96,6 +105,11 @@ export enum StatusCode {
   InternalServerError = 500,
 }
 
+export enum KeyboardCode {
+  Space = 'Space',
+  Enter = 'Enter',
+}
+
 export interface IBookSectionInfo {
   text: string;
   className: string;
@@ -103,9 +117,34 @@ export interface IBookSectionInfo {
   group: number;
 }
 
-export type PageName = 'main' | 'studentBook';
+export type PageName = 'main' | 'studentBook' | 'games';
+
+export type GameName = 'audiocall';
 
 export interface IGameInfo {
   name: string;
   className: string;
+}
+
+export interface IGameCorrectAnswer {
+  wordId: string;
+  audioUrl: string;
+  imageUrl: string;
+  word: string;
+  wordTranslation: string;
+}
+
+export interface IAudiocallAnswerOption {
+  wordTranslation: string;
+  isCorrect: boolean;
+}
+
+export interface IAudiocallQuestionInfo {
+  correctAnswer: IGameCorrectAnswer;
+  answerOptions: IAudiocallAnswerOption[];
+}
+
+export interface IGameQuestionResult {
+  isCorrect: boolean;
+  correctAnswer: IGameCorrectAnswer;
 }

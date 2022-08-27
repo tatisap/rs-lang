@@ -5,6 +5,7 @@
 @import './style/utilities/mixins';
 @import './style/utilities/variables';
 @import './style/utilities/extends';
+@import './style/utilities/keyframes';
 
 @import './style/components/common';
 @import './style/components/header';
@@ -14,4 +15,7 @@
 @import './style/components/student-book';
 @import './style/components/about';
 @import './style/components/games-homepage';
+@import './style/components/game-starting-page';
+@import './style/components/game-final-page';
+@import './style/components/audiocall';
 @import './style/components/footer';

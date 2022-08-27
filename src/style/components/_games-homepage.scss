@@ -1,29 +1,41 @@
 .page_games {
-  .game-list__container {
+  position: relative;
+  .game {
+    @include image($game-landscape);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    background-position: center;
+    background-size: cover;
+  }
+  .game-catalog {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
     gap: 30px;
-    height: 100%;
     @media (max-width: 768px) {
       gap: 20px;
     }
-    .game-list__title {
+    .game-catalog__title {
       margin: 20px 0 0;
       font: {
         size: 1.3rem;
         weight: 700;
       }
     }
-    .game-list {
+    .game-catalog__list {
       @extend %normalized-list;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
       gap: 30px;
-      .game-list__item {
+      .game-catalog__list-item {
         @extend %interactive;
         display: flex;
         justify-content: center;
@@ -45,19 +57,18 @@
         }
         &.audiocall-game {
           @include image($audio);
-          
         }
         &.sprint-game {
           @include image($sprint);
         }
       }
     }
-    .game-list__image {
-      @include image($game-page-img);
-      flex-grow: 1;
-      width: 100%;
-      min-height: 40vh;
-      background-position: center;
-    }
+  }
+  .page__image {
+    @include image($game-page-img);
+    width: 70%;
+    min-height: 30vh;
+    margin: 20px auto 0;
+    background-position: center;
   }
 }
