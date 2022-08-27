@@ -20,7 +20,7 @@ export default class GamesHomepageConstructor {
   private createGameListTitle(): HTMLHeadingElement {
     return this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h3',
-      classNames: ['game-list__title'],
+      classNames: ['game-catalog__title'],
       innerText: GAME_INFO_HEADINGS.selectionGame,
     });
   }
@@ -28,7 +28,7 @@ export default class GamesHomepageConstructor {
   private createGameItem(className: string, gameName: string): HTMLLIElement {
     return this.elementCreator.createUIElement<HTMLLIElement>({
       tag: 'li',
-      classNames: ['game-list__item', `${className}-game`],
+      classNames: ['game-catalog__list-item', `${className}-game`],
       innerText: gameName,
     });
   }
@@ -36,7 +36,7 @@ export default class GamesHomepageConstructor {
   private createGameList(): HTMLUListElement {
     const gameList: HTMLUListElement = this.elementCreator.createUIElement<HTMLUListElement>({
       tag: 'ul',
-      classNames: ['game-list'],
+      classNames: ['game-catalog__list'],
     });
     gameList.append(
       ...(Object.values(GAMES) as IGameInfo[]).map(
@@ -49,7 +49,7 @@ export default class GamesHomepageConstructor {
   public createGameListContainer(): HTMLDivElement {
     const gameListContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
-      classNames: ['game-list__container'],
+      classNames: ['page__game-catalog', 'game-catalog'],
     });
     gameListContainer.append(this.createGameListTitle(), this.createGameList());
     return gameListContainer;

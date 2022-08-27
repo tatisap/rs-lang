@@ -11,7 +11,7 @@
     background-position: center;
     background-size: cover;
   }
-  .game-list__container {
+  .game-catalog {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -21,21 +21,21 @@
     @media (max-width: 768px) {
       gap: 20px;
     }
-    .game-list__title {
+    .game-catalog__title {
       margin: 20px 0 0;
       font: {
         size: 1.3rem;
         weight: 700;
       }
     }
-    .game-list {
+    .game-catalog__list {
       @extend %normalized-list;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
       gap: 30px;
-      .game-list__item {
+      .game-catalog__list-item {
         @extend %interactive;
         display: flex;
         justify-content: center;
