@@ -58,6 +58,8 @@ export const NO_CONTENT = '';
 export const STORAGE_KEYS = {
   user: '77-user',
   currentPage: '77-currentPage',
+  bookSection: '77-bookSection',
+  bookPage: '77-bookPage',
 };
 
 export const AUTH_MODAL_MODES: { [K in AuthMode]: AuthMode } = {
@@ -79,6 +81,7 @@ export const AUTH_ERROR_MESSAGE = {
 export const DISPLAY_MODES = {
   contentNotVisible: 'none',
   contentBlockVisible: 'block',
+  contentFlexVisible: 'flex',
 };
 
 export const PAGE_TITLES = {
@@ -142,6 +145,7 @@ export const BOOK_SECTIONS = {
     text: 'Superhero',
     className: 'superhero',
     color: '#E2DDFF',
+    group: 6,
   },
 };
 

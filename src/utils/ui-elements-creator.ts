@@ -1,11 +1,12 @@
-import { IAudioElement, IElement, IImageElement, IInput, ILabel } from '../types';
+import { IElement, IInput, ILabel, IMediaElement } from '../types';
 
 export default class UIElementsConstructor {
   public createUIElement = <T extends HTMLElement>(elementInfo: IElement): T => {
-    const { tag, classNames, innerText } = elementInfo;
+    const { tag, classNames, innerText, innerHTML } = elementInfo;
     const element: T = document.createElement(tag) as T;
     element.classList.add(...classNames);
     if (innerText) element.textContent = innerText;
+    if (innerHTML) element.textContent = innerHTML;
     return element;
   };
 
@@ -29,21 +30,21 @@ export default class UIElementsConstructor {
     return label;
   }
 
-  public createImage(imageInfo: IImageElement): HTMLImageElement {
-    const image: HTMLImageElement = this.createUIElement<HTMLImageElement>({
-      tag: 'img',
+  public createImage(imageInfo: IMediaElement): HTMLDivElement {
+    const image: HTMLDivElement = this.createUIElement<HTMLDivElement>({
+      tag: 'div',
       ...imageInfo,
     });
-    image.src = imageInfo.src;
+    image.style.backgroundImage = `url(${imageInfo.url})`;
     return image;
   }
 
-  public createAudio(audioInfo: IAudioElement): HTMLAudioElement {
+  public createAudio(audioInfo: IMediaElement): HTMLAudioElement {
     const audio: HTMLAudioElement = this.createUIElement<HTMLAudioElement>({
       tag: 'audio',
       ...audioInfo,
     });
-    audio.src = audioInfo.src;
+    audio.src = audioInfo.url;
     return audio;
   }
 }

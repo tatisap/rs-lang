@@ -124,19 +124,11 @@
           font-size: 32px;
         }
 
-        .title__link-icon {
+        .title__link-audio {
           display: flex;
           width: 40px;
           height: 40px;
-        }
-        &:nth-child(1) {
           @include image($audio);
-        }
-        &:nth-child(2) {
-          @include image($delete);
-        }
-        &:nth-child(3) {
-          @include image($hard);
         }
       }
 

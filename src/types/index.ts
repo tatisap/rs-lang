@@ -39,6 +39,7 @@ export interface IElement {
   tag: string;
   classNames: string[];
   innerText?: string;
+  innerHTML?: string;
 }
 
 export interface IInput extends Omit<IElement, 'tag'> {
@@ -51,13 +52,8 @@ export interface ILabel extends Omit<IElement, 'tag'> {
   htmlFor: string;
 }
 
-export interface IImageElement extends Omit<IElement, 'tag'> {
-  src: string;
-  alt: string;
-}
-
-export interface IAudioElement extends Omit<IElement, 'tag'> {
-  src: string;
+export interface IMediaElement extends Omit<IElement, 'tag'> {
+  url: string;
 }
 
 export type AuthMode = 'signIn' | 'signUp';
@@ -109,7 +105,7 @@ export interface IBookSectionInfo {
   text: string;
   className: string;
   color: string;
-  group?: number;
+  group: number;
 }
 
 export type PageName = 'main' | 'studentBook';
