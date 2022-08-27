@@ -77,7 +77,8 @@ export interface ISignUpError {
 
 export enum Numbers {
   Zero = 0,
-  One = 1,
+  One,
+  Two,
 }
 
 export enum StringifiedBoolean {
@@ -117,7 +118,7 @@ export interface IBookSectionInfo {
   group: number;
 }
 
-export type PageName = 'main' | 'studentBook' | 'games';
+export type PageName = 'main' | 'studentBook' | 'games' | 'statistic';
 
 export type GameName = 'audiocall';
 
