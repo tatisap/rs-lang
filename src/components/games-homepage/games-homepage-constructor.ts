@@ -46,23 +46,19 @@ export default class GamesHomepageConstructor {
     return gameList;
   }
 
-  private createGameListImage(): HTMLDivElement {
-    return this.elementCreator.createUIElement<HTMLDivElement>({
-      tag: 'div',
-      classNames: ['game-list__image'],
-    });
-  }
-
   public createGameListContainer(): HTMLDivElement {
     const gameListContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['game-list__container'],
     });
-    gameListContainer.append(
-      this.createGameListTitle(),
-      this.createGameList(),
-      this.createGameListImage()
-    );
+    gameListContainer.append(this.createGameListTitle(), this.createGameList());
     return gameListContainer;
+  }
+
+  public createPageImage(): HTMLDivElement {
+    return this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['page__image'],
+    });
   }
 }

@@ -18,7 +18,8 @@ export default class GamesHomepage {
     pageContainer.classList.add('page_games');
     pageContainer.append(
       this.uiConstructor.createPageTitle(),
-      this.uiConstructor.createGameListContainer()
+      this.uiConstructor.createGameListContainer(),
+      this.uiConstructor.createPageImage()
     );
     (Object.keys(GAMES) as GameName[]).forEach((gameName: GameName): void => {
       (pageContainer.querySelector(`.${gameName}-game`) as HTMLLIElement).addEventListener(
