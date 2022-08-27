@@ -1,5 +1,5 @@
-import { IAudiocallAnswerOption, IGameCorrectAnswer, Numbers } from '../../../types';
-import UIElementsConstructor from '../../../utils/ui-elements-creator';
+import { IAudiocallAnswerOption, IGameCorrectAnswer, Numbers } from '../../../../types';
+import UIElementsConstructor from '../../../../utils/ui-elements-creator';
 
 export default class QuestionCardConstructor {
   private elementCreator: UIElementsConstructor;

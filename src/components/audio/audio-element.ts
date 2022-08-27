@@ -1,4 +1,4 @@
-import UIElementsConstructor from '../../../utils/ui-elements-creator';
+import UIElementsConstructor from '../../utils/ui-elements-creator';
 
 export default class AudioElement {
   private elementCreator: UIElementsConstructor;

@@ -1,4 +1,4 @@
-import AudioCallGame from './audiocall/audiocall-game';
+import AudioCallGame from './audiocall';
 
 export default class GameSwitcher {
   public startNewAudioCallGame(level?: number, levelPage?: number): void {

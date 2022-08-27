@@ -7,10 +7,10 @@ import {
   StringifiedBoolean,
 } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
-import AudiocallController from './audiocall-controller';
+import AudiocallController from './controller/controller';
 import AudiocallQuestion from './question-card';
-import GameStartingPage from '../game-starting-page';
-import GameFinalPage from '../game-final-page';
+import GameStartingPage from '../common/starting-page';
+import GameFinalPage from '../common/final-page';
 
 export default class AudioCallGame {
   private elementCreator: UIElementsConstructor;

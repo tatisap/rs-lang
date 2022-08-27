@@ -1,7 +1,7 @@
-import { BOOK_SECTIONS, GAME_TITLES, NO_CONTENT } from '../../constants';
-import UIElementsConstructor from '../../utils/ui-elements-creator';
-import gamesInfo from '../../data/games-info.json';
-import { GameName, Numbers } from '../../types';
+import { BOOK_SECTIONS, GAME_TITLES, NO_CONTENT } from '../../../constants';
+import UIElementsConstructor from '../../../utils/ui-elements-creator';
+import gamesInfo from '../../../data/games-info.json';
+import { GameName, Numbers } from '../../../types';
 
 export default class GameStartingPage {
   private elementCreator: UIElementsConstructor;

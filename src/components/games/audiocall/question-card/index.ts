@@ -1,7 +1,7 @@
-import { AUDIOCALL_AUDIO_BUTTON_PLACEMENT, AUDIOCALL_OPTIONS_NUMBER } from '../../../constants';
-import { IAudiocallQuestionInfo, KeyboardCode, Numbers } from '../../../types';
-import AudioElement from './audio-element';
-import QuestionCardConstructor from './question-card-constructor';
+import { AUDIOCALL_AUDIO_BUTTON_PLACEMENT, AUDIOCALL_OPTIONS_NUMBER } from '../../../../constants';
+import { IAudiocallQuestionInfo, KeyboardCode, Numbers } from '../../../../types';
+import AudioElement from '../../../audio/audio-element';
+import QuestionCardConstructor from './card-constructor';
 
 export default class AudiocallQuestion {
   private uiConstructor: QuestionCardConstructor;

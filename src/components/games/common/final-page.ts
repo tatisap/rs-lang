@@ -1,7 +1,12 @@
-import { DISPLAY_MODES, GAME_ANSWER_RESULT_STATUS, GAME_TITLES, NO_CONTENT } from '../../constants';
-import { IGameCorrectAnswer, IGameQuestionResult, Numbers } from '../../types';
-import UIElementsConstructor from '../../utils/ui-elements-creator';
-import AudioElement from './audiocall/audio-element';
+import {
+  DISPLAY_MODES,
+  GAME_ANSWER_RESULT_STATUS,
+  GAME_TITLES,
+  NO_CONTENT,
+} from '../../../constants';
+import { IGameCorrectAnswer, IGameQuestionResult, Numbers } from '../../../types';
+import UIElementsConstructor from '../../../utils/ui-elements-creator';
+import AudioElement from '../../audio/audio-element';
 
 export default class GameFinalPage {
   private elementCreator: UIElementsConstructor;
