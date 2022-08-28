@@ -55,13 +55,17 @@ export default class StatisticUIConstructor {
     });
   }
 
-  public createDailyGameChart(): HTMLCanvasElement {
-    const canvas: HTMLCanvasElement = this.elementCreator.createUIElement<HTMLCanvasElement>({
+  private createCanvas(): HTMLCanvasElement {
+    return this.elementCreator.createUIElement<HTMLCanvasElement>({
       tag: 'canvas',
       classNames: ['chart'],
     });
+  }
 
-    const myChart = new Chart(canvas, {
+  public createDailyGameChart(): HTMLCanvasElement {
+    const canvas: HTMLCanvasElement = this.createCanvas();
+
+    const chart: Chart = new Chart(canvas, {
       type: 'bar',
       data: {
         labels: ['Аудиовызов', 'Спринт'],
@@ -86,30 +90,29 @@ export default class StatisticUIConstructor {
           },
         ],
       },
-      options: {
-        scales: {
-          y: {
-            title: DEFAULT_CONFIGS.yAxisTitle,
-          },
-        },
-        plugins: {
-          title: {
-            text: CHART_TITLES.byGames,
-            font: DEFAULT_CONFIGS.chartTitleFont,
-          },
+    });
+
+    chart.options = {
+      scales: {
+        y: {
+          title: DEFAULT_CONFIGS.yAxisTitle,
         },
       },
-    });
+      plugins: {
+        title: {
+          text: CHART_TITLES.byGames,
+          font: DEFAULT_CONFIGS.chartTitleFont,
+        },
+      },
+    };
+
     return canvas;
   }
 
   public createDailyWordChart(): HTMLCanvasElement {
-    const canvas: HTMLCanvasElement = this.elementCreator.createUIElement<HTMLCanvasElement>({
-      tag: 'canvas',
-      classNames: ['chart'],
-    });
+    const canvas: HTMLCanvasElement = this.createCanvas();
 
-    const myChart = new Chart(canvas, {
+    const chart: Chart = new Chart(canvas, {
       type: 'bar',
       data: {
         labels: [CHART_LABELS.xAxis.perDay],
@@ -134,30 +137,29 @@ export default class StatisticUIConstructor {
           },
         ],
       },
-      options: {
-        scales: {
-          y: {
-            title: DEFAULT_CONFIGS.yAxisTitle,
-          },
-        },
-        plugins: {
-          title: {
-            text: CHART_TITLES.byWords,
-            font: DEFAULT_CONFIGS.chartTitleFont,
-          },
+    });
+
+    chart.options = {
+      scales: {
+        y: {
+          title: DEFAULT_CONFIGS.yAxisTitle,
         },
       },
-    });
+      plugins: {
+        title: {
+          text: CHART_TITLES.byWords,
+          font: DEFAULT_CONFIGS.chartTitleFont,
+        },
+      },
+    };
+
     return canvas;
   }
 
   public createAllTimeChart(): HTMLCanvasElement {
-    const canvas: HTMLCanvasElement = this.elementCreator.createUIElement<HTMLCanvasElement>({
-      tag: 'canvas',
-      classNames: ['chart'],
-    });
+    const canvas: HTMLCanvasElement = this.createCanvas();
 
-    const myChart = new Chart(canvas, {
+    const chart: Chart = new Chart(canvas, {
       type: 'scatter',
       data: {
         labels: ['24/08/2022', '25/08/2022', '26/08/2022', '27/08/2022'],
@@ -177,14 +179,16 @@ export default class StatisticUIConstructor {
           },
         ],
       },
-      options: {
-        scales: {
-          y: {
-            title: DEFAULT_CONFIGS.yAxisTitle,
-          },
+    });
+
+    chart.options = {
+      scales: {
+        y: {
+          title: DEFAULT_CONFIGS.yAxisTitle,
         },
       },
-    });
+    };
+
     return canvas;
   }
 }
