@@ -31,7 +31,7 @@ export default class WordCard {
     return wordContainer;
   }
 
-  private createImage(imageUrl: string): HTMLElement {
+  private createImage(imageUrl: string): HTMLDivElement {
     return this.elementCreator.createImage({
       classNames: ['word-section__img'],
       url: imageUrl,
