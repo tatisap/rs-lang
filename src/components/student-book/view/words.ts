@@ -10,11 +10,12 @@ export default class WordCard {
   }
 
   public createWordCard(): HTMLDivElement {
-    const pageWords: HTMLDivElement = <HTMLDivElement>document.querySelector('.words');
+    const pageWords: HTMLDivElement = document.querySelector('.words') as HTMLDivElement;
     const wordContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['words__word-section'],
     });
+    wordContainer.dataset.wordId = `${this.word.id}`;
     const infoContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['word-section__info'],
@@ -30,10 +31,10 @@ export default class WordCard {
     return wordContainer;
   }
 
-  private createImage(wordInfo: string): HTMLElement {
+  private createImage(wordUrl: string): HTMLElement {
     return this.elementCreator.createImage({
       classNames: ['word-section__img'],
-      url: wordInfo,
+      url: wordUrl,
     });
   }
 
@@ -42,22 +43,22 @@ export default class WordCard {
       tag: 'div',
       classNames: ['info__title-container'],
     });
-    const title: HTMLHeadElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
+    const title: HTMLHeadingElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h3',
       classNames: ['info__title'],
       innerText: `${this.word.word} - ${this.word.wordTranslate} - ${this.word.transcription}`,
     });
 
-    titleContainer.append(title, this.createAudio());
+    titleContainer.append(title, this.createControlsContainer());
     return titleContainer;
   }
 
-  private createAudio(): HTMLButtonElement {
-    const audioBtn: HTMLButtonElement = this.elementCreator.createUIElement<HTMLButtonElement>({
-      tag: 'button',
-      classNames: ['link-icon__audio', 'audio'],
+  private createControlsContainer(): HTMLDivElement {
+    const controlsButton: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['info__controls', 'controls'],
     });
-    return audioBtn;
+    return controlsButton;
   }
 
   private createTextMeaningElement(): HTMLDivElement {

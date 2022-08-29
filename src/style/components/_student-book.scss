@@ -87,26 +87,44 @@
 
 .page__words {
   display: flex;
-  max-width: 90%;
-  margin: 20px auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  min-height: 50vh;
+  margin: 20px 0 0 0;
+  padding: 20px;
   border-radius: 5px;
 
   .words__word-section {
     display: flex;
-    gap: 60px;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 24%;
+    padding: 15px;
+    background: rgb(255, 255, 255, 0.5);
+    border-radius: 10px;
     font-family: $lexend;
-
+    @media (max-width: 768px) {
+      max-width: 48%;
+    }
+    @media (max-width: 320px) {
+      max-width: 99%;
+    }
     .word-section__img {
-      width: 260px;
+      max-width: 100%;
       height: 260px;
       object-fit: cover;
+      background-position: center;
       border-radius: 10px;
+      @media (max-width: 768px) {
+        height: 200px;
+      }
     }
 
     .word-section__info {
       display: flex;
       flex-direction: column;
-      gap: 27px;
+      gap: 10px;
 
       .info__title-container {
         display: flex;
@@ -117,28 +135,22 @@
       .info__title {
         display: flex;
         gap: 20px;
-        font-size: 32px;
+        font-size: 16px;
         margin: 0;
-        padding: 13px 0 0;
+        padding: 13px 0 10px;
       }
 
-      .link-icon__audio {
-        @extend %interactive;
-        @include image($audio);
-        border: none;
-        width: 40px;
-        height: 40px;
-        margin-top: 13px;
-        background-color: transparent;
+      .info__text-meaning {
+        border-bottom: 1px dashed #c0c0c0;
+        padding-bottom: 10px;
       }
-
       .info__text-meaning,
       .info__text-example {
         display: flex;
         flex-direction: column;
         margin: 0;
-        font-size: 24px;
-        gap: 10px;
+        font-size: 14px;
+        gap: 8px;
         .text-example__native,
         .text-meaning__native {
           font-weight: 600;
