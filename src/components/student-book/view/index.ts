@@ -45,12 +45,12 @@ export default class StudentBookView {
   }
 
   private createPageTitle(): HTMLHeadingElement {
-    const pageTtitle: HTMLHeadingElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
+    const pageTitle: HTMLHeadingElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h2',
       classNames: ['page__title'],
       innerText: PAGE_TITLES.studentBook,
     });
-    return pageTtitle;
+    return pageTitle;
   }
 
   private createGameLink(gameClass: string, gameName: string, gameLink: string): HTMLAnchorElement {
