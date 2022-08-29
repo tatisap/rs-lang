@@ -31,10 +31,10 @@ export default class WordCard {
     return wordContainer;
   }
 
-  private createImage(wordUrl: string): HTMLElement {
+  private createImage(imageUrl: string): HTMLElement {
     return this.elementCreator.createImage({
       classNames: ['word-section__img'],
-      url: wordUrl,
+      url: imageUrl,
     });
   }
 
