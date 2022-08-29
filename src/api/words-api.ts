@@ -1,4 +1,4 @@
-import { HttpMethods, IUserWord, IWord, Numbers } from '../types';
+import { HttpMethods, IStatistics, IUserWord, IWord, Numbers } from '../types';
 import { BASE_URL, PATHS, QUERY_KEYS, REQUEST_HEADERS } from '../constants';
 
 export default class WordsAPI {
@@ -22,5 +22,20 @@ export default class WordsAPI {
     });
     const data: IUserWord[] = (await response.json()) as IUserWord[];
     return data;
+  }
+
+  public async getUserStatistic(userId: string, token: string): Promise<IStatistics> {
+    const response: Response = await fetch(
+      `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.statistics}`,
+      {
+        method: HttpMethods.GET,
+        headers: {
+          [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
+          [REQUEST_HEADERS.accept]: 'application/json',
+        },
+      }
+    );
+    const statistics: IStatistics = (await response.json()) as IStatistics;
+    return statistics;
   }
 }
