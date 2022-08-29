@@ -96,7 +96,11 @@ export default class AuthController {
     }
   }
 
-  public async getAccessToken(): Promise<string> {
+  public getAccessToken(): string {
     return this.getConfidentialInfo().token;
+  }
+
+  public getUserId(): string {
+    return this.getConfidentialInfo().userId;
   }
 }
