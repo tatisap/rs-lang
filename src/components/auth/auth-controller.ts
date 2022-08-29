@@ -5,6 +5,7 @@ import {
   IAuthStatus,
   IResponse,
   ISignUpError,
+  ITokens,
   IUser,
   IUserTokens,
   Numbers,
@@ -62,6 +63,15 @@ export default class AuthController {
     }
   }
 
+  public signOut(): void {
+    this.removeConfidentialInfo();
+    document.location.reload();
+  }
+
+  public getConfidentialInfo(): IUserTokens {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.user) as string) as IUserTokens;
+  }
+
   public saveConfidentialInfo(info: IUserTokens): void {
     localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(info));
   }
@@ -72,5 +82,21 @@ export default class AuthController {
 
   public isUserAuthorized(): boolean {
     return !!localStorage.getItem(STORAGE_KEYS.user);
+  }
+
+  public async updateTokens(): Promise<void> {
+    try {
+      const userInfo: IUserTokens = this.getConfidentialInfo();
+      const newTokens: ITokens = await this.api.updateToken(userInfo.userId, userInfo.refreshToken);
+      userInfo.token = newTokens.token;
+      userInfo.refreshToken = newTokens.refreshToken;
+      this.saveConfidentialInfo(userInfo);
+    } catch {
+      this.signOut();
+    }
+  }
+
+  public async getAccessToken(): Promise<string> {
+    return this.getConfidentialInfo().token;
   }
 }
