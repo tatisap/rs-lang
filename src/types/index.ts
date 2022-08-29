@@ -29,6 +29,11 @@ export interface IUserTokens {
   name: string;
 }
 
+export interface ITokens {
+  token: string;
+  refreshToken: string;
+}
+
 export interface ITeamMember {
   name: string;
   github: string;
@@ -59,7 +64,7 @@ export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
   statusCode: StatusCode;
-  content?: IUser | IUserTokens | ISignUpError | string;
+  content?: IUser | IUserTokens | ISignUpError | ITokens | string;
 }
 
 export interface IAuthStatus {
@@ -149,3 +154,65 @@ export interface IGameQuestionResult {
   isCorrect: boolean;
   correctAnswer: IGameCorrectAnswer;
 }
+
+export interface IDailyGameChartData {
+  gameLabel: string;
+  data: {
+    newWords: number;
+    correctAnswers: number;
+    maxCorrectAnswers: number;
+  };
+}
+
+export interface IDailyWordChartData {
+  newWords: number;
+  learnedWords: number;
+  correctAnswers: number;
+}
+
+export interface IAllTimeChartData {
+  date: Date;
+  newWords: number;
+  learnedWords: number;
+}
+
+export type IUserWordDataByGame = {
+  [game in GameName]: {
+    correctAnswersCounter: number;
+    incorrectAnswersCounter: number;
+  };
+};
+
+export interface IUserWordGameDataByDate {
+  [date: string]: IUserWordDataByGame;
+}
+
+export interface IUserWord {
+  difficulty: 'hard' | 'easy';
+  optional: {
+    isLearned: boolean;
+    dateOfLearning: string;
+    correctAnswersInRow: number;
+    gameNameOfFirstUse: GameName;
+    dateOfFirstUse: string;
+    dataByDates: IUserWordGameDataByDate;
+  };
+}
+
+export interface IStatistics {
+  optional: {
+    [date: string]: {
+      maxCorrectAnswerSeries: {
+        [game in GameName]: number;
+      };
+    };
+  };
+}
+
+export interface IProcessedStatisticInfo {
+  dailyGameChartData: IDailyGameChartData[];
+  dailyWordsChartData: IDailyWordChartData;
+  allTimeChartData: IAllTimeChartData[];
+}
+
+export type StatisticalDatesType = 'dateOfLearning' | 'dateOfFirstUse';
