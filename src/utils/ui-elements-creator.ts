@@ -30,15 +30,6 @@ export default class UIElementsConstructor {
     return label;
   }
 
-  public createImage(imageInfo: IMediaElement): HTMLDivElement {
-    const image: HTMLDivElement = this.createUIElement<HTMLDivElement>({
-      tag: 'div',
-      ...imageInfo,
-    });
-    image.style.backgroundImage = `url(${imageInfo.url})`;
-    return image;
-  }
-
   public createAudio(audioInfo: IMediaElement): HTMLAudioElement {
     const audio: HTMLAudioElement = this.createUIElement<HTMLAudioElement>({
       tag: 'audio',
@@ -46,5 +37,14 @@ export default class UIElementsConstructor {
     });
     audio.src = audioInfo.url;
     return audio;
+  }
+
+  public createImage(imageInfo: IMediaElement): HTMLDivElement {
+    const image: HTMLDivElement = this.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      ...imageInfo,
+    });
+    image.style.backgroundImage = `url(${imageInfo.url})`;
+    return image;
   }
 }

@@ -1,0 +1,45 @@
+.game__final-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: $app-background-color;
+  overflow: auto;
+  .final-page__title {
+    align-self: center;
+    margin: 0;
+    font: {
+      family: $balsamiq;
+      size: 1.5rem;
+      weight: 700;
+    }
+  }
+  .result-list__title {
+    margin: 0 0 10px;
+  }
+  .result-list {
+    @extend %normalized-list;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    &.result-list_correct {
+      background-color: $green-tab-color;
+    }
+    &.result-list_incorrect {
+      background-color: $red-tab-color;
+    }
+    .result-list__item {
+      display: flex;
+      gap: 10px;
+      .audio-wrapper {
+        @include image($audio);
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+      }
+    }
+  }
+}
