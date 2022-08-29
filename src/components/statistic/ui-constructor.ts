@@ -7,6 +7,7 @@ import {
   CHART_TITLES,
   DEFAULT_CONFIGS,
 } from '../../constants/chart-defaults';
+import { IAllTimeChartData, IDailyGameChartData, IDailyWordChartData } from '../../types';
 
 export default class StatisticUIConstructor {
   private elementCreator: UIElementsConstructor;
@@ -24,18 +25,10 @@ export default class StatisticUIConstructor {
   }
 
   public createChartsContainer(): HTMLDivElement {
-    const container: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
+    return this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__charts', 'charts'],
     });
-    container.append(
-      this.createDailyChartsTitle(),
-      this.createDailyGameChart(),
-      this.createDailyWordChart(),
-      this.createAllTimeChartTitle(),
-      this.createAllTimeChart()
-    );
-    return container;
   }
 
   public createDailyChartsTitle(): HTMLHeadingElement {
@@ -62,29 +55,33 @@ export default class StatisticUIConstructor {
     });
   }
 
-  public createDailyGameChart(): HTMLCanvasElement {
+  public createDailyGameChart(statisticData: IDailyGameChartData[]): HTMLCanvasElement {
     const canvas: HTMLCanvasElement = this.createCanvas();
 
     const chart: Chart = new Chart(canvas, {
       type: 'bar',
       data: {
-        labels: ['Аудиовызов', 'Спринт'],
+        labels: statisticData.map((data: IDailyGameChartData): string => data.gameLabel),
         datasets: [
           {
             label: CHART_LABELS.legend.newWords,
-            data: [10, 15],
+            data: statisticData.map((data: IDailyGameChartData): number => data.data.newWords),
             backgroundColor: CHART_COLORS.transparentOrange,
             borderColor: CHART_COLORS.orange,
           },
           {
             label: CHART_LABELS.legend.correctAnswers,
-            data: [6, 5],
+            data: statisticData.map(
+              (data: IDailyGameChartData): number => data.data.correctAnswers
+            ),
             backgroundColor: CHART_COLORS.transparentBlue,
             borderColor: CHART_COLORS.blue,
           },
           {
             label: CHART_LABELS.legend.maxCorrectAnswers,
-            data: [3, 3],
+            data: statisticData.map(
+              (data: IDailyGameChartData): number => data.data.maxCorrectAnswers
+            ),
             backgroundColor: CHART_COLORS.transparentPurple,
             borderColor: CHART_COLORS.purple,
           },
@@ -109,7 +106,7 @@ export default class StatisticUIConstructor {
     return canvas;
   }
 
-  public createDailyWordChart(): HTMLCanvasElement {
+  public createDailyWordChart(statisticData: IDailyWordChartData): HTMLCanvasElement {
     const canvas: HTMLCanvasElement = this.createCanvas();
 
     const chart: Chart = new Chart(canvas, {
@@ -119,19 +116,19 @@ export default class StatisticUIConstructor {
         datasets: [
           {
             label: CHART_LABELS.legend.newWords,
-            data: [10, 15],
+            data: [statisticData.newWords],
             backgroundColor: CHART_COLORS.transparentOrange,
             borderColor: CHART_COLORS.orange,
           },
           {
             label: CHART_LABELS.legend.learnedWords,
-            data: [6, 5],
+            data: [statisticData.learnedWords],
             backgroundColor: CHART_COLORS.transparentBlue,
             borderColor: CHART_COLORS.blue,
           },
           {
             label: CHART_LABELS.legend.correctAnswers,
-            data: [3, 3],
+            data: [statisticData.correctAnswers],
             backgroundColor: CHART_COLORS.transparentPurple,
             borderColor: CHART_COLORS.purple,
           },
@@ -156,24 +153,26 @@ export default class StatisticUIConstructor {
     return canvas;
   }
 
-  public createAllTimeChart(): HTMLCanvasElement {
+  public createAllTimeChart(statisticData: IAllTimeChartData[]): HTMLCanvasElement {
     const canvas: HTMLCanvasElement = this.createCanvas();
 
     const chart: Chart = new Chart(canvas, {
       type: 'scatter',
       data: {
-        labels: ['24/08/2022', '25/08/2022', '26/08/2022', '27/08/2022'],
+        labels: statisticData.map((data: IAllTimeChartData): string =>
+          data.date.toLocaleDateString()
+        ),
         datasets: [
           {
             type: 'line',
             label: CHART_LABELS.legend.learnedWords,
-            data: [10, 50, 100, 360],
+            data: statisticData.map((data: IAllTimeChartData): number => data.learnedWords),
             borderColor: CHART_COLORS.purple,
           },
           {
             type: 'bar',
             label: CHART_LABELS.legend.newWords,
-            data: [10, 40, 50, 300],
+            data: statisticData.map((data: IAllTimeChartData): number => data.newWords),
             backgroundColor: CHART_COLORS.transparentBlue,
             borderColor: CHART_COLORS.blue,
           },
