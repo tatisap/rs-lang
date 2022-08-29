@@ -1,7 +1,13 @@
-import { BOOK_SECTIONS, GAME_INFO_HEADINGS, NO_CONTENT } from '../../../constants';
+import {
+  BOOK_SECTIONS,
+  GAME_INFO_HEADINGS,
+  NO_CONTENT,
+  STORAGE_KEYS,
+  DEFAULT_PAGE_NAME,
+} from '../../../constants';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import gamesInfo from '../../../data/games-info.json';
-import { GameName, Numbers } from '../../../types';
+import { GameName, Numbers, PageName } from '../../../types';
 
 export default class GameStartingPage {
   private elementCreator: UIElementsConstructor;
@@ -15,13 +21,15 @@ export default class GameStartingPage {
 
   public open(gameName: GameName, gameContainer: HTMLDivElement, level?: string): void {
     this.clearContainer();
+    const currentPage =
+      (localStorage.getItem(STORAGE_KEYS.currentPage) as PageName) || DEFAULT_PAGE_NAME;
 
     this.container.append(
       this.createStartingPageTitle(gamesInfo[gameName].ruName),
       this.createRules(gamesInfo[gameName].rules)
     );
 
-    if (!level) {
+    if (currentPage === 'games') {
       const levels: number[] = Object.values(BOOK_SECTIONS).map(
         (_, index: number): number => index + Numbers.One
       );
@@ -32,7 +40,7 @@ export default class GameStartingPage {
         this.levelSelectionHandler(event)
       );
       this.container.append(levelSelection);
-    } else {
+    } else if (currentPage === 'studentBook') {
       const startGameButton: HTMLButtonElement = this.createStartGameButton();
       startGameButton.addEventListener('click', (event: Event): void =>
         this.dispatchLevelSelectedEvent(event.target as HTMLButtonElement, level as string)

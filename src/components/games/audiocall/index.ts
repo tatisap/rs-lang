@@ -38,8 +38,16 @@ export default class AudioCallGame {
     this.openGameContainer();
     this.hideFooter();
 
-    if (level && levelPage) {
-      await this.questionSwitcher(level, levelPage);
+    if (level !== undefined && levelPage !== undefined) {
+      this.startingPage.open(
+        GAMES.audiocall.className as GameName,
+        this.container,
+        level.toString()
+      );
+      this.container.addEventListener('level-selected', async (): Promise<void> => {
+        this.clearGameContainer();
+        await this.questionSwitcher(level, levelPage);
+      });
     } else {
       this.startingPage.open(GAMES.audiocall.className as GameName, this.container);
       this.container.addEventListener('level-selected', async (event: Event): Promise<void> => {

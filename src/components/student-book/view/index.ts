@@ -6,18 +6,23 @@ import {
   PAGINATION_BUTTONS,
   MAX_PAGES_IN_BOOK_SECTION,
   DISPLAY_MODES,
+  NO_CONTENT,
 } from '../../../constants';
 import { IBookSectionInfo, Numbers } from '../../../types';
 import StudentBookController from '../controller';
+import GameSwitcher from '../../games/game-switcher';
 
 export default class StudentBookView {
   readonly elementCreator: UIElementsConstructor;
 
   readonly bookController: StudentBookController;
 
+  readonly gameSwitcher: GameSwitcher;
+
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.bookController = new StudentBookController();
+    this.gameSwitcher = new GameSwitcher();
   }
 
   public renderPage(): void {
@@ -37,7 +42,7 @@ export default class StudentBookView {
 
     pageContainer.append(
       this.createPageTitle(),
-      this.createGamesContainer(),
+      this.createGamesContainer(section.group, page),
       this.createBookSectionsContainer(section.className),
       this.createPaginationContainer(section, page),
       this.createWordsContainer(section.color)
@@ -53,25 +58,43 @@ export default class StudentBookView {
     return pageTtitle;
   }
 
-  private createGameLink(gameClass: string, gameName: string, gameLink: string): HTMLAnchorElement {
+  private createGameLink(
+    gameClass: string,
+    gameName: string,
+    section: number,
+    page: number
+  ): HTMLAnchorElement {
     const gameLinkElement: HTMLAnchorElement =
       this.elementCreator.createUIElement<HTMLAnchorElement>({
-        tag: 'a',
-        classNames: ['games__game-link', gameClass],
+        tag: 'span',
+        classNames: ['games__game-link', `${gameClass}-link`],
         innerText: gameName,
       });
-    gameLinkElement.setAttribute('href', gameLink);
+    switch (gameClass) {
+      case GAMES.audiocall.className:
+        gameLinkElement.addEventListener('click', (): void => {
+          this.gameSwitcher.startNewAudioCallGame(section, page);
+        });
+        break;
+      case GAMES.sprint.className:
+        gameLinkElement.addEventListener('click', (): void =>
+          this.gameSwitcher.startNewSprintGame(section, page)
+        );
+        break;
+      default:
+        break;
+    }
     return gameLinkElement;
   }
 
-  private createGamesContainer(): HTMLDivElement {
+  private createGamesContainer(section: number, page: number): HTMLDivElement {
     const gamesContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__games', 'games'],
     });
     gamesContainer.append(
-      this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, GAMES.audiocall.link),
-      this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, GAMES.sprint.link)
+      this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, section, page),
+      this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, section, page)
     );
     return gamesContainer;
   }
@@ -83,7 +106,8 @@ export default class StudentBookView {
       innerText: sectionName,
     });
     bookSection.addEventListener('click', (event: Event): void => {
-      this.bookController.switchSection(event);
+      const newSection: IBookSectionInfo = this.bookController.switchSection(event);
+      this.updateGamesButtons(newSection.group, Numbers.One);
     });
     return bookSection;
   }
@@ -117,7 +141,9 @@ export default class StudentBookView {
       paginationButton.setAttribute('disabled', '');
     }
     paginationButton.addEventListener('click', (event: Event): void => {
-      this.bookController.switchPage(event);
+      const newPageAndSection: { page: number; section: IBookSectionInfo } =
+        this.bookController.switchPage(event);
+      this.updateGamesButtons(newPageAndSection.section.group, newPageAndSection.page);
     });
     return paginationButton;
   }
@@ -158,5 +184,14 @@ export default class StudentBookView {
     });
     wordsContainer.style.backgroundColor = sectionColor;
     return wordsContainer;
+  }
+
+  private updateGamesButtons(section: number, page: number): void {
+    const gameButtonsContainer = document.querySelector('.page__games') as HTMLDivElement;
+    gameButtonsContainer.innerHTML = NO_CONTENT;
+    gameButtonsContainer.append(
+      this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, section, page),
+      this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, section, page)
+    );
   }
 }

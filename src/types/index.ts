@@ -119,7 +119,7 @@ export interface IBookSectionInfo {
 
 export type PageName = 'main' | 'studentBook' | 'games';
 
-export type GameName = 'audiocall';
+export type GameName = 'audiocall' | 'sprint';
 
 export interface IGameInfo {
   name: string;
