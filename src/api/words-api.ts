@@ -1,4 +1,4 @@
-import { HttpMethods, IStatistics, IUserWord, IWord, Numbers } from '../types';
+import { HttpMethods, IUserStatistics, IUserWord, IWord, Numbers } from '../types';
 import { BASE_URL, PATHS, QUERY_KEYS, REQUEST_HEADERS } from '../constants';
 
 export default class WordsAPI {
@@ -24,7 +24,7 @@ export default class WordsAPI {
     return data;
   }
 
-  public async getUserStatistic(userId: string, token: string): Promise<IStatistics> {
+  public async getUserStatistic(userId: string, token: string): Promise<IUserStatistics> {
     const response: Response = await fetch(
       `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.statistics}`,
       {
@@ -35,7 +35,7 @@ export default class WordsAPI {
         },
       }
     );
-    const statistics: IStatistics = (await response.json()) as IStatistics;
+    const statistics: IUserStatistics = (await response.json()) as IUserStatistics;
     return statistics;
   }
 }

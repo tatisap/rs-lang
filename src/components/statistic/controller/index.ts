@@ -2,15 +2,15 @@ import WordsAPI from '../../../api/words-api';
 import { GAMES, MS_PER_DAY } from '../../../constants';
 import {
   GameName,
-  IAllTimeChartData,
-  IDailyGameChartData,
-  IDailyWordChartData,
+  IDailyChartDataByGame,
+  IDailyChartDataForAllWords,
   IGameInfo,
+  ILongTermChartDataPerDate,
   IProcessedStatisticInfo,
-  IStatistics,
+  IUserStatistics,
   IUserWord,
   Numbers,
-  StatisticalDatesType,
+  StatisticalDateKeysType,
 } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import RequestProcessor from '../../request-processor';
@@ -42,11 +42,11 @@ export default class StatisticPageController {
       this.api.getUserWords
     );
 
-    const userStatistics: IStatistics = await this.requestProcessor.process<IStatistics>(
+    const userStatistics: IUserStatistics = await this.requestProcessor.process<IUserStatistics>(
       this.api.getUserStatistic
     );
 
-    const dailyGameChartData: IDailyGameChartData[] = this.getDailyGameChartData(
+    const dailyChartDataByGames: IDailyChartDataByGame[] = this.getDailyGameChartData(
       gameLabels,
       gameNames,
       dateKey,
@@ -54,15 +54,18 @@ export default class StatisticPageController {
       userStatistics
     );
 
-    const dailyWordsChartData: IDailyWordChartData = this.getDailyWordsChartData(
+    const dailyChartDataForAllWords: IDailyChartDataForAllWords = this.getDailyWordsChartData(
       gameNames,
       dateKey,
       userWords
     );
 
-    const allTimeChartData: IAllTimeChartData[] = this.getAllTimeChartData(userWords, gameNames);
+    const longTermChartData: ILongTermChartDataPerDate[] = this.getAllTimeChartData(
+      userWords,
+      gameNames
+    );
 
-    return { dailyGameChartData, dailyWordsChartData, allTimeChartData };
+    return { dailyChartDataByGames, dailyChartDataForAllWords, longTermChartData };
   }
 
   public getDailyGameChartData(
@@ -70,9 +73,9 @@ export default class StatisticPageController {
     gameNames: GameName[],
     date: string,
     userWords: IUserWord[],
-    userStatistics: IStatistics
-  ): IDailyGameChartData[] {
-    return gameNames.map((gameName: GameName, index: number): IDailyGameChartData => {
+    userStatistics: IUserStatistics
+  ): IDailyChartDataByGame[] {
+    return gameNames.map((gameName: GameName, index: number): IDailyChartDataByGame => {
       return {
         gameLabel: gameLabels[index],
         data: {
@@ -88,7 +91,7 @@ export default class StatisticPageController {
     gameNames: GameName[],
     dateKey: string,
     userWords: IUserWord[]
-  ): IDailyWordChartData {
+  ): IDailyChartDataForAllWords {
     return {
       newWords: this.counter.countNewWordsForDate(userWords, gameNames, dateKey),
       learnedWords: this.counter.countLearnedWordsForDate(userWords, dateKey),
@@ -96,7 +99,10 @@ export default class StatisticPageController {
     };
   }
 
-  public getAllTimeChartData(userWords: IUserWord[], gameNames: GameName[]): IAllTimeChartData[] {
+  public getAllTimeChartData(
+    userWords: IUserWord[],
+    gameNames: GameName[]
+  ): ILongTermChartDataPerDate[] {
     const dateKeys: string[] = Array.from(
       new Set([
         ...this.getDateKeysByType(userWords, 'dateOfLearning'),
@@ -104,7 +110,7 @@ export default class StatisticPageController {
       ])
     );
 
-    const rawData: IAllTimeChartData[] = dateKeys.map((dateKey: string) => {
+    const rawData: ILongTermChartDataPerDate[] = dateKeys.map((dateKey: string) => {
       return {
         date: this.dateFormatter.getDateByDateKey(dateKey),
         newWords: this.counter.countNewWordsForDate(userWords, gameNames, dateKey),
@@ -113,13 +119,14 @@ export default class StatisticPageController {
     });
 
     rawData.sort(
-      (a: IAllTimeChartData, b: IAllTimeChartData): number => a.date.getTime() - b.date.getTime()
+      (a: ILongTermChartDataPerDate, b: ILongTermChartDataPerDate): number =>
+        a.date.getTime() - b.date.getTime()
     );
 
-    const enrichedData: IAllTimeChartData[] = this.enrichAllTimeChartDataByDates(rawData);
+    const enrichedData: ILongTermChartDataPerDate[] = this.enrichAllTimeChartDataByDates(rawData);
 
-    enrichedData.forEach((dataItem: IAllTimeChartData, index: number): void => {
-      const currentDataItem: IAllTimeChartData = dataItem;
+    enrichedData.forEach((dataItem: ILongTermChartDataPerDate, index: number): void => {
+      const currentDataItem: ILongTermChartDataPerDate = dataItem;
       if (index > Numbers.Zero)
         currentDataItem.learnedWords += enrichedData[index - Numbers.One].learnedWords;
     });
@@ -135,17 +142,19 @@ export default class StatisticPageController {
     return Object.values(GAMES).map((game: IGameInfo): GameName => game.className as GameName);
   }
 
-  private getDateKeysByType(userWords: IUserWord[], dateType: StatisticalDatesType): string[] {
+  private getDateKeysByType(userWords: IUserWord[], dateType: StatisticalDateKeysType): string[] {
     return userWords
       .map((userWord: IUserWord) => userWord.optional[dateType])
       .filter((date: string): boolean => !!date);
   }
 
-  private enrichAllTimeChartDataByDates(sortedRawData: IAllTimeChartData[]): IAllTimeChartData[] {
+  private enrichAllTimeChartDataByDates(
+    sortedRawData: ILongTermChartDataPerDate[]
+  ): ILongTermChartDataPerDate[] {
     const minDate: Date = sortedRawData[Numbers.Zero].date;
     const maxDate: Date = sortedRawData[sortedRawData.length - Numbers.One].date;
 
-    const enrichedData: IAllTimeChartData[] = [];
+    const enrichedData: ILongTermChartDataPerDate[] = [];
 
     for (let i: number = minDate.getTime(); i <= maxDate.getTime(); i += MS_PER_DAY) {
       const date = new Date(i);
@@ -153,11 +162,11 @@ export default class StatisticPageController {
         date,
         newWords:
           sortedRawData.find(
-            (data: IAllTimeChartData): boolean => data.date.getTime() === date.getTime()
+            (data: ILongTermChartDataPerDate): boolean => data.date.getTime() === date.getTime()
           )?.newWords || Numbers.Zero,
         learnedWords:
           sortedRawData.find(
-            (result: IAllTimeChartData): boolean => result.date.getTime() === date.getTime()
+            (result: ILongTermChartDataPerDate): boolean => result.date.getTime() === date.getTime()
           )?.learnedWords || Numbers.Zero,
       });
     }

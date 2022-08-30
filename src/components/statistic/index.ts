@@ -22,10 +22,10 @@ export default class StatisticPage {
 
     chartsContainer.append(
       this.uiConstructor.createDailyChartsTitle(),
-      this.uiConstructor.createDailyGameChart(statisticInfo.dailyGameChartData),
-      this.uiConstructor.createDailyWordChart(statisticInfo.dailyWordsChartData),
-      this.uiConstructor.createAllTimeChartTitle(),
-      this.uiConstructor.createAllTimeChart(statisticInfo.allTimeChartData)
+      this.uiConstructor.createDailyChartByGames(statisticInfo.dailyChartDataByGames),
+      this.uiConstructor.createDailyChartForAllWords(statisticInfo.dailyChartDataForAllWords),
+      this.uiConstructor.createLongTermChartTitle(),
+      this.uiConstructor.createLongTermChart(statisticInfo.longTermChartData)
     );
 
     pageContainer.append(this.uiConstructor.createPageTitle(), chartsContainer);

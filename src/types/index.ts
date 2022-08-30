@@ -155,27 +155,6 @@ export interface IGameQuestionResult {
   correctAnswer: IGameCorrectAnswer;
 }
 
-export interface IDailyGameChartData {
-  gameLabel: string;
-  data: {
-    newWords: number;
-    correctAnswers: number;
-    maxCorrectAnswers: number;
-  };
-}
-
-export interface IDailyWordChartData {
-  newWords: number;
-  learnedWords: number;
-  correctAnswers: number;
-}
-
-export interface IAllTimeChartData {
-  date: Date;
-  newWords: number;
-  learnedWords: number;
-}
-
 export type IUserWordDataByGame = {
   [game in GameName]: {
     correctAnswersCounter: number;
@@ -199,7 +178,34 @@ export interface IUserWord {
   };
 }
 
-export interface IStatistics {
+export interface IDailyChartDataByGame {
+  gameLabel: string;
+  data: {
+    newWords: number;
+    correctAnswers: number;
+    maxCorrectAnswers: number;
+  };
+}
+
+export interface IDailyChartDataForAllWords {
+  newWords: number;
+  learnedWords: number;
+  correctAnswers: number;
+}
+
+export interface ILongTermChartDataPerDate {
+  date: Date;
+  newWords: number;
+  learnedWords: number;
+}
+
+export interface IProcessedStatisticInfo {
+  dailyChartDataByGames: IDailyChartDataByGame[];
+  dailyChartDataForAllWords: IDailyChartDataForAllWords;
+  longTermChartData: ILongTermChartDataPerDate[];
+}
+
+export interface IUserStatistics {
   optional: {
     [date: string]: {
       maxCorrectAnswerSeries: {
@@ -209,10 +215,4 @@ export interface IStatistics {
   };
 }
 
-export interface IProcessedStatisticInfo {
-  dailyGameChartData: IDailyGameChartData[];
-  dailyWordsChartData: IDailyWordChartData;
-  allTimeChartData: IAllTimeChartData[];
-}
-
-export type StatisticalDatesType = 'dateOfLearning' | 'dateOfFirstUse';
+export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
