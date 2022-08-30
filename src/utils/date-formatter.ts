@@ -2,7 +2,7 @@ import { DATE_KEY_SEPARATOR } from '../constants';
 
 export default class DateFormatter {
   public getStringifiedDateKey(date: Date): string {
-    return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`;
+    return `${date.getFullYear()}${DATE_KEY_SEPARATOR}${date.getMonth()}${DATE_KEY_SEPARATOR}${date.getDate()}`;
   }
 
   public getDateByDateKey(dateKey: string): Date {

@@ -21,8 +21,10 @@ export default class StatisticPage {
       await this.controller.getProcessedStatisticInfo();
 
     chartsContainer.append(
+      this.uiConstructor.createDailyChartsTitle(),
       this.uiConstructor.createDailyGameChart(statisticInfo.dailyGameChartData),
       this.uiConstructor.createDailyWordChart(statisticInfo.dailyWordsChartData),
+      this.uiConstructor.createAllTimeChartTitle(),
       this.uiConstructor.createAllTimeChart(statisticInfo.allTimeChartData)
     );
 

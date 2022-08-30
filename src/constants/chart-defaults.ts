@@ -38,3 +38,5 @@ export const DEFAULT_CONFIGS = {
   },
   lineTension: 0.1,
 };
+
+export const CHART_RESIZE_BREAKPOINT = 650;

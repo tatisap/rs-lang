@@ -1,5 +1,5 @@
-import WordsAPI from '../../api/words-api';
-import { GAMES, MS_PER_DAY } from '../../constants';
+import WordsAPI from '../../../api/words-api';
+import { GAMES, MS_PER_DAY } from '../../../constants';
 import {
   GameName,
   IAllTimeChartData,
@@ -11,9 +11,10 @@ import {
   IUserWord,
   Numbers,
   StatisticalDatesType,
-} from '../../types';
-import DateFormatter from '../../utils/date-formater';
-import RequestProcessor from '../request-processor.ts';
+} from '../../../types';
+import DateFormatter from '../../../utils/date-formatter';
+import RequestProcessor from '../../request-processor';
+import StatisticCounter from './counter';
 
 export default class StatisticPageController {
   private api: WordsAPI;
@@ -22,18 +23,13 @@ export default class StatisticPageController {
 
   private dateFormatter: DateFormatter;
 
+  private counter: StatisticCounter;
+
   constructor() {
     this.api = new WordsAPI();
     this.requestProcessor = new RequestProcessor();
     this.dateFormatter = new DateFormatter();
-  }
-
-  private getGameLabels(): string[] {
-    return Object.values(GAMES).map((game: IGameInfo): string => game.name);
-  }
-
-  private getGameNames(): GameName[] {
-    return Object.values(GAMES).map((game: IGameInfo): GameName => game.className as GameName);
+    this.counter = new StatisticCounter();
   }
 
   public async getProcessedStatisticInfo(): Promise<IProcessedStatisticInfo> {
@@ -69,63 +65,6 @@ export default class StatisticPageController {
     return { dailyGameChartData, dailyWordsChartData, allTimeChartData };
   }
 
-  private countNewWordsInGameForDate(
-    userWords: IUserWord[],
-    gameName: GameName,
-    dateKey: string
-  ): number {
-    return userWords.reduce((counter: number, userWord: IUserWord): number => {
-      if (
-        userWord.optional.gameNameOfFirstUse === gameName &&
-        userWord.optional.dateOfFirstUse === dateKey
-      )
-        return counter + Numbers.One;
-      return counter;
-    }, Numbers.Zero);
-  }
-
-  private countNewWordsForDate(userWords: IUserWord[], gameNames: GameName[], dateKey: string) {
-    return gameNames
-      .map((gameName: GameName): number =>
-        this.countNewWordsInGameForDate(userWords, gameName, dateKey)
-      )
-      .reduce((counter: number, newWordsInGame: number): number => counter + newWordsInGame);
-  }
-
-  private countCorrectAnswersInGameForDate(
-    userWords: IUserWord[],
-    gameName: GameName,
-    dateKey: string
-  ): number {
-    return userWords.reduce((counter: number, userWord: IUserWord): number => {
-      const numberOfCorrectAnswers: number =
-        userWord.optional.dataByDates[dateKey]?.[gameName]?.correctAnswersCounter;
-      if (numberOfCorrectAnswers) return counter + numberOfCorrectAnswers;
-      return counter;
-    }, Numbers.Zero);
-  }
-
-  private countCorrectAnswersForDate(
-    userWords: IUserWord[],
-    gameNames: GameName[],
-    dateKey: string
-  ) {
-    return gameNames
-      .map((gameName: GameName): number =>
-        this.countCorrectAnswersInGameForDate(userWords, gameName, dateKey)
-      )
-      .reduce(
-        (counter: number, correctAnswersInGame: number): number => counter + correctAnswersInGame
-      );
-  }
-
-  private countLearnedWordsForDate(userWords: IUserWord[], dateKey: string): number {
-    return userWords.reduce((counter: number, userWord: IUserWord): number => {
-      if (userWord.optional.dateOfLearning === dateKey) return counter + Numbers.One;
-      return counter;
-    }, Numbers.Zero);
-  }
-
   public getDailyGameChartData(
     gameLabels: string[],
     gameNames: GameName[],
@@ -137,8 +76,8 @@ export default class StatisticPageController {
       return {
         gameLabel: gameLabels[index],
         data: {
-          newWords: this.countNewWordsInGameForDate(userWords, gameName, date),
-          correctAnswers: this.countCorrectAnswersInGameForDate(userWords, gameName, date),
+          newWords: this.counter.countNewWordsInGameForDate(userWords, gameName, date),
+          correctAnswers: this.counter.countCorrectAnswersInGameForDate(userWords, gameName, date),
           maxCorrectAnswers: userStatistics.optional[date]?.maxCorrectAnswerSeries?.[gameName],
         },
       };
@@ -151,16 +90,10 @@ export default class StatisticPageController {
     userWords: IUserWord[]
   ): IDailyWordChartData {
     return {
-      newWords: this.countNewWordsForDate(userWords, gameNames, dateKey),
-      learnedWords: this.countLearnedWordsForDate(userWords, dateKey),
-      correctAnswers: this.countCorrectAnswersForDate(userWords, gameNames, dateKey),
+      newWords: this.counter.countNewWordsForDate(userWords, gameNames, dateKey),
+      learnedWords: this.counter.countLearnedWordsForDate(userWords, dateKey),
+      correctAnswers: this.counter.countCorrectAnswersForDate(userWords, gameNames, dateKey),
     };
-  }
-
-  private getDateKeysByType(userWords: IUserWord[], dateType: StatisticalDatesType): string[] {
-    return userWords
-      .map((userWord: IUserWord) => userWord.optional[dateType])
-      .filter((date: string): boolean => !!date);
   }
 
   public getAllTimeChartData(userWords: IUserWord[], gameNames: GameName[]): IAllTimeChartData[] {
@@ -174,8 +107,8 @@ export default class StatisticPageController {
     const rawData: IAllTimeChartData[] = dateKeys.map((dateKey: string) => {
       return {
         date: this.dateFormatter.getDateByDateKey(dateKey),
-        newWords: this.countNewWordsForDate(userWords, gameNames, dateKey),
-        learnedWords: this.countLearnedWordsForDate(userWords, dateKey),
+        newWords: this.counter.countNewWordsForDate(userWords, gameNames, dateKey),
+        learnedWords: this.counter.countLearnedWordsForDate(userWords, dateKey),
       };
     });
 
@@ -192,6 +125,20 @@ export default class StatisticPageController {
     });
 
     return enrichedData;
+  }
+
+  private getGameLabels(): string[] {
+    return Object.values(GAMES).map((game: IGameInfo): string => game.name);
+  }
+
+  private getGameNames(): GameName[] {
+    return Object.values(GAMES).map((game: IGameInfo): GameName => game.className as GameName);
+  }
+
+  private getDateKeysByType(userWords: IUserWord[], dateType: StatisticalDatesType): string[] {
+    return userWords
+      .map((userWord: IUserWord) => userWord.optional[dateType])
+      .filter((date: string): boolean => !!date);
   }
 
   private enrichAllTimeChartDataByDates(sortedRawData: IAllTimeChartData[]): IAllTimeChartData[] {

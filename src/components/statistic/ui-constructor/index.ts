@@ -1,13 +1,13 @@
-import Chart from './charts-config';
-import { PAGE_TITLES } from '../../constants';
-import UIElementsConstructor from '../../utils/ui-elements-creator';
+import Chart from '../chart-config';
+import { PAGE_TITLES } from '../../../constants';
+import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import {
   CHART_COLORS,
   CHART_LABELS,
   CHART_TITLES,
   DEFAULT_CONFIGS,
-} from '../../constants/chart-defaults';
-import { IAllTimeChartData, IDailyGameChartData, IDailyWordChartData } from '../../types';
+} from '../../../constants/chart-defaults';
+import { IAllTimeChartData, IDailyGameChartData, IDailyWordChartData } from '../../../types';
 
 export default class StatisticUIConstructor {
   private elementCreator: UIElementsConstructor;
