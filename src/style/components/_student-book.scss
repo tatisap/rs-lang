@@ -90,10 +90,15 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
-  min-height: 50vh;
+  min-height: 2450px;
   margin: 20px 0 0 0;
   padding: 20px;
   border-radius: 5px;
+  text-align: center;
+
+  &.difficult-words {
+    min-height: 50vh;
+  }
 
   .words__word-section {
     display: flex;
