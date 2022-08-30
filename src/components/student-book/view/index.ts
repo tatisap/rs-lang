@@ -6,18 +6,24 @@ import {
   PAGINATION_BUTTONS,
   MAX_PAGES_IN_BOOK_SECTION,
   DISPLAY_MODES,
+  NO_CONTENT,
 } from '../../../constants';
-import { IBookSectionInfo, Numbers } from '../../../types';
+import { IBookSectionInfo, Numbers, IWord } from '../../../types';
 import StudentBookController from '../controller';
+import WordCard from './words';
+import WordsAPI from '../../../api/words-api';
 
 export default class StudentBookView {
   readonly elementCreator: UIElementsConstructor;
 
   readonly bookController: StudentBookController;
 
+  readonly wordsAPI: WordsAPI;
+
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.bookController = new StudentBookController();
+    this.wordsAPI = new WordsAPI();
   }
 
   public renderPage(): void {
@@ -31,7 +37,10 @@ export default class StudentBookView {
     }
   }
 
-  private updatePageContainer(section = BOOK_SECTIONS.beginner, page = Numbers.One): void {
+  private async updatePageContainer(
+    section = BOOK_SECTIONS.beginner,
+    page = Numbers.One
+  ): Promise<void> {
     const pageContainer = document.getElementById('app') as HTMLElement;
     pageContainer.classList.add('page_student-book');
 
@@ -40,7 +49,7 @@ export default class StudentBookView {
       this.createGamesContainer(),
       this.createBookSectionsContainer(section.className),
       this.createPaginationContainer(section, page),
-      this.createWordsContainer(section.color)
+      await this.createWordsContainer(section, page)
     );
   }
 
@@ -82,8 +91,9 @@ export default class StudentBookView {
       classNames: ['sections__book-section', sectionName.toLowerCase()],
       innerText: sectionName,
     });
-    bookSection.addEventListener('click', (event: Event): void => {
-      this.bookController.switchSection(event);
+    bookSection.addEventListener('click', async (event: Event): Promise<void> => {
+      const newSection: IBookSectionInfo = this.bookController.switchSection(event);
+      await this.updateWordsContainer(newSection, Numbers.One);
     });
     return bookSection;
   }
@@ -116,8 +126,10 @@ export default class StudentBookView {
     if (page === MAX_PAGES_IN_BOOK_SECTION && buttonClass === PAGINATION_BUTTONS.next.className) {
       paginationButton.setAttribute('disabled', '');
     }
-    paginationButton.addEventListener('click', (event: Event): void => {
-      this.bookController.switchPage(event);
+    paginationButton.addEventListener('click', async (event: Event): Promise<void> => {
+      const newSectionAndPage: { page: number; section: IBookSectionInfo } =
+        this.bookController.switchPage(event);
+      await this.updateWordsContainer(newSectionAndPage.section, newSectionAndPage.page);
     });
     return paginationButton;
   }
@@ -151,12 +163,36 @@ export default class StudentBookView {
     return paginationContainer;
   }
 
-  private createWordsContainer(sectionColor: string): HTMLDivElement {
+  private async createWordsContainer(
+    section: IBookSectionInfo,
+    page: number
+  ): Promise<HTMLDivElement> {
     const wordsContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__words', 'words'],
     });
-    wordsContainer.style.backgroundColor = sectionColor;
+    wordsContainer.style.backgroundColor = section.color;
+    wordsContainer.append(...(await this.fillWordsContainer(section, page)));
     return wordsContainer;
+  }
+
+  private async fillWordsContainer(
+    section: IBookSectionInfo,
+    page: number
+  ): Promise<HTMLDivElement[]> {
+    const words: IWord[] = await new WordsAPI().getWords(section.group, page);
+    const wordsCards: HTMLDivElement[] = words.map(
+      (word: IWord): HTMLDivElement => new WordCard(word).createWordCard()
+    );
+    return wordsCards;
+  }
+
+  private async updateWordsContainer(section: IBookSectionInfo, page: number): Promise<void> {
+    const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
+    wordsContainer.innerHTML = NO_CONTENT;
+    const words: IWord[] = await new WordsAPI().getWords(section.group, page);
+    words.forEach((word: IWord): void => {
+      wordsContainer.append(new WordCard(word).createWordCard());
+    });
   }
 }
