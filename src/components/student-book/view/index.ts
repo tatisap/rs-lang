@@ -7,22 +7,28 @@ import {
   MAX_PAGES_IN_BOOK_SECTION,
   DISPLAY_MODES,
   NO_CONTENT,
+  DIFFICULT_WORDS_CONTAINER_MESSAGES,
+  STORAGE_KEYS,
 } from '../../../constants';
-import { IBookSectionInfo, Numbers, IWord } from '../../../types';
+import { IBookSectionInfo, Numbers, IWord, IUserTokens } from '../../../types';
 import StudentBookController from '../controller';
 import WordCard from './words';
 import WordsAPI from '../../../api/words-api';
+import AuthController from '../../auth/auth-controller';
 
 export default class StudentBookView {
   readonly elementCreator: UIElementsConstructor;
 
   readonly bookController: StudentBookController;
 
+  readonly authController: AuthController;
+
   readonly wordsAPI: WordsAPI;
 
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.bookController = new StudentBookController();
+    this.authController = new AuthController();
     this.wordsAPI = new WordsAPI();
   }
 
@@ -93,7 +99,9 @@ export default class StudentBookView {
     });
     bookSection.addEventListener('click', async (event: Event): Promise<void> => {
       const newSection: IBookSectionInfo = this.bookController.switchSection(event);
-      await this.updateWordsContainer(newSection, Numbers.One);
+      const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
+      wordsContainer.innerHTML = NO_CONTENT;
+      await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
     });
     return bookSection;
   }
@@ -129,7 +137,13 @@ export default class StudentBookView {
     paginationButton.addEventListener('click', async (event: Event): Promise<void> => {
       const newSectionAndPage: { page: number; section: IBookSectionInfo } =
         this.bookController.switchPage(event);
-      await this.updateWordsContainer(newSectionAndPage.section, newSectionAndPage.page);
+      const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
+      wordsContainer.innerHTML = NO_CONTENT;
+      await this.fillWordsContainer(
+        newSectionAndPage.section,
+        newSectionAndPage.page,
+        wordsContainer
+      );
     });
     return paginationButton;
   }
@@ -172,27 +186,48 @@ export default class StudentBookView {
       classNames: ['page__words', 'words'],
     });
     wordsContainer.style.backgroundColor = section.color;
-    wordsContainer.append(...(await this.fillWordsContainer(section, page)));
+    await this.fillWordsContainer(section, page, wordsContainer);
     return wordsContainer;
   }
 
-  private async fillWordsContainer(
+  private async createWordsCards(
     section: IBookSectionInfo,
     page: number
   ): Promise<HTMLDivElement[]> {
-    const words: IWord[] = await new WordsAPI().getWords(section.group, page);
+    const words: IWord[] = await this.wordsAPI.getWords(section.group, page);
     const wordsCards: HTMLDivElement[] = words.map(
       (word: IWord): HTMLDivElement => new WordCard(word).createWordCard()
     );
     return wordsCards;
   }
 
-  private async updateWordsContainer(section: IBookSectionInfo, page: number): Promise<void> {
-    const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
-    wordsContainer.innerHTML = NO_CONTENT;
-    const words: IWord[] = await new WordsAPI().getWords(section.group, page);
-    words.forEach((word: IWord): void => {
-      wordsContainer.append(new WordCard(word).createWordCard());
-    });
+  private async createDifficultWordsCards(): Promise<HTMLDivElement[]> {
+    const userInfo: IUserTokens = JSON.parse(localStorage.getItem(STORAGE_KEYS.user) as string);
+    const words: IWord[] = await this.wordsAPI.getDifficultWords(userInfo.userId);
+    const wordsCards: HTMLDivElement[] = words.map(
+      (word: IWord): HTMLDivElement => new WordCard(word).createWordCard()
+    );
+    return wordsCards;
+  }
+
+  private async fillWordsContainer(
+    section: IBookSectionInfo,
+    page: number,
+    container: HTMLDivElement
+  ): Promise<void> {
+    if (section.text === BOOK_SECTIONS.difficultWords.text) {
+      container.classList.add('difficult-words');
+      if (!this.authController.isUserAuthorized()) {
+        container.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forAnauthorized;
+      } else {
+        const difficultWordsCards = await this.createDifficultWordsCards();
+        difficultWordsCards.length
+          ? container.append(...difficultWordsCards)
+          : (container.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords);
+      }
+    } else {
+      container.classList.remove('difficult-words');
+      container.append(...(await this.createWordsCards(section, page)));
+    }
   }
 }

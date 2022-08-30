@@ -182,3 +182,9 @@ export const AUDIOCALL_AUDIO_BUTTON_PLACEMENT = {
 };
 
 export const AUDIOCALL_ANSWER_OPTIONS_NUMBER = 5;
+
+export const DIFFICULT_WORDS_CONTAINER_MESSAGES = {
+  forAnauthorized: 'Доступно только авторизованным пользователям',
+  noWords:
+    'Вы ещё не отмечали слова как сложные. Для того, чтобы сделать это, нажмите на кнопку "Добавить в сложные" рядом со словом',
+};
