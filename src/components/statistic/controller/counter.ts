@@ -1,4 +1,4 @@
-import { GameName, IUserWord, Numbers } from '../../../types';
+import { GameName, IDailyChartDataByGame, IUserWord, Numbers } from '../../../types';
 
 export default class StatisticCounter {
   public countNewWordsInGameForDate(
@@ -31,24 +31,23 @@ export default class StatisticCounter {
   ): number {
     return userWords.reduce((counter: number, userWord: IUserWord): number => {
       const numberOfCorrectAnswers: number =
-        userWord.optional.dataByDates[dateKey]?.[gameName]?.correctAnswersCounter;
-      if (numberOfCorrectAnswers) return counter + numberOfCorrectAnswers;
-      return counter;
+        userWord.optional.dataByDates[dateKey]?.[gameName]?.correctAnswersCounter || Numbers.Zero;
+      return counter + numberOfCorrectAnswers;
     }, Numbers.Zero);
   }
 
-  public countCorrectAnswersForDate(
+  public countAnswersInGameForDate(
     userWords: IUserWord[],
-    gameNames: GameName[],
+    gameName: GameName,
     dateKey: string
-  ) {
-    return gameNames
-      .map((gameName: GameName): number =>
-        this.countCorrectAnswersInGameForDate(userWords, gameName, dateKey)
-      )
-      .reduce(
-        (counter: number, correctAnswersInGame: number): number => counter + correctAnswersInGame
-      );
+  ): number {
+    return userWords.reduce((counter: number, userWord: IUserWord): number => {
+      const numberOfCorrectAnswers: number =
+        userWord.optional.dataByDates[dateKey]?.[gameName]?.correctAnswersCounter || Numbers.Zero;
+      const numberOfIncorrectAnswers: number =
+        userWord.optional.dataByDates[dateKey]?.[gameName]?.incorrectAnswersCounter || Numbers.Zero;
+      return counter + numberOfCorrectAnswers + numberOfIncorrectAnswers;
+    }, Numbers.Zero);
   }
 
   public countLearnedWordsForDate(userWords: IUserWord[], dateKey: string): number {
@@ -56,5 +55,16 @@ export default class StatisticCounter {
       if (userWord.optional.dateOfLearning === dateKey) return counter + Numbers.One;
       return counter;
     }, Numbers.Zero);
+  }
+
+  public sumPropertyValues(
+    data: IDailyChartDataByGame[],
+    property: keyof IDailyChartDataByGame['data']
+  ): number {
+    return data.reduce(
+      (counter: number, dataItem: IDailyChartDataByGame): number =>
+        counter + dataItem.data[property],
+      Numbers.Zero
+    );
   }
 }

@@ -182,7 +182,9 @@ export interface IDailyChartDataByGame {
   gameLabel: string;
   data: {
     newWords: number;
+    totalAnswers: number;
     correctAnswers: number;
+    correctAnswersPercentage: number;
     maxCorrectAnswers: number;
   };
 }
@@ -191,6 +193,7 @@ export interface IDailyChartDataForAllWords {
   newWords: number;
   learnedWords: number;
   correctAnswers: number;
+  correctAnswersPercentage: number;
 }
 
 export interface ILongTermChartDataPerDate {

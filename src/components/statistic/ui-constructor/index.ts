@@ -6,6 +6,7 @@ import {
   CHART_LABELS,
   CHART_TITLES,
   DEFAULT_CONFIGS,
+  PERCENTAGE_INFO_LABEL,
 } from '../../../constants/chart-defaults';
 import {
   IDailyChartDataByGame,
@@ -49,6 +50,24 @@ export default class StatisticUIConstructor {
       tag: 'h3',
       classNames: ['charts__title'],
       innerText: CHART_TITLES.allTime,
+    });
+  }
+
+  public createDailyCorrectAnswerPercentageInfo(
+    dataByGames: IDailyChartDataByGame[],
+    dataForAllWords: IDailyChartDataForAllWords
+  ): HTMLDivElement {
+    return this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['charts__percentage-info'],
+      innerText: `${PERCENTAGE_INFO_LABEL} ${
+        dataForAllWords.correctAnswersPercentage
+      }% (${dataByGames
+        .map(
+          (data: IDailyChartDataByGame): string =>
+            `${data.gameLabel}: ${data.data.correctAnswersPercentage}%`
+        )
+        .join(', ')})`,
     });
   }
 

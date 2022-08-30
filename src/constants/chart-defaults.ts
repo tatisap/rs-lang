@@ -40,3 +40,7 @@ export const DEFAULT_CONFIGS = {
 };
 
 export const CHART_RESIZE_BREAKPOINT = 650;
+
+export const PER_CENT = 100;
+
+export const PERCENTAGE_INFO_LABEL = 'Процент верных ответов за день:';

@@ -1,6 +1,7 @@
 import StatisticAPI from '../../../api/statistic-api';
 import WordsAPI from '../../../api/words-api';
 import { GAMES, MS_PER_DAY } from '../../../constants';
+import { PER_CENT } from '../../../constants/chart-defaults';
 import {
   GameName,
   IDailyChartDataByGame,
@@ -62,7 +63,7 @@ export default class StatisticPageController {
     );
 
     const dailyChartDataForAllWords: IDailyChartDataForAllWords = this.getDailyWordsChartData(
-      gameNames,
+      dailyChartDataByGames,
       dateKey,
       userWords
     );
@@ -75,38 +76,53 @@ export default class StatisticPageController {
     return { dailyChartDataByGames, dailyChartDataForAllWords, longTermChartData };
   }
 
-  public getDailyGameChartData(
+  private getDailyGameChartData(
     gameLabels: string[],
     gameNames: GameName[],
-    date: string,
+    dateKey: string,
     userWords: IUserWord[],
     userStatistics: IUserStatistics
   ): IDailyChartDataByGame[] {
     return gameNames.map((gameName: GameName, index: number): IDailyChartDataByGame => {
+      const correctAnswers: number = this.counter.countCorrectAnswersInGameForDate(
+        userWords,
+        gameName,
+        dateKey
+      );
+      const totalAnswers: number = this.counter.countAnswersInGameForDate(
+        userWords,
+        gameName,
+        dateKey
+      );
       return {
         gameLabel: gameLabels[index],
         data: {
-          newWords: this.counter.countNewWordsInGameForDate(userWords, gameName, date),
-          correctAnswers: this.counter.countCorrectAnswersInGameForDate(userWords, gameName, date),
-          maxCorrectAnswers: userStatistics.optional[date]?.maxCorrectAnswerSeries?.[gameName],
+          newWords: this.counter.countNewWordsInGameForDate(userWords, gameName, dateKey),
+          correctAnswersPercentage: this.calcPercentage(correctAnswers, totalAnswers),
+          correctAnswers,
+          totalAnswers,
+          maxCorrectAnswers: userStatistics.optional[dateKey]?.maxCorrectAnswerSeries?.[gameName],
         },
       };
     });
   }
 
-  public getDailyWordsChartData(
-    gameNames: GameName[],
+  private getDailyWordsChartData(
+    dataByGames: IDailyChartDataByGame[],
     dateKey: string,
     userWords: IUserWord[]
   ): IDailyChartDataForAllWords {
+    const correctAnswers: number = this.counter.sumPropertyValues(dataByGames, 'correctAnswers');
+    const totalAnswers: number = this.counter.sumPropertyValues(dataByGames, 'totalAnswers');
     return {
-      newWords: this.counter.countNewWordsForDate(userWords, gameNames, dateKey),
+      newWords: this.counter.sumPropertyValues(dataByGames, 'newWords'),
       learnedWords: this.counter.countLearnedWordsForDate(userWords, dateKey),
-      correctAnswers: this.counter.countCorrectAnswersForDate(userWords, gameNames, dateKey),
+      correctAnswers,
+      correctAnswersPercentage: this.calcPercentage(correctAnswers, totalAnswers),
     };
   }
 
-  public getAllTimeChartData(
+  private getAllTimeChartData(
     userWords: IUserWord[],
     gameNames: GameName[]
   ): ILongTermChartDataPerDate[] {
@@ -153,6 +169,10 @@ export default class StatisticPageController {
     return userWords
       .map((userWord: IUserWord) => userWord.optional[dateType])
       .filter((date: string): boolean => !!date);
+  }
+
+  private calcPercentage(part: number, whole: number) {
+    return Math.round((part / whole) * PER_CENT);
   }
 
   private enrichAllTimeChartDataByDates(

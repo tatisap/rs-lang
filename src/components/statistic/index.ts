@@ -24,6 +24,10 @@ export default class StatisticPage {
       this.uiConstructor.createDailyChartsTitle(),
       this.uiConstructor.createDailyChartByGames(statisticInfo.dailyChartDataByGames),
       this.uiConstructor.createDailyChartForAllWords(statisticInfo.dailyChartDataForAllWords),
+      this.uiConstructor.createDailyCorrectAnswerPercentageInfo(
+        statisticInfo.dailyChartDataByGames,
+        statisticInfo.dailyChartDataForAllWords
+      ),
       this.uiConstructor.createLongTermChartTitle(),
       this.uiConstructor.createLongTermChart(statisticInfo.longTermChartData)
     );
