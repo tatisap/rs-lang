@@ -11,6 +11,12 @@ export default class WordsAPI {
     return data;
   }
 
+  public async getWord(id: string): Promise<IWord> {
+    const response: Response = await fetch(`${BASE_URL}/${PATHS.words}/${id}`);
+    const data: IWord = await response.json();
+    return data;
+  }
+
   public async getUserWords(userId: string, token: string): Promise<IUserWord[]> {
     const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}`;
     const response: Response = await fetch(url, {

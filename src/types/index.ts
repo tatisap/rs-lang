@@ -44,6 +44,7 @@ export interface IElement {
   tag: string;
   classNames: string[];
   innerText?: string;
+  innerHTML?: string;
 }
 
 export interface IInput extends Omit<IElement, 'tag'> {
