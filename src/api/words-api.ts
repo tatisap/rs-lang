@@ -16,4 +16,11 @@ export default class WordsAPI {
     const data: IWord = await response.json();
     return data;
   }
+
+  public async getDifficultWords(userId: string): Promise<IWord[]> {
+    const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.aggregatedWords}?${QUERY_KEYS.filter}={"userWord.difficulty":"hard"}`;
+    const response = await fetch(url);
+    const data: IWord[] = await response.json();
+    return data;
+  }
 }
