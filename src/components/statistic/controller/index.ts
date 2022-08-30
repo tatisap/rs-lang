@@ -1,3 +1,4 @@
+import StatisticAPI from '../../../api/statistic-api';
 import WordsAPI from '../../../api/words-api';
 import { GAMES, MS_PER_DAY } from '../../../constants';
 import {
@@ -17,7 +18,10 @@ import RequestProcessor from '../../request-processor';
 import StatisticCounter from './counter';
 
 export default class StatisticPageController {
-  private api: WordsAPI;
+  private api: {
+    words: WordsAPI;
+    statistic: StatisticAPI;
+  };
 
   private requestProcessor: RequestProcessor;
 
@@ -26,7 +30,10 @@ export default class StatisticPageController {
   private counter: StatisticCounter;
 
   constructor() {
-    this.api = new WordsAPI();
+    this.api = {
+      words: new WordsAPI(),
+      statistic: new StatisticAPI(),
+    };
     this.requestProcessor = new RequestProcessor();
     this.dateFormatter = new DateFormatter();
     this.counter = new StatisticCounter();
@@ -39,11 +46,11 @@ export default class StatisticPageController {
     const dateKey: string = this.dateFormatter.getStringifiedDateKey(today);
 
     const userWords: IUserWord[] = await this.requestProcessor.process<IUserWord[]>(
-      this.api.getUserWords
+      this.api.words.getUserWords
     );
 
     const userStatistics: IUserStatistics = await this.requestProcessor.process<IUserStatistics>(
-      this.api.getUserStatistic
+      this.api.statistic.getUserStatistic
     );
 
     const dailyChartDataByGames: IDailyChartDataByGame[] = this.getDailyGameChartData(
