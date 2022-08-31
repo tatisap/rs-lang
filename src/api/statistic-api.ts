@@ -1,8 +1,8 @@
-import { HttpMethods, IUserStatistics } from '../types';
+import { HttpMethods, IRequestParameters, IUserStatistics } from '../types';
 import { BASE_URL, PATHS, REQUEST_HEADERS } from '../constants';
 
 export default class StatisticAPI {
-  public async getUserStatistic(userId: string, token: string): Promise<IUserStatistics> {
+  public async getUserStatistic({ userId, token }: IRequestParameters): Promise<IUserStatistics> {
     const response: Response = await fetch(
       `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.statistics}`,
       {

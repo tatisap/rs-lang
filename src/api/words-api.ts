@@ -1,4 +1,4 @@
-import { HttpMethods, IUserWord, IWord, Numbers } from '../types';
+import { HttpMethods, IRequestParameters, IUserWord, IWord, Numbers } from '../types';
 import { BASE_URL, PATHS, QUERY_KEYS, REQUEST_HEADERS } from '../constants';
 
 export default class WordsAPI {
@@ -17,7 +17,7 @@ export default class WordsAPI {
     return data;
   }
 
-  public async getUserWords(userId: string, token: string): Promise<IUserWord[]> {
+  public async getUserWords({ userId, token }: IRequestParameters): Promise<IUserWord[]> {
     const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}`;
     const response: Response = await fetch(url, {
       method: HttpMethods.GET,
@@ -27,6 +27,19 @@ export default class WordsAPI {
       },
     });
     const data: IUserWord[] = (await response.json()) as IUserWord[];
+    return data;
+  }
+
+  public async getUserWord({ userId, token, wordId }: IRequestParameters): Promise<IUserWord> {
+    const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}/${wordId}`;
+    const response: Response = await fetch(url, {
+      method: HttpMethods.GET,
+      headers: {
+        [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
+        [REQUEST_HEADERS.accept]: 'application/json',
+      },
+    });
+    const data: IUserWord = (await response.json()) as IUserWord;
     return data;
   }
 }

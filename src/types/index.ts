@@ -81,6 +81,13 @@ export interface ISignUpError {
   };
 }
 
+export interface IRequestParameters {
+  userId: string;
+  token: string;
+  wordId?: string;
+  body?: IUserWord;
+}
+
 export enum Numbers {
   Zero = 0,
   One,

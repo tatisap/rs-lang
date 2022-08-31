@@ -98,7 +98,8 @@ export default class StatisticPageController {
         gameLabel: gameLabels[index],
         data: {
           newWords: this.counter.countNewWordsInGameForDate(userWords, gameName, dateKey),
-          correctAnswersPercentage: this.calcPercentage(correctAnswers, totalAnswers),
+          correctAnswersPercentage:
+            this.calcPercentage(correctAnswers, totalAnswers) || Numbers.Zero,
           correctAnswers,
           totalAnswers,
           maxCorrectAnswers: userStatistics.optional[dateKey]?.maxCorrectAnswerSeries?.[gameName],
@@ -118,7 +119,7 @@ export default class StatisticPageController {
       newWords: this.counter.sumPropertyValues(dataByGames, 'newWords'),
       learnedWords: this.counter.countLearnedWordsForDate(userWords, dateKey),
       correctAnswers,
-      correctAnswersPercentage: this.calcPercentage(correctAnswers, totalAnswers),
+      correctAnswersPercentage: this.calcPercentage(correctAnswers, totalAnswers) || Numbers.Zero,
     };
   }
 

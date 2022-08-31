@@ -1,3 +1,4 @@
+import { IRequestParameters } from '../../types';
 import AuthController from '../auth/auth-controller';
 
 export default class RequestProcessor {
@@ -7,15 +8,18 @@ export default class RequestProcessor {
     this.authController = new AuthController();
   }
 
-  public async process<T>(request: (id: string, token: string) => Promise<T>): Promise<T> {
+  public async process<T>(
+    request: (parameters: IRequestParameters) => Promise<T>,
+    args?: Omit<IRequestParameters, 'userId' | 'token'>
+  ): Promise<T> {
     const userId: string = this.authController.getUserId();
-    let accessToken: string = this.authController.getAccessToken();
+    let token: string = this.authController.getAccessToken();
     try {
-      return await request(userId, accessToken);
+      return await request({ userId, token, ...args });
     } catch {
       this.authController.updateTokens();
-      accessToken = this.authController.getAccessToken();
-      return await request(userId, accessToken);
+      token = this.authController.getAccessToken();
+      return await request({ userId, token, ...args });
     }
   }
 }
