@@ -25,6 +25,7 @@ export default class WordCard {
     wordContainer.append(this.createImage(`${BASE_URL}/${this.word.image}`), infoContainer);
     infoContainer.append(
       this.createWordTitle(),
+      this.createControlsContainer(),
       this.createTextMeaningElement(),
       this.createTextExampleElement()
     );
@@ -49,7 +50,7 @@ export default class WordCard {
       innerText: `${this.word.word} - ${this.word.wordTranslate} - ${this.word.transcription}`,
     });
 
-    titleContainer.append(title, this.createControlsContainer());
+    titleContainer.append(title);
     return titleContainer;
   }
 
@@ -58,6 +59,7 @@ export default class WordCard {
       tag: 'div',
       classNames: ['info__controls', 'controls'],
     });
+    controlsButton.append(this.createDifficultWordButton());
     return controlsButton;
   }
 
@@ -112,4 +114,13 @@ export default class WordCard {
 
     return textExampleContainer;
   }
+
+  private createDifficultWordButton = (): HTMLButtonElement => {
+    const buttonDifficult: HTMLButtonElement =
+      this.elementCreator.createUIElement<HTMLButtonElement>({
+        tag: 'button',
+        classNames: ['controls__difficult-btn', 'difficult-btn'],
+      });
+    return buttonDifficult;
+  };
 }

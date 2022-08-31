@@ -153,6 +153,17 @@
         padding: 13px 0 10px;
       }
 
+      .info__controls {
+        display: flex;
+        .controls__difficult-btn {
+          @extend %normalized-button;
+          @extend %interactive;
+          @include image($hard);
+          width: 35px;
+          height: 35px;
+        }
+      }
+
       .info__text-meaning {
         border-bottom: 1px dashed #c0c0c0;
         padding-bottom: 10px;
