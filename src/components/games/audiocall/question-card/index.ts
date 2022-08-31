@@ -24,7 +24,7 @@ export default class AudiocallQuestion {
   constructor(questionInfo: IAudiocallQuestionInfo, questionNumber: number) {
     this.uiConstructor = new QuestionCardConstructor();
     this.container = this.uiConstructor.createContainer(questionNumber);
-    this.audioElement = new AudioElement(questionInfo.correctAnswer.audioUrl);
+    this.audioElement = new AudioElement([questionInfo.correctAnswer.audioUrl]);
     this.optionsListElement = this.uiConstructor.createOptionList(questionInfo.answerOptions);
     this.answerElement = this.uiConstructor.createAnswer(questionInfo.correctAnswer);
     this.skipButton = this.uiConstructor.createSkipButton();
@@ -40,7 +40,7 @@ export default class AudiocallQuestion {
       this.skipButton
     );
     gameField.append(this.container);
-    this.audioElement.playAudio();
+    this.audioElement.play();
   }
 
   private addHandlersToElements(): void {
@@ -53,7 +53,7 @@ export default class AudiocallQuestion {
       event.preventDefault();
       switch (event.code) {
         case KeyboardCode.Space:
-          this.audioElement.playAudio();
+          this.audioElement.play();
           break;
         case KeyboardCode.Enter:
           this.skipButtonHandler();
