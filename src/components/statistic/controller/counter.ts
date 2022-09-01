@@ -16,7 +16,11 @@ export default class StatisticCounter {
     }, Numbers.Zero);
   }
 
-  public countNewWordsForDate(userWords: IUserWord[], gameNames: GameName[], dateKey: string) {
+  public countNewWordsForDate(
+    userWords: IUserWord[],
+    gameNames: GameName[],
+    dateKey: string
+  ): number {
     return gameNames
       .map((gameName: GameName): number =>
         this.countNewWordsInGameForDate(userWords, gameName, dateKey)
