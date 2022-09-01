@@ -59,7 +59,7 @@ export default class WordCard {
       tag: 'div',
       classNames: ['info__controls', 'controls'],
     });
-    controlsButton.append(this.createDifficultWordButton());
+    controlsButton.append(this.createLearnedWordButton(), this.createDifficultWordButton());
     return controlsButton;
   }
 
@@ -115,12 +115,22 @@ export default class WordCard {
     return textExampleContainer;
   }
 
-  private createDifficultWordButton = (): HTMLButtonElement => {
+  private createDifficultWordButton(): HTMLButtonElement {
     const buttonDifficult: HTMLButtonElement =
       this.elementCreator.createUIElement<HTMLButtonElement>({
         tag: 'button',
         classNames: ['controls__difficult-btn', 'difficult-btn'],
       });
     return buttonDifficult;
-  };
+  }
+
+  private createLearnedWordButton(): HTMLButtonElement {
+    const buttonLearned: HTMLButtonElement = this.elementCreator.createUIElement<HTMLButtonElement>(
+      {
+        tag: 'button',
+        classNames: ['controls__learned-btn', 'learned-btn'],
+      }
+    );
+    return buttonLearned;
+  }
 }

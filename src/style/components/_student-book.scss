@@ -155,12 +155,19 @@
 
       .info__controls {
         display: flex;
+        gap:10px;
         .controls__difficult-btn {
           @extend %normalized-button;
           @extend %interactive;
-          @include image($hard);
           width: 35px;
           height: 35px;
+        }
+        .difficult-btn {
+          @include image($hard);
+        }
+        .learned-btn {
+          @extend .controls__difficult-btn;
+          @include image($done);
         }
       }
 
