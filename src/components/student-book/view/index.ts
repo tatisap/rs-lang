@@ -101,6 +101,7 @@ export default class StudentBookView {
       const newSection: IBookSectionInfo = this.bookController.switchSection(event);
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
+      wordsContainer.append(this.createLoader(newSection));
       await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
     });
     return bookSection;
@@ -139,6 +140,7 @@ export default class StudentBookView {
         this.bookController.switchPage(event);
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
+      wordsContainer.append(this.createLoader(newSectionAndPage.section));
       await this.fillWordsContainer(
         newSectionAndPage.section,
         newSectionAndPage.page,
@@ -229,5 +231,16 @@ export default class StudentBookView {
       container.classList.remove('difficult-words');
       container.append(...(await this.createWordsCards(section, page)));
     }
+    const loader: HTMLDivElement | null = document.querySelector('.loader');
+    if (loader) loader.remove();
+  }
+
+  private createLoader(sectionInfo: IBookSectionInfo): HTMLDivElement {
+    const loaderContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['loader', `loader-${sectionInfo.className}`],
+    });
+    loaderContainer.style.backgroundImage = `linear-gradient(to right, #212121 10%, ${sectionInfo.color} 50%)`;
+    return loaderContainer;
   }
 }
