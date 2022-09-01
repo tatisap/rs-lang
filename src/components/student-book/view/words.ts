@@ -1,11 +1,11 @@
 import { BASE_URL } from '../../../constants';
-import { IWord } from '../../../types';
+import { IWord, IAggregatedWord } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
 
-  constructor(private word: IWord) {
+  constructor(private word: IWord | IAggregatedWord) {
     this.elementCreator = new UIElementsConstructor();
   }
 
@@ -14,7 +14,6 @@ export default class WordCard {
       tag: 'div',
       classNames: ['words__word-section'],
     });
-    wordContainer.dataset.wordId = `${this.word.id}`;
     const infoContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['word-section__info'],
