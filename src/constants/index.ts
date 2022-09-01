@@ -188,3 +188,5 @@ export const DIFFICULT_WORDS_CONTAINER_MESSAGES = {
   noWords:
     'Вы ещё не отмечали слова как сложные. Для того, чтобы сделать это, нажмите на кнопку "Добавить в сложные" рядом со словом',
 };
+
+export const MAX_WORDS_IN_BOOK = 3600;
