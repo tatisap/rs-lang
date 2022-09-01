@@ -1,4 +1,11 @@
-import { IWord, Numbers, HttpMethods, IRequestParameters, IAggregatedWord, IUserWord } from '../types';
+import {
+  IWord,
+  Numbers,
+  HttpMethods,
+  IRequestParameters,
+  IAggregatedWord,
+  IUserWord,
+} from '../types';
 import { BASE_URL, PATHS, QUERY_KEYS, REQUEST_HEADERS, MAX_WORDS_IN_BOOK } from '../constants';
 
 export default class WordsAPI {
