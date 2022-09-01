@@ -1,5 +1,13 @@
 import { BASE_URL, PATHS, REQUEST_HEADERS } from '../constants';
-import { HttpMethods, IResponse, ISignUpError, IUser, IUserTokens, StatusCode } from '../types';
+import {
+  HttpMethods,
+  IResponse,
+  ISignUpError,
+  ITokens,
+  IUser,
+  IUserTokens,
+  StatusCode,
+} from '../types';
 
 export default class UserAPI {
   public async createUser(user: IUser): Promise<IResponse> {
@@ -37,5 +45,17 @@ export default class UserAPI {
       };
     }
     return { statusCode: response.status };
+  }
+
+  public async updateToken(userId: string, refreshToken: string): Promise<ITokens> {
+    const response: Response = await fetch(`${BASE_URL}/${PATHS.users}/${userId}/${PATHS.tokens}`, {
+      method: HttpMethods.GET,
+      headers: {
+        [REQUEST_HEADERS.authorization]: `Bearer ${refreshToken}`,
+        [REQUEST_HEADERS.accept]: 'application/json',
+      },
+    });
+    const tokens: ITokens = (await response.json()) as ITokens;
+    return tokens;
   }
 }

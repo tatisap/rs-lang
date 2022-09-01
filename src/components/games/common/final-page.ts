@@ -89,7 +89,7 @@ export default class GameFinalPage {
       classNames: ['result-list__item'],
       innerText: `${answerInfo.word} - ${answerInfo.wordTranslation}`,
     });
-    item.prepend(new AudioElement(answerInfo.audioUrl).init().getAudioElement());
+    item.prepend(new AudioElement([answerInfo.audioUrl]).init().getAudioElement());
     return item;
   }
 
