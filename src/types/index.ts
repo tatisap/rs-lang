@@ -29,6 +29,11 @@ export interface IUserTokens {
   name: string;
 }
 
+export interface ITokens {
+  token: string;
+  refreshToken: string;
+}
+
 export interface ITeamMember {
   name: string;
   github: string;
@@ -60,7 +65,7 @@ export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
   statusCode: StatusCode;
-  content?: IUser | IUserTokens | ISignUpError | string;
+  content?: IUser | IUserTokens | ISignUpError | ITokens | string;
 }
 
 export interface IAuthStatus {
@@ -76,9 +81,17 @@ export interface ISignUpError {
   };
 }
 
+export interface IRequestParameters {
+  userId: string;
+  token: string;
+  wordId?: string;
+  body?: IUserWord;
+}
+
 export enum Numbers {
   Zero = 0,
-  One = 1,
+  One,
+  Two,
 }
 
 export enum StringifiedBoolean {
@@ -118,7 +131,7 @@ export interface IBookSectionInfo {
   group: number;
 }
 
-export type PageName = 'main' | 'studentBook' | 'games';
+export type PageName = 'main' | 'studentBook' | 'games' | 'statistic';
 
 export type GameName = 'audiocall';
 
@@ -149,3 +162,68 @@ export interface IGameQuestionResult {
   isCorrect: boolean;
   correctAnswer: IGameCorrectAnswer;
 }
+
+export type IUserWordDataByGame = {
+  [game in GameName]: {
+    correctAnswersCounter: number;
+    incorrectAnswersCounter: number;
+  };
+};
+
+export interface IUserWordGameDataByDate {
+  [date: string]: IUserWordDataByGame;
+}
+
+export interface IUserWord {
+  difficulty: 'hard' | 'easy';
+  optional: {
+    isLearned: boolean;
+    dateOfLearning: string;
+    correctAnswersInRow: number;
+    gameNameOfFirstUse: GameName;
+    dateOfFirstUse: string;
+    dataByDates: IUserWordGameDataByDate;
+  };
+}
+
+export interface IDailyChartDataByGame {
+  gameLabel: string;
+  data: {
+    newWords: number;
+    totalAnswers: number;
+    correctAnswers: number;
+    correctAnswersPercentage: number;
+    maxCorrectAnswers: number;
+  };
+}
+
+export interface IDailyChartDataForAllWords {
+  newWords: number;
+  learnedWords: number;
+  correctAnswers: number;
+  correctAnswersPercentage: number;
+}
+
+export interface ILongTermChartDataPerDate {
+  date: Date;
+  newWords: number;
+  learnedWords: number;
+}
+
+export interface IProcessedStatisticInfo {
+  dailyChartDataByGames: IDailyChartDataByGame[];
+  dailyChartDataForAllWords: IDailyChartDataForAllWords;
+  longTermChartData: ILongTermChartDataPerDate[];
+}
+
+export interface IUserStatistics {
+  optional: {
+    [date: string]: {
+      maxCorrectAnswerSeries: {
+        [game in GameName]: number;
+      };
+    };
+  };
+}
+
+export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';

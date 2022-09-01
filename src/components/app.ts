@@ -6,6 +6,7 @@ import MainPageView from './main-page/view';
 import Menu from './menu';
 import StudentBookView from './student-book/view';
 import StudentBook from './student-book';
+import StatisticPage from './statistic';
 
 export default class App {
   private menu: Menu;
@@ -18,6 +19,7 @@ export default class App {
     main: MainPageView;
     studentBook: StudentBookView;
     games: GamesHomepage;
+    statistic: StatisticPage;
   };
 
   constructor() {
@@ -28,6 +30,7 @@ export default class App {
       main: new MainPageView(),
       studentBook: new StudentBookView(),
       games: new GamesHomepage(),
+      statistic: new StatisticPage(),
     };
   }
 

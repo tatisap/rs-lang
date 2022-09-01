@@ -183,6 +183,12 @@ export const AUDIOCALL_AUDIO_BUTTON_PLACEMENT = {
 
 export const AUDIOCALL_ANSWER_OPTIONS_NUMBER = 5;
 
+export const DATE_KEY_SEPARATOR = '/';
+
+export const MS_PER_DAY = 86400000;
+
+export const UNAUTHORIZED_MESSAGE = 'Для просмотра этой страницы необходимо авторизироваться';
+
 export const DIFFICULT_WORDS_CONTAINER_MESSAGES = {
   forAnauthorized: 'Доступно только авторизованным пользователям',
   noWords:
