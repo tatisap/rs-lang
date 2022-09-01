@@ -217,19 +217,22 @@ export default class StudentBookView {
     page: number,
     container: HTMLDivElement
   ): Promise<void> {
+    const wordsContainer = container;
     if (section.text === BOOK_SECTIONS.difficultWords.text) {
-      container.classList.add('difficult-words');
+      wordsContainer.classList.add('difficult-words');
       if (!this.authController.isUserAuthorized()) {
-        container.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forAnauthorized;
+        wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forAnauthorized;
       } else {
         const difficultWordsCards = await this.createDifficultWordsCards();
-        difficultWordsCards.length
-          ? container.append(...difficultWordsCards)
-          : (container.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords);
+        if (difficultWordsCards.length) {
+          wordsContainer.append(...difficultWordsCards);
+        } else {
+          wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords;
+        }
       }
     } else {
-      container.classList.remove('difficult-words');
-      container.append(...(await this.createWordsCards(section, page)));
+      wordsContainer.classList.remove('difficult-words');
+      wordsContainer.append(...(await this.createWordsCards(section, page)));
     }
     const loader: HTMLDivElement | null = document.querySelector('.loader');
     if (loader) loader.remove();
