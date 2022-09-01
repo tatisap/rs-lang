@@ -8,13 +8,13 @@ import {
   DISPLAY_MODES,
   NO_CONTENT,
   DIFFICULT_WORDS_CONTAINER_MESSAGES,
-  STORAGE_KEYS,
 } from '../../../constants';
-import { IBookSectionInfo, Numbers, IWord, IUserTokens, IAggregatedWord } from '../../../types';
+import { IBookSectionInfo, Numbers, IWord, IAggregatedWord } from '../../../types';
 import StudentBookController from '../controller';
 import WordCard from './words';
 import WordsAPI from '../../../api/words-api';
 import AuthController from '../../auth/auth-controller';
+import RequestProcessor from '../../request-processor';
 
 export default class StudentBookView {
   readonly elementCreator: UIElementsConstructor;
@@ -25,11 +25,14 @@ export default class StudentBookView {
 
   readonly wordsAPI: WordsAPI;
 
+  readonly requestProcessor: RequestProcessor;
+
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.bookController = new StudentBookController();
     this.authController = new AuthController();
     this.wordsAPI = new WordsAPI();
+    this.requestProcessor = new RequestProcessor();
   }
 
   public renderPage(): void {
@@ -206,11 +209,9 @@ export default class StudentBookView {
   }
 
   private async createDifficultWordsCards(): Promise<HTMLDivElement[]> {
-    const userInfo: IUserTokens = JSON.parse(localStorage.getItem(STORAGE_KEYS.user) as string);
-    const words: IAggregatedWord[] = await this.wordsAPI.getDifficultWords({
-      userId: userInfo.userId,
-      token: userInfo.token,
-    });
+    const words: IAggregatedWord[] = await this.requestProcessor.process<IAggregatedWord[]>(
+      this.wordsAPI.getDifficultWords
+    );
     const sortedWords = words.sort(
       (currentWord: IAggregatedWord, nextWord: IAggregatedWord): number =>
         currentWord.userWord.optional.dateOfMarkAsHard - nextWord.userWord.optional.dateOfMarkAsHard
