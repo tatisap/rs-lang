@@ -1,12 +1,13 @@
 import { BASE_URL } from '../../../constants';
-import { IWord } from '../../../types';
+import { Difficulty, IWord } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
 
-  constructor(private word: IWord) {
+  constructor(private word: IWord, private difficulty: Difficulty) {
     this.elementCreator = new UIElementsConstructor();
+    this.difficulty = difficulty;
   }
 
   public createWordCard(): HTMLDivElement {
@@ -121,6 +122,10 @@ export default class WordCard {
         tag: 'button',
         classNames: ['controls__difficult-btn', 'difficult-btn'],
       });
+    if (this.difficulty === 'hard') {
+      buttonDifficult.classList.add('active');
+      buttonDifficult.disabled = true;
+    }
     return buttonDifficult;
   }
 

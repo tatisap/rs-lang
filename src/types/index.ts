@@ -149,3 +149,28 @@ export interface IGameQuestionResult {
   isCorrect: boolean;
   correctAnswer: IGameCorrectAnswer;
 }
+
+export type IUserWordDataByGame = {
+  [game in GameName]: {
+    correctAnswersCounter: number;
+    incorrectAnswersCounter: number;
+  };
+};
+
+export interface IUserWordGameDataByDate {
+  [date: string]: IUserWordDataByGame;
+}
+
+export interface IUserWord {
+  difficulty: Difficulty;
+  optional: {
+    isLearned: boolean;
+    dateOfLearning: string | NoData;
+    correctAnswersInRow: number;
+    gameNameOfFirstUse: GameName | NoData;
+    dateOfFirstUse: string | NoData;
+    dataByDates: IUserWordGameDataByDate;
+  };
+}
+export type NoData = 'no_data';
+export type Difficulty = 'hard' | 'easy';
