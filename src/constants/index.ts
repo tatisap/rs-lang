@@ -149,6 +149,11 @@ export const BOOK_SECTIONS = {
   },
 };
 
+export const CARD_BUTTON = {
+  difficulty: '#C55',
+  learned: '#53C60B',
+};
+
 export const PAGINATION_BUTTONS = {
   previous: {
     className: 'button-previous',
