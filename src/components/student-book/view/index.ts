@@ -10,7 +10,7 @@ import {
   DIFFICULT_WORDS_CONTAINER_MESSAGES,
   STORAGE_KEYS,
 } from '../../../constants';
-import { IBookSectionInfo, Numbers, IWord, IUserTokens } from '../../../types';
+import { IBookSectionInfo, Numbers, IWord, IUserTokens, IAggregatedWord } from '../../../types';
 import StudentBookController from '../controller';
 import WordCard from './words';
 import WordsAPI from '../../../api/words-api';
@@ -197,17 +197,30 @@ export default class StudentBookView {
     page: number
   ): Promise<HTMLDivElement[]> {
     const words: IWord[] = await this.wordsAPI.getWords(section.group, page);
-    const wordsCards: HTMLDivElement[] = words.map(
-      (word: IWord): HTMLDivElement => new WordCard(word).createWordCard()
-    );
+    const wordsCards: HTMLDivElement[] = words.map((word: IWord): HTMLDivElement => {
+      const wordContainer = new WordCard(word).createWordCard();
+      wordContainer.dataset.wordId = `${word.id}`;
+      return wordContainer;
+    });
     return wordsCards;
   }
 
   private async createDifficultWordsCards(): Promise<HTMLDivElement[]> {
     const userInfo: IUserTokens = JSON.parse(localStorage.getItem(STORAGE_KEYS.user) as string);
-    const words: IWord[] = await this.wordsAPI.getDifficultWords(userInfo.userId);
-    const wordsCards: HTMLDivElement[] = words.map(
-      (word: IWord): HTMLDivElement => new WordCard(word).createWordCard()
+    const words: IAggregatedWord[] = await this.wordsAPI.getDifficultWords({
+      userId: userInfo.userId,
+      token: userInfo.token,
+    });
+    const sortedWords = words.sort(
+      (currentWord: IAggregatedWord, nextWord: IAggregatedWord): number =>
+        currentWord.userWord.optional.dateOfMarkAsHard - nextWord.userWord.optional.dateOfMarkAsHard
+    );
+    const wordsCards: HTMLDivElement[] = sortedWords.map(
+      (word: IAggregatedWord): HTMLDivElement => {
+        const wordContainer = new WordCard(word).createWordCard();
+        wordContainer.dataset.wordId = `${word._id}`;
+        return wordContainer;
+      }
     );
     return wordsCards;
   }
