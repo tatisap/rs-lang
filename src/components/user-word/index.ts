@@ -123,10 +123,10 @@ export default class UserWord {
       info.optional.dateOfFirstUse,
       info.optional.dateOfMarkAsHard,
     ];
-    const dataEntries: [string, IUserWordDataByGame][] = Object.entries(info.optional.dataByDates);
-    this.dataByDates = dataEntries.map(
-      (dataItem: [string, IUserWordDataByGame]): WordDataByGame =>
-        new WordDataByGame(dataItem[Numbers.Zero]).update(dataItem[Numbers.One])
+    const dateKeys: string[] = Object.keys(info.optional.dataByDates);
+    this.dataByDates = dateKeys.map(
+      (dateKey: string): WordDataByGame =>
+        new WordDataByGame(dateKey).update(info.optional.dataByDates[dateKey])
     );
     return this;
   }
@@ -142,9 +142,10 @@ export default class UserWord {
         dateOfFirstUse: this.dateOfFirstUse,
         dateOfMarkAsHard: this.dateOfMarkAsHard,
         dataByDates: Object.fromEntries(
-          this.dataByDates.map((dataItem: WordDataByGame): [string, IUserWordDataByGame] =>
-            dataItem.getInfo()
-          )
+          this.dataByDates.map((dataItem: WordDataByGame): [string, IUserWordDataByGame] => {
+            const dataByGames: { dateKey: string; data: IUserWordDataByGame } = dataItem.getInfo();
+            return [dataByGames.dateKey, dataByGames.data];
+          })
         ),
       },
     };

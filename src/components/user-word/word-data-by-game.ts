@@ -4,15 +4,20 @@ import { GameName, IAnswerCounter, IUserWordDataByGame, Numbers } from '../../ty
 export default class WordDataByGame {
   private dateKey: string;
 
-  private dataByGames: [GameName, IAnswerCounter][];
+  private dataByGames: {
+    game: GameName;
+    counter: IAnswerCounter;
+  }[];
 
   constructor(dateKey: string) {
     this.dateKey = dateKey;
     this.dataByGames = (Object.keys(GAMES) as GameName[]).map(
-      (gameName: GameName): [GameName, IAnswerCounter] => [
-        gameName,
-        { correctAnswersCounter: Numbers.Zero, incorrectAnswersCounter: Numbers.Zero },
-      ]
+      (gameName: GameName): { game: GameName; counter: IAnswerCounter } => {
+        return {
+          game: gameName,
+          counter: { correctAnswersCounter: Numbers.Zero, incorrectAnswersCounter: Numbers.Zero },
+        };
+      }
     );
   }
 
@@ -23,17 +28,17 @@ export default class WordDataByGame {
   public increaseCorrectAnswer(game: GameName): void {
     (
       this.dataByGames.find(
-        (data: [GameName, IAnswerCounter]): boolean => game === data[Numbers.Zero]
-      ) as [GameName, IAnswerCounter]
-    )[Numbers.One].correctAnswersCounter += Numbers.One;
+        (data: { game: GameName; counter: IAnswerCounter }): boolean => game === data.game
+      ) as { game: GameName; counter: IAnswerCounter }
+    ).counter.correctAnswersCounter += Numbers.One;
   }
 
   public increaseIncorrectAnswer(game: GameName): void {
     (
       this.dataByGames.find(
-        (data: [GameName, IAnswerCounter]): boolean => game === data[Numbers.Zero]
-      ) as [GameName, IAnswerCounter]
-    )[Numbers.One].incorrectAnswersCounter += Numbers.One;
+        (data: { game: GameName; counter: IAnswerCounter }): boolean => game === data.game
+      ) as { game: GameName; counter: IAnswerCounter }
+    ).counter.incorrectAnswersCounter += Numbers.One;
   }
 
   public update(data: IUserWordDataByGame): WordDataByGame {
@@ -41,22 +46,26 @@ export default class WordDataByGame {
       Object.assign(
         (
           this.dataByGames.find(
-            (gameData: [GameName, IAnswerCounter]): boolean => gameName === gameData[Numbers.Zero]
-          ) as [GameName, IAnswerCounter]
-        )[Numbers.One],
+            (gameData: { game: GameName; counter: IAnswerCounter }): boolean =>
+              gameName === gameData.game
+          ) as { game: GameName; counter: IAnswerCounter }
+        ).counter,
         data[gameName]
       );
     });
     return this;
   }
 
-  public getInfo(): [string, IUserWordDataByGame] {
+  public getInfo(): { dateKey: string; data: IUserWordDataByGame } {
     const cloneDataByGames: [GameName, IAnswerCounter][] = this.dataByGames.map(
-      (gameData: [GameName, IAnswerCounter]): [GameName, IAnswerCounter] => [
-        gameData[Numbers.Zero],
-        { ...gameData[Numbers.One] },
+      (gameData: { game: GameName; counter: IAnswerCounter }): [GameName, IAnswerCounter] => [
+        gameData.game,
+        { ...gameData.counter },
       ]
     );
-    return [this.dateKey, Object.fromEntries(cloneDataByGames) as IUserWordDataByGame];
+    return {
+      dateKey: this.dateKey,
+      data: Object.fromEntries(cloneDataByGames) as IUserWordDataByGame,
+    };
   }
 }
