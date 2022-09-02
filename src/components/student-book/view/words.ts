@@ -1,13 +1,26 @@
+import WordsAPI from '../../../api/words-api';
 import { BASE_URL } from '../../../constants';
 import { Difficulty, IWord } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
+import AuthController from '../../auth/auth-controller';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
 
-  constructor(private word: IWord, private difficulty: Difficulty) {
+  readonly authController: AuthController;
+
+  readonly wordsAPI: WordsAPI;
+
+  readonly requestProcessor: RequestProcessor;
+
+  private difficulty: 'easy' | 'hard';
+
+  constructor(private word: IWord) {
     this.elementCreator = new UIElementsConstructor();
-    this.difficulty = difficulty;
+    this.authController = new AuthController();
+    this.wordsAPI = new WordsAPI();
+    this.requestProcessor = new RequestProcessor();
+    this.difficulty = 'easy';
   }
 
   public createWordCard(): HTMLDivElement {
@@ -126,8 +139,18 @@ export default class WordCard {
       buttonDifficult.classList.add('active');
       buttonDifficult.disabled = true;
     }
+    buttonDifficult.addEventListener('click', async () => {});
     return buttonDifficult;
   }
+
+  private disableDifficult = (btn: Difficulty): void => {
+    const button = <HTMLButtonElement>(
+      document.querySelector(`div[data-word-id = "${this.word.id}"] .${btn}-btn`)
+    );
+
+    button.classList.remove('active');
+    button.removeAttribute('disabled');
+  };
 
   private createLearnedWordButton(): HTMLButtonElement {
     const buttonLearned: HTMLButtonElement = this.elementCreator.createUIElement<HTMLButtonElement>(
@@ -138,4 +161,14 @@ export default class WordCard {
     );
     return buttonLearned;
   }
+
+  private disableLearned = (btn: HTMLButtonElement): void => {
+    const wordContainer: HTMLDivElement = document.querySelector(
+      '.words__word-section'
+    ) as HTMLDivElement;
+    wordContainer.classList.remove('learned');
+
+    btn.classList.remove('active');
+    btn.removeAttribute('disabled');
+  };
 }

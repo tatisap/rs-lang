@@ -29,6 +29,13 @@ export interface IUserTokens {
   name: string;
 }
 
+export interface IRequestParameters {
+  userId: string;
+  token: string;
+  wordId?: string;
+  body?: IUserWord;
+}
+
 export interface ITeamMember {
   name: string;
   github: string;
