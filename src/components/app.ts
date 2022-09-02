@@ -50,6 +50,7 @@ export default class App {
     const pageName: PageName = menuItem.dataset.pageName as PageName;
     this.menu.resetMenuItemsActiveState();
     this.menu.setMenuItemActiveState(pageName);
+    this.resetMainContainerClassesToDefaults();
     this.openPage(pageName);
     this.saveCurrentPageName(pageName);
     this.menu.closeMenu();
@@ -73,5 +74,15 @@ export default class App {
   private makeFooterVisible(): void {
     (document.querySelector('footer') as HTMLElement).style.display =
       DISPLAY_MODES.contentFlexVisible;
+  }
+
+  private resetMainContainerClassesToDefaults(): void {
+    const mainContainer = document.getElementById('app') as HTMLDivElement;
+    const mainContainerClasses: DOMTokenList = mainContainer.classList;
+    mainContainerClasses.forEach((mainContainerClass: string): void => {
+      if (mainContainerClass.startsWith('page_')) {
+        mainContainer.classList.remove(mainContainerClass);
+      }
+    });
   }
 }

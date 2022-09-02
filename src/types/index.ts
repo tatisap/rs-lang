@@ -182,6 +182,7 @@ export interface IUserWord {
     correctAnswersInRow: number;
     gameNameOfFirstUse: GameName;
     dateOfFirstUse: string;
+    dateOfMarkAsHard: number;
     dataByDates: IUserWordGameDataByDate;
   };
 }
@@ -227,3 +228,15 @@ export interface IUserStatistics {
 }
 
 export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
+
+export interface IAggregatedWord extends Omit<IWord, 'id'> {
+  _id: string;
+  userWord: IUserWord;
+}
+
+export interface IAggregatedWordsElement {
+  paginatedResults: IAggregatedWord[];
+  totalCount: { count: number }[];
+}
+
+export type IAggregatedWordsData = IAggregatedWordsElement[];
