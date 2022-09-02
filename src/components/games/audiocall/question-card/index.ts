@@ -2,7 +2,12 @@ import {
   AUDIOCALL_AUDIO_BUTTON_PLACEMENT,
   AUDIOCALL_ANSWER_OPTIONS_NUMBER,
 } from '../../../../constants';
-import { IAudiocallQuestionInfo, KeyboardCode, Numbers } from '../../../../types';
+import {
+  IAudiocallQuestionInfo,
+  IGameQuestionResult,
+  KeyboardCode,
+  Numbers,
+} from '../../../../types';
 import AudioElement from '../../../audio/audio-element';
 import QuestionCardConstructor from './card-constructor';
 
@@ -116,9 +121,18 @@ export default class AudiocallQuestion {
       }
     });
 
-    this.container.dataset.isUserAnswerCorrect = `${
-      chosenOption?.dataset.value === this.questionInfo.correctAnswer.wordTranslation
-    }`;
+    const isUserAnswerCorrect: boolean =
+      chosenOption?.dataset.value === this.questionInfo.correctAnswer.wordTranslation;
+    this.container.dataset.isUserAnswerCorrect = `${isUserAnswerCorrect}`;
+    this.container.dispatchEvent(
+      new CustomEvent('question-answered', {
+        bubbles: true,
+        detail: {
+          isCorrect: isUserAnswerCorrect,
+          correctAnswer: this.questionInfo.correctAnswer,
+        } as IGameQuestionResult,
+      })
+    );
 
     this.openAnswer();
   }

@@ -196,3 +196,10 @@ export const DIFFICULT_WORDS_CONTAINER_MESSAGES = {
 };
 
 export const MAX_WORDS_IN_BOOK = 3600;
+
+export const NUMBER_OF_CORRECT_ANSWERS_TO_LEARN = {
+  forEasyWords: 3,
+  forHardWords: 5,
+};
+
+export const NO_DATA = 'no_data';

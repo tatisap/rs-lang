@@ -11,6 +11,7 @@ import {
   IProcessedStatisticInfo,
   IUserStatistics,
   IUserWord,
+  NoData,
   Numbers,
   StatisticalDateKeysType,
 } from '../../../types';
@@ -168,8 +169,8 @@ export default class StatisticPageController {
 
   private getDateKeysByType(userWords: IUserWord[], dateType: StatisticalDateKeysType): string[] {
     return userWords
-      .map((userWord: IUserWord) => userWord.optional[dateType])
-      .filter((date: string): boolean => !!date);
+      .map((userWord: IUserWord): string | NoData => userWord.optional[dateType])
+      .filter((date: string | NoData): boolean => !!date && date !== 'no_data') as string[];
   }
 
   private calcPercentage(part: number, whole: number) {
