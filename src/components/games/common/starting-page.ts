@@ -46,6 +46,7 @@ export default class GameStartingPage {
         this.dispatchLevelSelectedEvent(event.target as HTMLButtonElement, level as string)
       );
       this.container.append(startGameButton);
+      (document.querySelector('.page__words') as HTMLDivElement).style.display = 'none';
     }
     gameContainer.append(this.container);
   }
