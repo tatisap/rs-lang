@@ -54,8 +54,8 @@ export default class UserWord {
     return this.isLearned;
   }
 
-  public isUsed(): boolean {
-    return this.dateOfFirstUse === NO_DATA;
+  public wasUsed(): boolean {
+    return this.dateOfFirstUse !== NO_DATA;
   }
 
   public setFirstUseInfo(gameName: GameName, date: string): void {

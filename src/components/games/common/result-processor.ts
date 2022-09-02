@@ -47,7 +47,7 @@ export default class GameResultProcessor {
         userWord.markAsLearned(dateKey);
       }
 
-      if (userWord.isUsed()) {
+      if (!userWord.wasUsed()) {
         userWord.setFirstUseInfo(gameName, dateKey);
       }
 
@@ -88,7 +88,7 @@ export default class GameResultProcessor {
       if (userWord.getLearningStatus()) {
         userWord.remoreLearnedMark();
       }
-      if (userWord.isUsed()) {
+      if (!userWord.wasUsed()) {
         userWord.setFirstUseInfo(gameName, dateKey);
       }
       userWord.increaseIncorrectAnswers(gameName, dateKey);
