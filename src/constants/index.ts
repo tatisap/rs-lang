@@ -188,3 +188,10 @@ export const DATE_KEY_SEPARATOR = '/';
 export const MS_PER_DAY = 86400000;
 
 export const UNAUTHORIZED_MESSAGE = 'Для просмотра этой страницы необходимо авторизироваться';
+
+export const NUMBER_OF_CORRECT_ANSWERS_TO_LEARN = {
+  forEasyWords: 3,
+  forHardWords: 5,
+};
+
+export const NO_DATA = 'no_data';
