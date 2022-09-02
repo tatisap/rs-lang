@@ -1,0 +1,12 @@
+.page_statistic {
+  text-align: center;
+  .charts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .charts__percentage-info {
+      margin-top: 20px;
+      text-align: center;
+    }
+  }
+}

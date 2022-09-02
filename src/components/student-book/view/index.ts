@@ -7,9 +7,14 @@ import {
   MAX_PAGES_IN_BOOK_SECTION,
   DISPLAY_MODES,
   NO_CONTENT,
+  DIFFICULT_WORDS_CONTAINER_MESSAGES,
 } from '../../../constants';
-import { IBookSectionInfo, Numbers } from '../../../types';
+import { IBookSectionInfo, Numbers, IWord, IAggregatedWord } from '../../../types';
 import StudentBookController from '../controller';
+import WordCard from './words';
+import WordsAPI from '../../../api/words-api';
+import AuthController from '../../auth/auth-controller';
+import RequestProcessor from '../../request-processor';
 import GameSwitcher from '../../games/game-switcher';
 
 export default class StudentBookView {
@@ -17,11 +22,20 @@ export default class StudentBookView {
 
   readonly bookController: StudentBookController;
 
+  readonly authController: AuthController;
+
+  readonly wordsAPI: WordsAPI;
+
+  readonly requestProcessor: RequestProcessor;
+
   readonly gameSwitcher: GameSwitcher;
 
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.bookController = new StudentBookController();
+    this.authController = new AuthController();
+    this.wordsAPI = new WordsAPI();
+    this.requestProcessor = new RequestProcessor();
     this.gameSwitcher = new GameSwitcher();
   }
 
@@ -36,7 +50,10 @@ export default class StudentBookView {
     }
   }
 
-  private updatePageContainer(section = BOOK_SECTIONS.beginner, page = Numbers.One): void {
+  private async updatePageContainer(
+    section = BOOK_SECTIONS.beginner,
+    page = Numbers.One
+  ): Promise<void> {
     const pageContainer = document.getElementById('app') as HTMLElement;
     pageContainer.classList.add('page_student-book');
 
@@ -45,17 +62,17 @@ export default class StudentBookView {
       this.createGamesContainer(section.group, page),
       this.createBookSectionsContainer(section.className),
       this.createPaginationContainer(section, page),
-      this.createWordsContainer(section.color)
+      await this.createWordsContainer(section, page)
     );
   }
 
   private createPageTitle(): HTMLHeadingElement {
-    const pageTtitle: HTMLHeadingElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
+    const pageTitle: HTMLHeadingElement = this.elementCreator.createUIElement<HTMLHeadingElement>({
       tag: 'h2',
       classNames: ['page__title'],
       innerText: PAGE_TITLES.studentBook,
     });
-    return pageTtitle;
+    return pageTitle;
   }
 
   private createGameLink(
@@ -105,8 +122,12 @@ export default class StudentBookView {
       classNames: ['sections__book-section', sectionName.toLowerCase()],
       innerText: sectionName,
     });
-    bookSection.addEventListener('click', (event: Event): void => {
+    bookSection.addEventListener('click', async (event: Event): Promise<void> => {
       const newSection: IBookSectionInfo = this.bookController.switchSection(event);
+      const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
+      wordsContainer.innerHTML = NO_CONTENT;
+      wordsContainer.append(this.createLoader(newSection.className));
+      await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
       this.updateGamesButtons(newSection.group, Numbers.One);
     });
     return bookSection;
@@ -140,9 +161,17 @@ export default class StudentBookView {
     if (page === MAX_PAGES_IN_BOOK_SECTION && buttonClass === PAGINATION_BUTTONS.next.className) {
       paginationButton.setAttribute('disabled', '');
     }
-    paginationButton.addEventListener('click', (event: Event): void => {
-      const newPageAndSection: { page: number; section: IBookSectionInfo } =
+    paginationButton.addEventListener('click', async (event: Event): Promise<void> => {
+      const newSectionAndPage: { page: number; section: IBookSectionInfo } =
         this.bookController.switchPage(event);
+      const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
+      wordsContainer.innerHTML = NO_CONTENT;
+      wordsContainer.append(this.createLoader(newSectionAndPage.section.className));
+      await this.fillWordsContainer(
+        newSectionAndPage.section,
+        newSectionAndPage.page,
+        wordsContainer
+      );
       this.updateGamesButtons(newPageAndSection.section.group, newPageAndSection.page);
     });
     return paginationButton;
@@ -177,13 +206,73 @@ export default class StudentBookView {
     return paginationContainer;
   }
 
-  private createWordsContainer(sectionColor: string): HTMLDivElement {
+  private async createWordsContainer(
+    section: IBookSectionInfo,
+    page: number
+  ): Promise<HTMLDivElement> {
     const wordsContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__words', 'words'],
     });
-    wordsContainer.style.backgroundColor = sectionColor;
+    wordsContainer.style.backgroundColor = section.color;
+    await this.fillWordsContainer(section, page, wordsContainer);
     return wordsContainer;
+  }
+
+  private createWordsCards(words: IWord[] | IAggregatedWord[]): HTMLDivElement[] {
+    return words.map(
+      (word: IWord | IAggregatedWord): HTMLDivElement => new WordCard(word).createWordCard()
+    );
+  }
+
+  private async createFilledWordsCards(
+    section?: IBookSectionInfo,
+    page?: number
+  ): Promise<HTMLDivElement[]> {
+    if (section && page) {
+      return this.createWordsCards(await this.wordsAPI.getWords(section.group, page));
+    }
+    const words: IAggregatedWord[] = await this.requestProcessor.process<IAggregatedWord[]>(
+      this.wordsAPI.getDifficultWords
+    );
+    const wordsSortedByDateOfMarkAsHard = words.sort(
+      (currentWord: IAggregatedWord, nextWord: IAggregatedWord): number =>
+        currentWord.userWord.optional.dateOfMarkAsHard - nextWord.userWord.optional.dateOfMarkAsHard
+    );
+    return this.createWordsCards(wordsSortedByDateOfMarkAsHard);
+  }
+
+  private async fillWordsContainer(
+    section: IBookSectionInfo,
+    page: number,
+    container: HTMLDivElement
+  ): Promise<void> {
+    const wordsContainer: HTMLDivElement = container;
+    if (section.text === BOOK_SECTIONS.difficultWords.text) {
+      wordsContainer.classList.add('difficult-words');
+      if (!this.authController.isUserAuthorized()) {
+        wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forUnauthorized;
+      } else {
+        const difficultWordsCards = await this.createFilledWordsCards();
+        if (difficultWordsCards.length) {
+          wordsContainer.append(...difficultWordsCards);
+        } else {
+          wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords;
+        }
+      }
+    } else {
+      wordsContainer.classList.remove('difficult-words');
+      wordsContainer.append(...(await this.createFilledWordsCards(section, page)));
+    }
+    const loader: HTMLDivElement | null = document.querySelector('.loader');
+    if (loader) loader.remove();
+  }
+
+  private createLoader(className: string): HTMLDivElement {
+    return this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['loader', `loader-${className}`],
+    });
   }
 
   private updateGamesButtons(section: number, page: number): void {

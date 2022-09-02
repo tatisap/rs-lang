@@ -6,6 +6,7 @@ import MainPageView from './main-page/view';
 import Menu from './menu';
 import StudentBookView from './student-book/view';
 import StudentBook from './student-book';
+import StatisticPage from './statistic';
 
 export default class App {
   private menu: Menu;
@@ -18,6 +19,7 @@ export default class App {
     main: MainPageView;
     studentBook: StudentBookView;
     games: GamesHomepage;
+    statistic: StatisticPage;
   };
 
   constructor() {
@@ -28,6 +30,7 @@ export default class App {
       main: new MainPageView(),
       studentBook: new StudentBookView(),
       games: new GamesHomepage(),
+      statistic: new StatisticPage(),
     };
   }
 
@@ -47,6 +50,7 @@ export default class App {
     const pageName: PageName = menuItem.dataset.pageName as PageName;
     this.menu.resetMenuItemsActiveState();
     this.menu.setMenuItemActiveState(pageName);
+    this.resetMainContainerClassesToDefaults();
     this.openPage(pageName);
     this.saveCurrentPageName(pageName);
     this.menu.closeMenu();
@@ -70,5 +74,15 @@ export default class App {
   private makeFooterVisible(): void {
     (document.querySelector('footer') as HTMLElement).style.display =
       DISPLAY_MODES.contentFlexVisible;
+  }
+
+  private resetMainContainerClassesToDefaults(): void {
+    const mainContainer = document.getElementById('app') as HTMLDivElement;
+    const mainContainerClasses: DOMTokenList = mainContainer.classList;
+    mainContainerClasses.forEach((mainContainerClass: string): void => {
+      if (mainContainerClass.startsWith('page_')) {
+        mainContainer.classList.remove(mainContainerClass);
+      }
+    });
   }
 }

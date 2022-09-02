@@ -43,8 +43,7 @@ export default class Auth {
     if (this.authButton.classList.contains('auth_unauthorized')) {
       this.view.openModal().renderContent();
     } else {
-      this.controller.removeConfidentialInfo();
-      document.location.reload();
+      this.controller.signOut();
     }
   }
 
