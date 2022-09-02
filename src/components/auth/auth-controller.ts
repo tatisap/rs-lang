@@ -88,8 +88,7 @@ export default class AuthController {
     try {
       const userInfo: IUserTokens = this.getConfidentialInfo();
       const newTokens: ITokens = await this.api.updateToken(userInfo.userId, userInfo.refreshToken);
-      userInfo.token = newTokens.token;
-      userInfo.refreshToken = newTokens.refreshToken;
+      [userInfo.token, userInfo.refreshToken] = [newTokens.token, newTokens.refreshToken];
       this.saveConfidentialInfo(userInfo);
     } catch {
       this.signOut();

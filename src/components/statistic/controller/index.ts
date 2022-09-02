@@ -1,7 +1,7 @@
 import StatisticAPI from '../../../api/statistic-api';
 import WordsAPI from '../../../api/words-api';
 import { GAMES, MS_PER_DAY } from '../../../constants';
-import { PER_CENT } from '../../../constants/chart-defaults';
+import { HUNDRED_PER_CENT } from '../../../constants/chart-defaults';
 import {
   GameName,
   IDailyChartDataByGame,
@@ -174,7 +174,7 @@ export default class StatisticPageController {
   }
 
   private calcPercentage(part: number, whole: number) {
-    return Math.round((part / whole) * PER_CENT);
+    return Math.round((part / whole) * HUNDRED_PER_CENT);
   }
 
   private enrichAllTimeChartDataByDates(

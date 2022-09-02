@@ -5,8 +5,8 @@ import {
   CHART_COLORS,
   CHART_LABELS,
   CHART_TITLES,
-  DEFAULT_CONFIGS,
-  PERCENTAGE_INFO_LABEL,
+  CHART_DEFAULT_CONFIGS,
+  CORRECT_ANSWERS_PERCENTAGE_LABEL,
 } from '../../../constants/chart-defaults';
 import {
   IDailyChartDataByGame,
@@ -60,7 +60,7 @@ export default class StatisticUIConstructor {
     return this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['charts__percentage-info'],
-      innerText: `${PERCENTAGE_INFO_LABEL} ${
+      innerText: `${CORRECT_ANSWERS_PERCENTAGE_LABEL} ${
         dataForAllWords.correctAnswersPercentage
       }% (${dataByGames
         .map(
@@ -115,13 +115,13 @@ export default class StatisticUIConstructor {
     chart.options = {
       scales: {
         y: {
-          title: DEFAULT_CONFIGS.yAxisTitle,
+          title: CHART_DEFAULT_CONFIGS.yAxisTitle,
         },
       },
       plugins: {
         title: {
           text: CHART_TITLES.byGames,
-          font: DEFAULT_CONFIGS.chartTitleFont,
+          font: CHART_DEFAULT_CONFIGS.chartTitleFont,
         },
       },
     };
@@ -162,13 +162,13 @@ export default class StatisticUIConstructor {
     chart.options = {
       scales: {
         y: {
-          title: DEFAULT_CONFIGS.yAxisTitle,
+          title: CHART_DEFAULT_CONFIGS.yAxisTitle,
         },
       },
       plugins: {
         title: {
           text: CHART_TITLES.byWords,
-          font: DEFAULT_CONFIGS.chartTitleFont,
+          font: CHART_DEFAULT_CONFIGS.chartTitleFont,
         },
       },
     };
@@ -206,7 +206,7 @@ export default class StatisticUIConstructor {
     chart.options = {
       scales: {
         y: {
-          title: DEFAULT_CONFIGS.yAxisTitle,
+          title: CHART_DEFAULT_CONFIGS.yAxisTitle,
         },
       },
     };

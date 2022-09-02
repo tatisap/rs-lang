@@ -28,7 +28,7 @@ export const CHART_TITLES = {
   byWords: 'По словам',
 };
 
-export const DEFAULT_CONFIGS = {
+export const CHART_DEFAULT_CONFIGS = {
   chartTitleFont: {
     size: 16,
   },
@@ -41,6 +41,6 @@ export const DEFAULT_CONFIGS = {
 
 export const CHART_RESIZE_BREAKPOINT = 650;
 
-export const PER_CENT = 100;
+export const HUNDRED_PER_CENT = 100;
 
-export const PERCENTAGE_INFO_LABEL = 'Процент верных ответов за день:';
+export const CORRECT_ANSWERS_PERCENTAGE_LABEL = 'Процент верных ответов за день:';
