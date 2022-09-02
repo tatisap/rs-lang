@@ -1,8 +1,9 @@
 import WordsAPI from '../../../api/words-api';
 import { BASE_URL } from '../../../constants';
-import { Difficulty, IWord } from '../../../types';
+import { IWord, IAggregatedWord } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AuthController from '../../auth/auth-controller';
+import RequestProcessor from '../../request-processor';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
@@ -15,7 +16,7 @@ export default class WordCard {
 
   private difficulty: 'easy' | 'hard';
 
-  constructor(private word: IWord) {
+  constructor(private word: IWord | IAggregatedWord) {
     this.elementCreator = new UIElementsConstructor();
     this.authController = new AuthController();
     this.wordsAPI = new WordsAPI();
@@ -24,18 +25,17 @@ export default class WordCard {
   }
 
   public createWordCard(): HTMLDivElement {
-    const pageWords: HTMLDivElement = document.querySelector('.words') as HTMLDivElement;
     const wordContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['words__word-section'],
     });
-    wordContainer.dataset.wordId = `${this.word.id}`;
+    wordContainer.dataset.wordId = `${
+      (this.word as IWord).id || (this.word as IAggregatedWord)._id
+    }`;
     const infoContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['word-section__info'],
     });
-
-    pageWords.append(wordContainer);
     wordContainer.append(this.createImage(`${BASE_URL}/${this.word.image}`), infoContainer);
     infoContainer.append(
       this.createWordTitle(),

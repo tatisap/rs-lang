@@ -187,3 +187,24 @@ export const AUDIOCALL_AUDIO_BUTTON_PLACEMENT = {
 };
 
 export const AUDIOCALL_ANSWER_OPTIONS_NUMBER = 5;
+
+export const DATE_KEY_SEPARATOR = '/';
+
+export const MS_PER_DAY = 86400000;
+
+export const UNAUTHORIZED_MESSAGE = 'Для просмотра этой страницы необходимо авторизироваться';
+
+export const DIFFICULT_WORDS_CONTAINER_MESSAGES = {
+  forUnauthorized: 'Доступно только авторизованным пользователям',
+  noWords:
+    'Вы ещё не отмечали слова как сложные. Для того, чтобы сделать это, нажмите на кнопку "Добавить в сложные" рядом со словом',
+};
+
+export const MAX_WORDS_IN_BOOK = 3600;
+
+export const NUMBER_OF_CORRECT_ANSWERS_TO_LEARN = {
+  forEasyWords: 3,
+  forHardWords: 5,
+};
+
+export const NO_DATA = 'no_data';

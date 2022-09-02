@@ -11,6 +11,7 @@ import AudiocallController from './controller/controller';
 import AudiocallQuestion from './question-card';
 import GameStartingPage from '../common/starting-page';
 import GameFinalPage from '../common/final-page';
+import GameResultProcessor from '../common/result-processor';
 
 export default class AudioCallGame {
   private elementCreator: UIElementsConstructor;
@@ -23,6 +24,8 @@ export default class AudioCallGame {
 
   private finalPage: GameFinalPage;
 
+  private resultProcessor: GameResultProcessor;
+
   private gameResults: IGameQuestionResult[];
 
   constructor() {
@@ -31,6 +34,7 @@ export default class AudioCallGame {
     this.container = this.createGameContainer();
     this.startingPage = new GameStartingPage();
     this.finalPage = new GameFinalPage();
+    this.resultProcessor = new GameResultProcessor();
     this.gameResults = [];
   }
 
@@ -47,6 +51,9 @@ export default class AudioCallGame {
         const selectedLevel: number =
           Number((event as CustomEvent).detail?.selectedLevel as string) - Numbers.One;
         await this.questionSwitcher(selectedLevel);
+      });
+      this.container.addEventListener('question-answered', async (event: Event): Promise<void> => {
+        await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
       });
     }
   }

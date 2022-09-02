@@ -29,11 +29,9 @@ export interface IUserTokens {
   name: string;
 }
 
-export interface IRequestParameters {
-  userId: string;
+export interface ITokens {
   token: string;
-  wordId?: string;
-  body?: IUserWord;
+  refreshToken: string;
 }
 
 export interface ITeamMember {
@@ -67,7 +65,7 @@ export type AuthMode = 'signIn' | 'signUp';
 
 export interface IResponse {
   statusCode: StatusCode;
-  content?: IUser | IUserTokens | ISignUpError | string;
+  content?: IUser | IUserTokens | ISignUpError | ITokens | string;
 }
 
 export interface IAuthStatus {
@@ -83,9 +81,17 @@ export interface ISignUpError {
   };
 }
 
+export interface IRequestParameters {
+  userId: string;
+  token: string;
+  wordId?: string;
+  body?: IUserWord;
+}
+
 export enum Numbers {
   Zero = 0,
-  One = 1,
+  One,
+  Two,
 }
 
 export enum StringifiedBoolean {
@@ -125,9 +131,9 @@ export interface IBookSectionInfo {
   group: number;
 }
 
-export type PageName = 'main' | 'studentBook' | 'games';
+export type PageName = 'main' | 'studentBook' | 'games' | 'statistic';
 
-export type GameName = 'audiocall';
+export type GameName = 'audiocall' | 'sprint';
 
 export interface IGameInfo {
   name: string;
@@ -157,11 +163,13 @@ export interface IGameQuestionResult {
   correctAnswer: IGameCorrectAnswer;
 }
 
+export interface IAnswerCounter {
+  correctAnswersCounter: number;
+  incorrectAnswersCounter: number;
+}
+
 export type IUserWordDataByGame = {
-  [game in GameName]: {
-    correctAnswersCounter: number;
-    incorrectAnswersCounter: number;
-  };
+  [game in GameName]: IAnswerCounter;
 };
 
 export interface IUserWordGameDataByDate {
@@ -169,15 +177,70 @@ export interface IUserWordGameDataByDate {
 }
 
 export interface IUserWord {
-  difficulty: Difficulty;
+  difficulty: 'hard' | 'easy';
   optional: {
     isLearned: boolean;
     dateOfLearning: string | NoData;
     correctAnswersInRow: number;
     gameNameOfFirstUse: GameName | NoData;
     dateOfFirstUse: string | NoData;
+    dateOfMarkAsHard: number | NoData;
     dataByDates: IUserWordGameDataByDate;
   };
 }
+
+export interface IDailyChartDataByGame {
+  gameLabel: string;
+  data: {
+    newWords: number;
+    totalAnswers: number;
+    correctAnswers: number;
+    correctAnswersPercentage: number;
+    maxCorrectAnswers: number;
+  };
+}
+
+export interface IDailyChartDataForAllWords {
+  newWords: number;
+  learnedWords: number;
+  correctAnswers: number;
+  correctAnswersPercentage: number;
+}
+
+export interface ILongTermChartDataPerDate {
+  date: Date;
+  newWords: number;
+  learnedWords: number;
+}
+
+export interface IProcessedStatisticInfo {
+  dailyChartDataByGames: IDailyChartDataByGame[];
+  dailyChartDataForAllWords: IDailyChartDataForAllWords;
+  longTermChartData: ILongTermChartDataPerDate[];
+}
+
+export interface IUserStatistics {
+  optional: {
+    [date: string]: {
+      maxCorrectAnswerSeries: {
+        [game in GameName]: number;
+      };
+    };
+  };
+}
+
+export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
+
+export interface IAggregatedWord extends Omit<IWord, 'id'> {
+  _id: string;
+  userWord: IUserWord;
+}
+
+export interface IAggregatedWordsElement {
+  paginatedResults: IAggregatedWord[];
+  totalCount: { count: number }[];
+}
+
+export type IAggregatedWordsData = IAggregatedWordsElement[];
+
 export type NoData = 'no_data';
-export type Difficulty = 'hard' | 'easy';

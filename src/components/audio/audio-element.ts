@@ -1,3 +1,4 @@
+import { Numbers } from '../../types';
 import UIElementsConstructor from '../../utils/ui-elements-creator';
 
 export default class AudioElement {
@@ -5,20 +6,25 @@ export default class AudioElement {
 
   private wrapper: HTMLDivElement;
 
-  private audio: HTMLAudioElement;
+  private audios: HTMLAudioElement[];
 
-  constructor(audoUrl: string) {
+  constructor(audioUrls: string[]) {
     this.elementCreator = new UIElementsConstructor();
     this.wrapper = this.createAudioWrapper();
-    this.audio = this.createAudio(audoUrl);
+    this.audios = audioUrls.map(this.createAudio, this);
   }
 
   public init(): AudioElement {
-    this.wrapper.append(this.audio);
-    this.wrapper.addEventListener('click', async (): Promise<void> => {
-      await this.playAudio();
+    this.wrapper.addEventListener('click', async (): Promise<void> => this.toggleAudio());
+    this.wrapper.addEventListener('now-playing', (): void => this.stop());
+    this.audios.at(-Numbers.One)?.addEventListener('ended', () => this.disableSoundAnimation());
+    this.audios.forEach((audio: HTMLAudioElement, index: number): void => {
+      if (index < this.audios.length - Numbers.One) {
+        audio.addEventListener('ended', async (): Promise<void> => {
+          await this.audios[index + Numbers.One].play();
+        });
+      }
     });
-    this.audio.addEventListener('ended', () => this.disableSoundAnimation());
     return this;
   }
 
@@ -26,9 +32,49 @@ export default class AudioElement {
     return this.wrapper;
   }
 
-  public async playAudio(): Promise<void> {
+  public addClassWithModifier(modifier: string): void {
+    this.wrapper.classList.add(`audio-wrapper_${modifier}`);
+    this.audios.forEach((audio: HTMLAudioElement): void =>
+      audio.classList.add(`audio_${modifier}`)
+    );
+  }
+
+  public removeClassWithModifier(modifier: string): void {
+    this.wrapper.classList.remove(`audio-wrapper_${modifier}`);
+    this.audios.forEach((audio: HTMLAudioElement): void =>
+      audio.classList.remove(`audio_${modifier}`)
+    );
+  }
+
+  public async play(): Promise<void> {
+    this.dispatchNowPlayingEvent();
     this.enableSoundAnimation();
-    await this.audio.play();
+    await this.audios[Numbers.Zero].play();
+  }
+
+  public stop(): void {
+    this.audios.forEach((audio: HTMLAudioElement): void => {
+      const playingAudio = audio;
+      playingAudio.pause();
+      playingAudio.currentTime = Numbers.Zero;
+    });
+    this.disableSoundAnimation();
+  }
+
+  private async toggleAudio(): Promise<void> {
+    if (!this.wrapper.classList.contains('audio-wrapper_audio-playing')) {
+      await this.play();
+    } else {
+      this.stop();
+    }
+  }
+
+  private dispatchNowPlayingEvent(): void {
+    (document.querySelectorAll('.audio-wrapper') as NodeListOf<HTMLDivElement>).forEach(
+      (audioElement: HTMLDivElement): void => {
+        audioElement.dispatchEvent(new Event('now-playing'));
+      }
+    );
   }
 
   private enableSoundAnimation(): void {
@@ -37,16 +83,6 @@ export default class AudioElement {
 
   private disableSoundAnimation(): void {
     this.wrapper.classList.remove('audio-wrapper_audio-playing');
-  }
-
-  public addClassWithModifier(modifier: string): void {
-    this.wrapper.classList.add(`audio-wrapper_${modifier}`);
-    this.audio.classList.add(`audio_${modifier}`);
-  }
-
-  public removeClassWithModifier(modifier: string): void {
-    this.wrapper.classList.remove(`audio-wrapper_${modifier}`);
-    this.audio.classList.remove(`audio_${modifier}`);
   }
 
   private createAudioWrapper(): HTMLDivElement {
