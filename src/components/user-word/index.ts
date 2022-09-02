@@ -5,6 +5,8 @@ import WordDataByGame from './word-data-by-game';
 export default class UserWord {
   private difficulty: 'easy' | 'hard';
 
+  private dateOfMarkAsHard: number | NoData;
+
   private isLearned: boolean;
 
   private dateOfLearning: string | NoData;
@@ -19,6 +21,7 @@ export default class UserWord {
 
   constructor() {
     this.difficulty = 'easy';
+    this.dateOfMarkAsHard = NO_DATA;
     this.isLearned = false;
     this.dateOfLearning = NO_DATA;
     this.correctAnswersInRow = Numbers.Zero;
@@ -29,10 +32,12 @@ export default class UserWord {
 
   public markAsEasy(): void {
     this.difficulty = 'easy';
+    this.dateOfMarkAsHard = NO_DATA;
   }
 
-  public markAsHard(): void {
+  public markAsHard(timestamp: number): void {
     this.difficulty = 'hard';
+    this.dateOfMarkAsHard = timestamp;
   }
 
   public markAsLearned(date: string): void {
@@ -108,6 +113,7 @@ export default class UserWord {
       this.correctAnswersInRow,
       this.gameOfFirstUse,
       this.dateOfFirstUse,
+      this.dateOfMarkAsHard,
     ] = [
       info.difficulty,
       info.optional.isLearned,
@@ -115,6 +121,7 @@ export default class UserWord {
       info.optional.correctAnswersInRow,
       info.optional.gameNameOfFirstUse,
       info.optional.dateOfFirstUse,
+      info.optional.dateOfMarkAsHard,
     ];
     const dataEntries: [string, IUserWordDataByGame][] = Object.entries(info.optional.dataByDates);
     this.dataByDates = dataEntries.map(
@@ -133,6 +140,7 @@ export default class UserWord {
         correctAnswersInRow: this.correctAnswersInRow,
         gameNameOfFirstUse: this.gameOfFirstUse,
         dateOfFirstUse: this.dateOfFirstUse,
+        dateOfMarkAsHard: this.dateOfMarkAsHard,
         dataByDates: Object.fromEntries(
           this.dataByDates.map((dataItem: WordDataByGame): [string, IUserWordDataByGame] =>
             dataItem.getInfo()

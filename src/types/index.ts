@@ -184,6 +184,7 @@ export interface IUserWord {
     correctAnswersInRow: number;
     gameNameOfFirstUse: GameName | NoData;
     dateOfFirstUse: string | NoData;
+    dateOfMarkAsHard: number | NoData;
     dataByDates: IUserWordGameDataByDate;
   };
 }
