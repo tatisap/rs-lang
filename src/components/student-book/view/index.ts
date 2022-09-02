@@ -172,7 +172,7 @@ export default class StudentBookView {
         newSectionAndPage.page,
         wordsContainer
       );
-      this.updateGamesButtons(newPageAndSection.section.group, newPageAndSection.page);
+      this.updateGamesButtons(newSectionAndPage.section.group, newSectionAndPage.page);
     });
     return paginationButton;
   }
@@ -237,7 +237,8 @@ export default class StudentBookView {
     );
     const wordsSortedByDateOfMarkAsHard = words.sort(
       (currentWord: IAggregatedWord, nextWord: IAggregatedWord): number =>
-        currentWord.userWord.optional.dateOfMarkAsHard - nextWord.userWord.optional.dateOfMarkAsHard
+        (currentWord.userWord.optional.dateOfMarkAsHard as number) -
+        (nextWord.userWord.optional.dateOfMarkAsHard as number)
     );
     return this.createWordsCards(wordsSortedByDateOfMarkAsHard);
   }
