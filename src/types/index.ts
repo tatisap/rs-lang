@@ -133,7 +133,7 @@ export interface IBookSectionInfo {
 
 export type PageName = 'main' | 'studentBook' | 'games' | 'statistic';
 
-export type GameName = 'audiocall';
+export type GameName = 'audiocall' | 'sprint';
 
 export interface IGameInfo {
   name: string;
@@ -163,11 +163,13 @@ export interface IGameQuestionResult {
   correctAnswer: IGameCorrectAnswer;
 }
 
+export interface IAnswerCounter {
+  correctAnswersCounter: number;
+  incorrectAnswersCounter: number;
+}
+
 export type IUserWordDataByGame = {
-  [game in GameName]: {
-    correctAnswersCounter: number;
-    incorrectAnswersCounter: number;
-  };
+  [game in GameName]: IAnswerCounter;
 };
 
 export interface IUserWordGameDataByDate {
@@ -178,10 +180,10 @@ export interface IUserWord {
   difficulty: 'hard' | 'easy';
   optional: {
     isLearned: boolean;
-    dateOfLearning: string;
+    dateOfLearning: string | NoData;
     correctAnswersInRow: number;
-    gameNameOfFirstUse: GameName;
-    dateOfFirstUse: string;
+    gameNameOfFirstUse: GameName | NoData;
+    dateOfFirstUse: string | NoData;
     dataByDates: IUserWordGameDataByDate;
   };
 }
@@ -227,3 +229,5 @@ export interface IUserStatistics {
 }
 
 export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
+
+export type NoData = 'no_data';
