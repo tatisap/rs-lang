@@ -42,4 +42,31 @@ export default class WordsAPI {
     const data: IUserWord = (await response.json()) as IUserWord;
     return data;
   }
+
+  public async createUserWord({ userId, token, wordId, body }: IRequestParameters): Promise<void> {
+    const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}/${wordId}`;
+    const response = await fetch(url, {
+      method: HttpMethods.POST,
+      headers: {
+        [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
+        [REQUEST_HEADERS.contentType]: 'application/json',
+        [REQUEST_HEADERS.accept]: 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    console.log(await response.json());
+  }
+
+  public async updateUserWord({ userId, token, wordId, body }: IRequestParameters): Promise<void> {
+    const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}/${wordId}`;
+    await fetch(url, {
+      method: HttpMethods.PUT,
+      headers: {
+        [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
+        [REQUEST_HEADERS.contentType]: 'application/json',
+        [REQUEST_HEADERS.accept]: 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+  }
 }
