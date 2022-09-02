@@ -1,6 +1,6 @@
-import { NO_DATA, NUMBER_OF_CORRECT_ANSWERS_TO_LEARN } from '../../../constants';
-import { GameName, IUserWord, IUserWordDataByGame, NoData, Numbers } from '../../../types';
-import WordDataByGame from './data-by-dates';
+import { NO_DATA, NUMBER_OF_CORRECT_ANSWERS_TO_LEARN } from '../../constants';
+import { GameName, IUserWord, IUserWordDataByGame, NoData, Numbers } from '../../types';
+import WordDataByGame from './word-data-by-game';
 
 export default class UserWord {
   private difficulty: 'easy' | 'hard';

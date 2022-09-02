@@ -1,5 +1,5 @@
-import { GAMES } from '../../../constants';
-import { GameName, IAnswerCounter, IUserWordDataByGame, Numbers } from '../../../types';
+import { GAMES } from '../../constants';
+import { GameName, IAnswerCounter, IUserWordDataByGame, Numbers } from '../../types';
 
 export default class WordDataByGame {
   private dateKey: string;

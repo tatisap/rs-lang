@@ -2,7 +2,7 @@ import WordsAPI from '../../../api/words-api';
 import { GameName, IGameCorrectAnswer, IGameQuestionResult, IUserWord } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import RequestProcessor from '../../request-processor';
-import UserWord from './user-word';
+import UserWord from '../../user-word';
 
 export default class GameResultProcessor {
   private api: WordsAPI;
