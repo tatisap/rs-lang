@@ -233,3 +233,10 @@ export interface IAggregatedWord extends Omit<IWord, 'id'> {
   _id: string;
   userWord: IUserWord;
 }
+
+export interface IAggregatedWordsElement {
+  paginatedResults: IAggregatedWord[];
+  totalCount: { count: number }[];
+}
+
+export type IAggregatedWordsData = IAggregatedWordsElement[];

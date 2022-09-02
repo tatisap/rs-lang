@@ -104,7 +104,7 @@ export default class StudentBookView {
       const newSection: IBookSectionInfo = this.bookController.switchSection(event);
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
-      wordsContainer.append(this.createLoader(newSection));
+      wordsContainer.append(this.createLoader(newSection.className));
       await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
     });
     return bookSection;
@@ -143,7 +143,7 @@ export default class StudentBookView {
         this.bookController.switchPage(event);
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
-      wordsContainer.append(this.createLoader(newSectionAndPage.section));
+      wordsContainer.append(this.createLoader(newSectionAndPage.section.className));
       await this.fillWordsContainer(
         newSectionAndPage.section,
         newSectionAndPage.page,
@@ -195,35 +195,27 @@ export default class StudentBookView {
     return wordsContainer;
   }
 
-  private async createWordsCards(
-    section: IBookSectionInfo,
-    page: number
-  ): Promise<HTMLDivElement[]> {
-    const words: IWord[] = await this.wordsAPI.getWords(section.group, page);
-    const wordsCards: HTMLDivElement[] = words.map((word: IWord): HTMLDivElement => {
-      const wordContainer = new WordCard(word).createWordCard();
-      wordContainer.dataset.wordId = `${word.id}`;
-      return wordContainer;
-    });
-    return wordsCards;
+  private createWordsCards(words: IWord[] | IAggregatedWord[]): HTMLDivElement[] {
+    return words.map(
+      (word: IWord | IAggregatedWord): HTMLDivElement => new WordCard(word).createWordCard()
+    );
   }
 
-  private async createDifficultWordsCards(): Promise<HTMLDivElement[]> {
+  private async createFilledWordsCards(
+    section?: IBookSectionInfo,
+    page?: number
+  ): Promise<HTMLDivElement[]> {
+    if (section && page) {
+      return this.createWordsCards(await this.wordsAPI.getWords(section.group, page));
+    }
     const words: IAggregatedWord[] = await this.requestProcessor.process<IAggregatedWord[]>(
       this.wordsAPI.getDifficultWords
     );
-    const sortedWords = words.sort(
+    const wordsSortedByDateOfMarkAsHard = words.sort(
       (currentWord: IAggregatedWord, nextWord: IAggregatedWord): number =>
         currentWord.userWord.optional.dateOfMarkAsHard - nextWord.userWord.optional.dateOfMarkAsHard
     );
-    const wordsCards: HTMLDivElement[] = sortedWords.map(
-      (word: IAggregatedWord): HTMLDivElement => {
-        const wordContainer = new WordCard(word).createWordCard();
-        wordContainer.dataset.wordId = `${word._id}`;
-        return wordContainer;
-      }
-    );
-    return wordsCards;
+    return this.createWordsCards(wordsSortedByDateOfMarkAsHard);
   }
 
   private async fillWordsContainer(
@@ -231,13 +223,13 @@ export default class StudentBookView {
     page: number,
     container: HTMLDivElement
   ): Promise<void> {
-    const wordsContainer = container;
+    const wordsContainer: HTMLDivElement = container;
     if (section.text === BOOK_SECTIONS.difficultWords.text) {
       wordsContainer.classList.add('difficult-words');
       if (!this.authController.isUserAuthorized()) {
-        wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forAnauthorized;
+        wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forUnauthorized;
       } else {
-        const difficultWordsCards = await this.createDifficultWordsCards();
+        const difficultWordsCards = await this.createFilledWordsCards();
         if (difficultWordsCards.length) {
           wordsContainer.append(...difficultWordsCards);
         } else {
@@ -246,18 +238,16 @@ export default class StudentBookView {
       }
     } else {
       wordsContainer.classList.remove('difficult-words');
-      wordsContainer.append(...(await this.createWordsCards(section, page)));
+      wordsContainer.append(...(await this.createFilledWordsCards(section, page)));
     }
     const loader: HTMLDivElement | null = document.querySelector('.loader');
     if (loader) loader.remove();
   }
 
-  private createLoader(sectionInfo: IBookSectionInfo): HTMLDivElement {
-    const loaderContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
+  private createLoader(className: string): HTMLDivElement {
+    return this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
-      classNames: ['loader', `loader-${sectionInfo.className}`],
+      classNames: ['loader', `loader-${className}`],
     });
-    loaderContainer.style.backgroundImage = `linear-gradient(to right, #212121 10%, ${sectionInfo.color} 50%)`;
-    return loaderContainer;
   }
 }

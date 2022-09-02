@@ -10,6 +10,33 @@
   background-image: linear-gradient(to right, $black 10%, $app-background-color 50%);
   animation: loader 1s infinite linear;
   transform: translateZ(0);
+  &.loader-a1 {
+    @include loader-background($red-tab-color);
+  }
+  
+  &.loader-a2 {
+    @include loader-background($orange-tab-color);
+  }
+  
+  &.loader-b1 {
+    @include loader-background($yellow-tab-color);
+  }
+  
+  &.loader-b2 {
+    @include loader-background($green-tab-color);
+  }
+  
+  &.loader-c1 {
+    @include loader-background($blue-tab-color);
+  }
+  
+  &.loader-c2 {
+    @include loader-background($indigo-tab-color);
+  }
+  
+  &.loader-superhero {
+    @include loader-background($violet-tab-color);
+  }
 }
 
 .loader:before {
@@ -35,34 +62,6 @@
   border-radius: 50%;
   background: $app-background-color;
   content: '';
-}
-
-.loader.loader-a1:after {
-  background: $red-tab-color;
-}
-
-.loader.loader-a2:after {
-  background: $orange-tab-color;
-}
-
-.loader.loader-b1:after {
-  background: $yellow-tab-color;
-}
-
-.loader.loader-b2:after {
-  background: $green-tab-color;
-}
-
-.loader.loader-c1:after {
-  background: $blue-tab-color;
-}
-
-.loader.loader-c2:after {
-  background: $indigo-tab-color;
-}
-
-.loader.loader-superhero:after {
-  background: $violet-tab-color;
 }
 
 @keyframes loader {

@@ -50,7 +50,7 @@ export default class App {
     const pageName: PageName = menuItem.dataset.pageName as PageName;
     this.menu.resetMenuItemsActiveState();
     this.menu.setMenuItemActiveState(pageName);
-    this.updateMainContainerClasses();
+    this.resetMainContainerClassesToDefaults();
     this.openPage(pageName);
     this.saveCurrentPageName(pageName);
     this.menu.closeMenu();
@@ -76,7 +76,7 @@ export default class App {
       DISPLAY_MODES.contentFlexVisible;
   }
 
-  private updateMainContainerClasses(): void {
+  private resetMainContainerClassesToDefaults(): void {
     const mainContainer = document.getElementById('app') as HTMLDivElement;
     const mainContainerClasses: DOMTokenList = mainContainer.classList;
     mainContainerClasses.forEach((mainContainerClass: string): void => {

@@ -14,6 +14,9 @@ export default class WordCard {
       tag: 'div',
       classNames: ['words__word-section'],
     });
+    wordContainer.dataset.wordId = `${
+      (this.word as IWord).id || (this.word as IAggregatedWord)._id
+    }`;
     const infoContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['word-section__info'],
