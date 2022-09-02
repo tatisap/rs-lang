@@ -1,27 +1,26 @@
 import { BASE_URL } from '../../../constants';
-import { IWord } from '../../../types';
+import { IWord, IAggregatedWord } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
 
-  constructor(private word: IWord) {
+  constructor(private word: IWord | IAggregatedWord) {
     this.elementCreator = new UIElementsConstructor();
   }
 
   public createWordCard(): HTMLDivElement {
-    const pageWords: HTMLDivElement = document.querySelector('.words') as HTMLDivElement;
     const wordContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['words__word-section'],
     });
-    wordContainer.dataset.wordId = `${this.word.id}`;
+    wordContainer.dataset.wordId = `${
+      (this.word as IWord).id || (this.word as IAggregatedWord)._id
+    }`;
     const infoContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['word-section__info'],
     });
-
-    pageWords.append(wordContainer);
     wordContainer.append(this.createImage(`${BASE_URL}/${this.word.image}`), infoContainer);
     infoContainer.append(
       this.createWordTitle(),

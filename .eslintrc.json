@@ -24,6 +24,7 @@
   "rules": {
     "prettier/prettier": "error",
     "no-console": ["error", { "allow": ["log"] }],
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
   }
 }
