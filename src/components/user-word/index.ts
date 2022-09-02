@@ -86,7 +86,7 @@ export default class UserWord {
     if (dateData) {
       dateData.increaseCorrectAnswer(gameName);
     } else {
-      const newDateData = new WordDataByGame(dateKey);
+      const newDateData: WordDataByGame = new WordDataByGame(dateKey);
       newDateData.increaseCorrectAnswer(gameName);
       this.dataByDates.push(newDateData);
     }

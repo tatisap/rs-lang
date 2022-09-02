@@ -21,8 +21,6 @@ export default class GameResultProcessor {
     const wordInfo: IGameCorrectAnswer = answer.correctAnswer;
     const todayDateKey: string = this.dateFormatter.getStringifiedDateKey(new Date());
 
-    console.log(answer);
-
     if (answer.isCorrect) {
       await this.processCorrectAnswer(wordInfo, todayDateKey, gameName);
     } else {
@@ -55,21 +53,17 @@ export default class GameResultProcessor {
 
       userWord.increaseCorrectAnswers(gameName, dateKey);
 
-      console.log(userWord.getUserWordInfo());
       await this.requestProcessor.process(this.api.updateUserWord, {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),
       });
-      console.log('1');
-    } catch (err) {
-      console.log(err);
+    } catch {
       const userWord: UserWord = new UserWord();
 
       userWord.increaseCorrectAnswersInRow();
       userWord.setFirstUseInfo(gameName, dateKey);
       userWord.increaseCorrectAnswers(gameName, dateKey);
 
-      console.log(userWord);
       await this.requestProcessor.process(this.api.createUserWord, {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),
@@ -103,13 +97,11 @@ export default class GameResultProcessor {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),
       });
-    } catch (err) {
-      console.log(err);
+    } catch {
       const userWord = new UserWord();
       userWord.setFirstUseInfo(gameName, dateKey);
       userWord.increaseIncorrectAnswers(gameName, dateKey);
 
-      console.log(userWord);
       await this.requestProcessor.process(this.api.createUserWord, {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),

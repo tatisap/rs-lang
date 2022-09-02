@@ -45,7 +45,7 @@ export default class WordsAPI {
 
   public async createUserWord({ userId, token, wordId, body }: IRequestParameters): Promise<void> {
     const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}/${wordId}`;
-    const response = await fetch(url, {
+    await fetch(url, {
       method: HttpMethods.POST,
       headers: {
         [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
@@ -54,7 +54,6 @@ export default class WordsAPI {
       },
       body: JSON.stringify(body),
     });
-    console.log(await response.json());
   }
 
   public async updateUserWord({ userId, token, wordId, body }: IRequestParameters): Promise<void> {
