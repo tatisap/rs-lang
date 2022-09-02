@@ -54,7 +54,7 @@ export default class UserWord {
     return this.isLearned;
   }
 
-  public isNew(): boolean {
+  public isUsed(): boolean {
     return this.dateOfFirstUse === NO_DATA;
   }
 
