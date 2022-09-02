@@ -15,7 +15,7 @@ export default class MainPageView {
     return this.elementCreator.createUIElement({
       tag: 'p',
       classNames: ['page__intro'],
-      innerText: description,
+      innerHTML: description,
     });
   }
 
