@@ -1,4 +1,4 @@
-import { DISPLAY_MODES, GAMES, NO_CONTENT } from '../../../constants';
+import { GAMES, NO_CONTENT } from '../../../constants';
 import {
   GameName,
   IAudiocallQuestionInfo,
@@ -40,7 +40,6 @@ export default class AudioCallGame {
 
   public async start(level?: number, levelPage?: number): Promise<void> {
     this.openGameContainer();
-    this.hideFooter();
     await this.resultProcessor.prepareUserStatistic();
 
     if (level && levelPage) {
@@ -113,10 +112,5 @@ export default class AudioCallGame {
 
   private closeGameContainer(): void {
     this.container.remove();
-  }
-
-  private hideFooter(): void {
-    (document.querySelector('.footer') as HTMLElement).style.display =
-      DISPLAY_MODES.contentNotVisible;
   }
 }
