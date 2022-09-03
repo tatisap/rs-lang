@@ -95,12 +95,10 @@ export const GAMES = {
   audiocall: {
     name: 'Аудиовызов',
     className: 'audiocall',
-    link: '',
   },
   sprint: {
     name: 'Спринт',
     className: 'sprint',
-    link: '',
   },
 };
 

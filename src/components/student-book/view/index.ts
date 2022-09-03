@@ -15,6 +15,7 @@ import WordCard from './words';
 import WordsAPI from '../../../api/words-api';
 import AuthController from '../../auth/auth-controller';
 import RequestProcessor from '../../request-processor';
+import GameSwitcher from '../../games/game-switcher';
 
 export default class StudentBookView {
   readonly elementCreator: UIElementsConstructor;
@@ -27,12 +28,15 @@ export default class StudentBookView {
 
   readonly requestProcessor: RequestProcessor;
 
+  readonly gameSwitcher: GameSwitcher;
+
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.bookController = new StudentBookController();
     this.authController = new AuthController();
     this.wordsAPI = new WordsAPI();
     this.requestProcessor = new RequestProcessor();
+    this.gameSwitcher = new GameSwitcher();
   }
 
   public renderPage(): void {
@@ -55,11 +59,11 @@ export default class StudentBookView {
 
     pageContainer.append(
       this.createPageTitle(),
-      this.createGamesContainer(),
+      this.createGamesContainer(section.group, page),
       this.createBookSectionsContainer(section.className),
-      this.createPaginationContainer(section, page),
-      await this.createWordsContainer(section, page)
+      this.createPaginationContainer(section, page)
     );
+    pageContainer.append(await this.createWordsContainer(section, page));
   }
 
   private createPageTitle(): HTMLHeadingElement {
@@ -71,25 +75,43 @@ export default class StudentBookView {
     return pageTitle;
   }
 
-  private createGameLink(gameClass: string, gameName: string, gameLink: string): HTMLAnchorElement {
-    const gameLinkElement: HTMLAnchorElement =
-      this.elementCreator.createUIElement<HTMLAnchorElement>({
-        tag: 'a',
-        classNames: ['games__game-link', gameClass],
+  private createGameLink(
+    gameClass: string,
+    gameName: string,
+    section: number,
+    page: number
+  ): HTMLButtonElement {
+    const gameLinkElement: HTMLButtonElement =
+      this.elementCreator.createUIElement<HTMLButtonElement>({
+        tag: 'button',
+        classNames: ['games__game-link', `${gameClass}-link`],
         innerText: gameName,
       });
-    gameLinkElement.setAttribute('href', gameLink);
+    switch (gameClass) {
+      case GAMES.audiocall.className:
+        gameLinkElement.addEventListener('click', (): void => {
+          this.gameSwitcher.startNewAudioCallGame(section, page);
+        });
+        break;
+      case GAMES.sprint.className:
+        gameLinkElement.addEventListener('click', (): void =>
+          this.gameSwitcher.startNewSprintGame(section, page)
+        );
+        break;
+      default:
+        break;
+    }
     return gameLinkElement;
   }
 
-  private createGamesContainer(): HTMLDivElement {
+  private createGamesContainer(section: number, page: number): HTMLDivElement {
     const gamesContainer: HTMLDivElement = this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['page__games', 'games'],
     });
     gamesContainer.append(
-      this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, GAMES.audiocall.link),
-      this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, GAMES.sprint.link)
+      this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, section, page),
+      this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, section, page)
     );
     return gamesContainer;
   }
@@ -105,6 +127,7 @@ export default class StudentBookView {
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
       wordsContainer.append(this.createLoader(newSection.className));
+      this.updateGamesButtons(newSection.group, Numbers.One);
       await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
     });
     return bookSection;
@@ -144,6 +167,7 @@ export default class StudentBookView {
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
       wordsContainer.append(this.createLoader(newSectionAndPage.section.className));
+      this.updateGamesButtons(newSectionAndPage.section.group, newSectionAndPage.page);
       await this.fillWordsContainer(
         newSectionAndPage.section,
         newSectionAndPage.page,
@@ -213,7 +237,8 @@ export default class StudentBookView {
     );
     const wordsSortedByDateOfMarkAsHard = words.sort(
       (currentWord: IAggregatedWord, nextWord: IAggregatedWord): number =>
-        currentWord.userWord.optional.dateOfMarkAsHard - nextWord.userWord.optional.dateOfMarkAsHard
+        (currentWord.userWord.optional.dateOfMarkAsHard as number) -
+        (nextWord.userWord.optional.dateOfMarkAsHard as number)
     );
     return this.createWordsCards(wordsSortedByDateOfMarkAsHard);
   }
@@ -228,12 +253,14 @@ export default class StudentBookView {
       wordsContainer.classList.add('difficult-words');
       if (!this.authController.isUserAuthorized()) {
         wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forUnauthorized;
+        this.bookController.disableGameLinks();
       } else {
         const difficultWordsCards = await this.createFilledWordsCards();
         if (difficultWordsCards.length) {
           wordsContainer.append(...difficultWordsCards);
         } else {
           wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords;
+          this.bookController.disableGameLinks();
         }
       }
     } else {
@@ -249,5 +276,14 @@ export default class StudentBookView {
       tag: 'div',
       classNames: ['loader', `loader-${className}`],
     });
+  }
+
+  private updateGamesButtons(section: number, page: number): void {
+    const gameButtonsContainer = document.querySelector('.page__games') as HTMLDivElement;
+    gameButtonsContainer.innerHTML = NO_CONTENT;
+    gameButtonsContainer.append(
+      this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, section, page),
+      this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, section, page)
+    );
   }
 }
