@@ -36,7 +36,7 @@ export default class GameResultProcessor {
     } else {
       await this.processIncorrectAnswer(wordInfo, todayDateKey, gameName);
     }
-    await this.updateMaxCorrectAnswerSeries(gameName, todayDateKey, answer.isCorrect);
+    await this.checkMaxCorrectAnswerSeries(gameName, todayDateKey, answer.isCorrect);
   }
 
   private async processCorrectAnswer(
@@ -121,7 +121,7 @@ export default class GameResultProcessor {
     }
   }
 
-  public async updateMaxCorrectAnswerSeries(
+  public async checkMaxCorrectAnswerSeries(
     game: GameName,
     dateKey: string,
     isAnswerCorrect: boolean
