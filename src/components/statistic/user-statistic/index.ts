@@ -108,7 +108,6 @@ export default class UserStatistics {
 
   public update(data: IUserStatistics): UserStatistics {
     this.currentCorrectAnswerSeries = data.optional.currentCorrectAnswerSeries;
-    console.log(data);
     this.dataByDates = Object.keys(data.optional.dataByDate).map(
       (
         dateKey: string

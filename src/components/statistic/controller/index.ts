@@ -53,7 +53,6 @@ export default class StatisticPageController {
     );
 
     const userStatistics: IUserStatistics = await this.getUserStatisticInfo();
-    console.log(userStatistics);
 
     const dailyChartDataByGames: IDailyChartDataByGame[] = this.getDailyGameChartData(
       gameLabels,
