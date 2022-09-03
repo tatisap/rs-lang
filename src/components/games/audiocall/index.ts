@@ -41,6 +41,7 @@ export default class AudioCallGame {
   public async start(level?: number, levelPage?: number): Promise<void> {
     this.openGameContainer();
     this.hideFooter();
+    await this.resultProcessor.prepareUserStatistic();
 
     if (level && levelPage) {
       await this.questionSwitcher(level, levelPage);

@@ -85,7 +85,7 @@ export interface IRequestParameters {
   userId: string;
   token: string;
   wordId?: string;
-  body?: IUserWord;
+  body?: IUserWord | IUserStatistics;
 }
 
 export enum Numbers {
@@ -221,10 +221,15 @@ export interface IProcessedStatisticInfo {
 
 export interface IUserStatistics {
   optional: {
-    [date: string]: {
-      maxCorrectAnswerSeries: {
-        [game in GameName]: number;
-      };
+    currentCorrectAnswerSeries: number;
+    dataByDate: IUserStatisticsByDate;
+  };
+}
+
+export interface IUserStatisticsByDate {
+  [date: string]: {
+    maxCorrectAnswerSeries: {
+      [game in GameName]: number;
     };
   };
 }
