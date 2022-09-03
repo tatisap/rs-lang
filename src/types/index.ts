@@ -234,6 +234,11 @@ export interface IUserStatisticsByDate {
   };
 }
 
+export interface IUserDayStatistic {
+  dateKey: string;
+  maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
+}
+
 export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
 
 export interface IAggregatedWord extends Omit<IWord, 'id'> {

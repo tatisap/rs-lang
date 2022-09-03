@@ -1,6 +1,12 @@
 import StatisticAPI from '../../../api/statistic-api';
 import { GAMES } from '../../../constants';
-import { GameName, IUserStatistics, IUserStatisticsByDate, Numbers } from '../../../types';
+import {
+  GameName,
+  IUserDayStatistic,
+  IUserStatistics,
+  IUserStatisticsByDate,
+  Numbers,
+} from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import RequestProcessor from '../../request-processor';
 
@@ -13,10 +19,7 @@ export default class UserStatistics {
 
   private currentCorrectAnswerSeries: number;
 
-  private dataByDates: {
-    dateKey: string;
-    maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
-  }[];
+  private dataByDates: IUserDayStatistic[];
 
   constructor() {
     this.statisticApi = new StatisticAPI();
@@ -66,35 +69,21 @@ export default class UserStatistics {
   }
 
   public updateMaxCorrectAnswerSeries(game: GameName, dateKey: string): void {
-    const dataForDate:
-      | {
-          dateKey: string;
-          maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
-        }
-      | undefined = this.dataByDates.find(
-      (dataItem: {
-        dateKey: string;
-        maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
-      }): boolean => dataItem.dateKey === dateKey
+    const dataForDate: IUserDayStatistic | undefined = this.dataByDates.find(
+      (dataItem: IUserDayStatistic): boolean => dataItem.dateKey === dateKey
     );
     if (dataForDate) {
       if (this.currentCorrectAnswerSeries > dataForDate.maxCorrectAnswerSeries[game]) {
         dataForDate.maxCorrectAnswerSeries[game] = this.currentCorrectAnswerSeries;
       }
     } else {
-      const newDataForDate: {
-        dateKey: string;
-        maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
-      } = this.createEmptyDataForDate(dateKey);
+      const newDataForDate: IUserDayStatistic = this.createEmptyDataForDate(dateKey);
       newDataForDate.maxCorrectAnswerSeries[game] = this.currentCorrectAnswerSeries;
       this.dataByDates.push(newDataForDate);
     }
   }
 
-  private createEmptyDataForDate(dateKey: string): {
-    dateKey: string;
-    maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
-  } {
+  private createEmptyDataForDate(dateKey: string): IUserDayStatistic {
     const gameDataEntries: [GameName, number][] = (Object.keys(GAMES) as GameName[]).map(
       (game: GameName): [GameName, number] => [game, Numbers.Zero]
     );
@@ -109,12 +98,7 @@ export default class UserStatistics {
   public update(data: IUserStatistics): UserStatistics {
     this.currentCorrectAnswerSeries = data.optional.currentCorrectAnswerSeries;
     this.dataByDates = Object.keys(data.optional.dataByDate).map(
-      (
-        dateKey: string
-      ): {
-        dateKey: string;
-        maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
-      } => {
+      (dateKey: string): IUserDayStatistic => {
         return {
           dateKey,
           maxCorrectAnswerSeries: { ...data.optional.dataByDate[dateKey].maxCorrectAnswerSeries },
@@ -130,10 +114,7 @@ export default class UserStatistics {
         currentCorrectAnswerSeries: this.currentCorrectAnswerSeries,
         dataByDate: Object.fromEntries(
           this.dataByDates.map(
-            (data: {
-              dateKey: string;
-              maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
-            }): [string, IUserStatisticsByDate['date']] => [
+            (data: IUserDayStatistic): [string, IUserStatisticsByDate['date']] => [
               data.dateKey,
               { maxCorrectAnswerSeries: { ...data.maxCorrectAnswerSeries } },
             ]
