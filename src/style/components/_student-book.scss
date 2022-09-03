@@ -27,6 +27,13 @@
     &:active {
       transform: scale(1.05);
     }
+    &:disabled:hover,
+    &:disabled:active {
+      transform: none;
+    }
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 }
 
