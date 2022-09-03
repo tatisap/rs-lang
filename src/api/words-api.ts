@@ -6,8 +6,16 @@ import {
   IAggregatedWord,
   IUserWord,
   IAggregatedWordsData,
+  StatusCode,
 } from '../types';
-import { BASE_URL, PATHS, QUERY_KEYS, REQUEST_HEADERS, MAX_WORDS_IN_BOOK } from '../constants';
+import {
+  BASE_URL,
+  PATHS,
+  QUERY_KEYS,
+  REQUEST_HEADERS,
+  MAX_WORDS_IN_BOOK,
+  ERRORS_MESSAGES,
+} from '../constants';
 
 export default class WordsAPI {
   public async getWords(group: number, page: number): Promise<IWord[]> {
@@ -37,6 +45,9 @@ export default class WordsAPI {
         [REQUEST_HEADERS.accept]: 'application/json',
       },
     });
+    if (response.status === StatusCode.Unauthorized) {
+      throw new Error(ERRORS_MESSAGES.unauthorized);
+    }
     const data: IAggregatedWordsData = await response.json();
     const difficultWords: IAggregatedWord[] = data[Numbers.Zero].paginatedResults;
     return difficultWords;
@@ -51,6 +62,9 @@ export default class WordsAPI {
         [REQUEST_HEADERS.accept]: 'application/json',
       },
     });
+    if (response.status === StatusCode.Unauthorized) {
+      throw new Error(ERRORS_MESSAGES.unauthorized);
+    }
     const data: IUserWord[] = (await response.json()) as IUserWord[];
     return data;
   }
@@ -64,13 +78,16 @@ export default class WordsAPI {
         [REQUEST_HEADERS.accept]: 'application/json',
       },
     });
+    if (response.status === StatusCode.Unauthorized) {
+      throw new Error(ERRORS_MESSAGES.unauthorized);
+    }
     const data: IUserWord = (await response.json()) as IUserWord;
     return data;
   }
 
   public async createUserWord({ userId, token, wordId, body }: IRequestParameters): Promise<void> {
     const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}/${wordId}`;
-    await fetch(url, {
+    const response: Response = await fetch(url, {
       method: HttpMethods.POST,
       headers: {
         [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
@@ -79,11 +96,14 @@ export default class WordsAPI {
       },
       body: JSON.stringify(body),
     });
+    if (response.status === StatusCode.Unauthorized) {
+      throw new Error(ERRORS_MESSAGES.unauthorized);
+    }
   }
 
   public async updateUserWord({ userId, token, wordId, body }: IRequestParameters): Promise<void> {
     const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}/${wordId}`;
-    await fetch(url, {
+    const response: Response = await fetch(url, {
       method: HttpMethods.PUT,
       headers: {
         [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
@@ -92,5 +112,8 @@ export default class WordsAPI {
       },
       body: JSON.stringify(body),
     });
+    if (response.status === StatusCode.Unauthorized) {
+      throw new Error(ERRORS_MESSAGES.unauthorized);
+    }
   }
 }

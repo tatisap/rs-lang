@@ -17,6 +17,7 @@ import {
 } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import RequestProcessor from '../../request-processor';
+import UserStatistics from '../user-statistic';
 import StatisticCounter from './counter';
 
 export default class StatisticPageController {
@@ -51,9 +52,7 @@ export default class StatisticPageController {
       this.api.words.getUserWords
     );
 
-    const userStatistics: IUserStatistics = await this.requestProcessor.process<IUserStatistics>(
-      this.api.statistic.getUserStatistic
-    );
+    const userStatistics: IUserStatistics = await this.getUserStatisticInfo();
 
     const dailyChartDataByGames: IDailyChartDataByGame[] = this.getDailyGameChartData(
       gameLabels,
@@ -103,7 +102,8 @@ export default class StatisticPageController {
             this.calcPercentage(correctAnswers, totalAnswers) || Numbers.Zero,
           correctAnswers,
           totalAnswers,
-          maxCorrectAnswers: userStatistics.optional[dateKey]?.maxCorrectAnswerSeries?.[gameName],
+          maxCorrectAnswers:
+            userStatistics.optional.dataByDate[dateKey]?.maxCorrectAnswerSeries?.[gameName],
         },
       };
     });
@@ -142,6 +142,7 @@ export default class StatisticPageController {
         learnedWords: this.counter.countLearnedWordsForDate(userWords, dateKey),
       };
     });
+    if (!rawData.length) return rawData;
 
     rawData.sort(
       (a: ILongTermChartDataPerDate, b: ILongTermChartDataPerDate): number =>
@@ -165,6 +166,16 @@ export default class StatisticPageController {
 
   private getGameNames(): GameName[] {
     return Object.values(GAMES).map((game: IGameInfo): GameName => game.className as GameName);
+  }
+
+  private async getUserStatisticInfo(): Promise<IUserStatistics> {
+    try {
+      return await this.requestProcessor.process<IUserStatistics>(
+        this.api.statistic.getUserStatistic
+      );
+    } catch {
+      return new UserStatistics().getInfo();
+    }
   }
 
   private getDateKeysByType(userWords: IUserWord[], dateType: StatisticalDateKeysType): string[] {

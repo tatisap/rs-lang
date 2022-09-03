@@ -1,4 +1,4 @@
-import { DISPLAY_MODES, GAMES, NO_CONTENT } from '../../../constants';
+import { GAMES, NO_CONTENT } from '../../../constants';
 import {
   GameName,
   IAudiocallQuestionInfo,
@@ -12,6 +12,7 @@ import AudiocallQuestion from './question-card';
 import GameStartingPage from '../common/starting-page';
 import GameFinalPage from '../common/final-page';
 import GameResultProcessor from '../common/result-processor';
+import AuthController from '../../auth/auth-controller';
 
 export default class AudioCallGame {
   private elementCreator: UIElementsConstructor;
@@ -19,6 +20,8 @@ export default class AudioCallGame {
   private container: HTMLDivElement;
 
   private controller: AudiocallController;
+
+  private auth: AuthController;
 
   private startingPage: GameStartingPage;
 
@@ -31,6 +34,7 @@ export default class AudioCallGame {
   constructor() {
     this.elementCreator = new UIElementsConstructor();
     this.controller = new AudiocallController();
+    this.auth = new AuthController();
     this.container = this.createGameContainer();
     this.startingPage = new GameStartingPage();
     this.finalPage = new GameFinalPage();
@@ -40,7 +44,7 @@ export default class AudioCallGame {
 
   public async start(level?: number, levelPage?: number): Promise<void> {
     this.openGameContainer();
-    this.hideFooter();
+    if (this.auth.isUserAuthorized()) await this.resultProcessor.prepareUserStatistic();
 
     if (level !== undefined && levelPage !== undefined) {
       this.startingPage.open(
@@ -61,7 +65,9 @@ export default class AudioCallGame {
         await this.questionSwitcher(selectedLevel);
       });
       this.container.addEventListener('question-answered', async (event: Event): Promise<void> => {
-        await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
+        if (this.auth.isUserAuthorized()) {
+          await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
+        }
       });
     }
   }
@@ -120,10 +126,5 @@ export default class AudioCallGame {
 
   private closeGameContainer(): void {
     this.container.remove();
-  }
-
-  private hideFooter(): void {
-    (document.querySelector('.footer') as HTMLElement).style.display =
-      DISPLAY_MODES.contentNotVisible;
   }
 }

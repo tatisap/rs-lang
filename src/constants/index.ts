@@ -201,3 +201,7 @@ export const NUMBER_OF_CORRECT_ANSWERS_TO_LEARN = {
 };
 
 export const NO_DATA = 'no_data';
+
+export const ERRORS_MESSAGES = {
+  unauthorized: 'Unauthorized',
+};
