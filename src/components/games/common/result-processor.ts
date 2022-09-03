@@ -1,18 +1,28 @@
 import WordsAPI from '../../../api/words-api';
-import { GameName, IGameCorrectAnswer, IGameQuestionResult, IUserWord } from '../../../types';
+import {
+  GameName,
+  IGameCorrectAnswer,
+  IGameQuestionResult,
+  IUserStatistics,
+  IUserWord,
+} from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import RequestProcessor from '../../request-processor';
+import UserStatistics from '../../statistic/user-statistic';
 import UserWord from '../../user-word';
 
 export default class GameResultProcessor {
-  private api: WordsAPI;
+  private wordApi: WordsAPI;
+
+  private userStatistics: UserStatistics;
 
   private requestProcessor: RequestProcessor;
 
   private dateFormatter: DateFormatter;
 
   constructor() {
-    this.api = new WordsAPI();
+    this.wordApi = new WordsAPI();
+    this.userStatistics = new UserStatistics();
     this.requestProcessor = new RequestProcessor();
     this.dateFormatter = new DateFormatter();
   }
@@ -26,6 +36,7 @@ export default class GameResultProcessor {
     } else {
       await this.processIncorrectAnswer(wordInfo, todayDateKey, gameName);
     }
+    await this.updateMaxCorrectAnswerSeries(gameName, todayDateKey, answer.isCorrect);
   }
 
   private async processCorrectAnswer(
@@ -35,7 +46,7 @@ export default class GameResultProcessor {
   ): Promise<void> {
     try {
       const userWordInfo: IUserWord = await this.requestProcessor.process<IUserWord>(
-        this.api.getUserWord,
+        this.wordApi.getUserWord,
         { wordId: word.wordId }
       );
 
@@ -53,7 +64,7 @@ export default class GameResultProcessor {
 
       userWord.increaseCorrectAnswers(gameName, dateKey);
 
-      await this.requestProcessor.process(this.api.updateUserWord, {
+      await this.requestProcessor.process(this.wordApi.updateUserWord, {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),
       });
@@ -64,7 +75,7 @@ export default class GameResultProcessor {
       userWord.setFirstUseInfo(gameName, dateKey);
       userWord.increaseCorrectAnswers(gameName, dateKey);
 
-      await this.requestProcessor.process(this.api.createUserWord, {
+      await this.requestProcessor.process(this.wordApi.createUserWord, {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),
       });
@@ -78,7 +89,7 @@ export default class GameResultProcessor {
   ): Promise<void> {
     try {
       const userWordInfo: IUserWord = await this.requestProcessor.process<IUserWord>(
-        this.api.getUserWord,
+        this.wordApi.getUserWord,
         {
           wordId: word.wordId,
         }
@@ -93,7 +104,7 @@ export default class GameResultProcessor {
       }
       userWord.increaseIncorrectAnswers(gameName, dateKey);
 
-      await this.requestProcessor.process(this.api.updateUserWord, {
+      await this.requestProcessor.process(this.wordApi.updateUserWord, {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),
       });
@@ -102,10 +113,32 @@ export default class GameResultProcessor {
       userWord.setFirstUseInfo(gameName, dateKey);
       userWord.increaseIncorrectAnswers(gameName, dateKey);
 
-      await this.requestProcessor.process(this.api.createUserWord, {
+      await this.requestProcessor.process(this.wordApi.createUserWord, {
         wordId: word.wordId,
         body: userWord.getUserWordInfo(),
       });
     }
+  }
+
+  public async updateMaxCorrectAnswerSeries(
+    game: GameName,
+    dateKey: string,
+    isAnswerCorrect: boolean
+  ): Promise<void> {
+    const userStatisticsInfo: IUserStatistics = await this.userStatistics.load();
+    this.userStatistics.update(userStatisticsInfo);
+
+    if (isAnswerCorrect) {
+      this.userStatistics.increaseCurrentCorrectAnswerSeries();
+    } else {
+      this.userStatistics.resetCurrentCorrectAnswerSeries();
+    }
+
+    this.userStatistics.updateMaxCorrectAnswerSeries(game, dateKey);
+    await this.userStatistics.save();
+  }
+
+  public async prepareUserStatistic() {
+    await this.userStatistics.init();
   }
 }
