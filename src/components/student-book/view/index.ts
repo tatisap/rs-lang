@@ -80,10 +80,10 @@ export default class StudentBookView {
     gameName: string,
     section: number,
     page: number
-  ): HTMLAnchorElement {
-    const gameLinkElement: HTMLAnchorElement =
-      this.elementCreator.createUIElement<HTMLAnchorElement>({
-        tag: 'span',
+  ): HTMLButtonElement {
+    const gameLinkElement: HTMLButtonElement =
+      this.elementCreator.createUIElement<HTMLButtonElement>({
+        tag: 'button',
         classNames: ['games__game-link', `${gameClass}-link`],
         innerText: gameName,
       });
