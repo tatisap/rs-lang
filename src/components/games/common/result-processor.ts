@@ -56,6 +56,7 @@ export default class GameResultProcessor {
 
       if (!userWord.getLearningStatus() && userWord.checkCorrectAnswersInRow()) {
         userWord.markAsLearned(dateKey);
+        userWord.markAsEasy();
       }
 
       if (!userWord.wasUsed()) {
