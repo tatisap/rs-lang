@@ -1,9 +1,10 @@
 import WordsAPI from '../../../api/words-api';
-import { BASE_URL } from '../../../constants';
-import { IWord, IAggregatedWord } from '../../../types';
+import { BASE_URL, CARD_BUTTON, NO_DATA } from '../../../constants';
+import { IWord, IAggregatedWord, IUserWord, IUserWordData, NoData } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AuthController from '../../auth/auth-controller';
 import RequestProcessor from '../../request-processor';
+import UserWord from '../../user-word';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
@@ -16,12 +17,18 @@ export default class WordCard {
 
   private difficulty: 'easy' | 'hard';
 
+  private isLearned: boolean;
+
+  private dateOfLearning: string | NoData;
+
   constructor(private word: IWord | IAggregatedWord) {
     this.elementCreator = new UIElementsConstructor();
     this.authController = new AuthController();
     this.wordsAPI = new WordsAPI();
     this.requestProcessor = new RequestProcessor();
-    this.difficulty = 'easy';
+    this.difficulty = 'hard';
+    this.isLearned = false;
+    this.dateOfLearning = NO_DATA;
   }
 
   public createWordCard(): HTMLDivElement {
@@ -139,13 +146,59 @@ export default class WordCard {
       buttonDifficult.classList.add('active');
       buttonDifficult.disabled = true;
     }
-    buttonDifficult.addEventListener('click', async () => {});
+    buttonDifficult.addEventListener('click', async () => {
+      if (this.authController.isUserAuthorized()) {
+        buttonDifficult.classList.add('active');
+        buttonDifficult.disabled = true;
+
+        const button = <HTMLDivElement>(
+          document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .difficult-btn`)
+        );
+        button.style.backgroundColor = CARD_BUTTON.difficulty;
+
+        const learnedWordButton = <HTMLButtonElement>(
+          document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .learned-btn`)
+        );
+        this.disableLearned(learnedWordButton);
+
+        const userWords: IUserWordData[] = await this.requestProcessor.process<IUserWordData[]>(
+          this.wordsAPI.getUserWords
+        );
+
+        if (userWords.find((word) => word.wordId === (this.word as IWord).id)) {
+          const userWordInfo: IUserWord = await this.requestProcessor.process<IUserWord>(
+            this.wordsAPI.getUserWord,
+            {
+              wordId: (this.word as IAggregatedWord).wordId,
+            }
+          );
+
+          const userWord: UserWord = new UserWord().update(userWordInfo);
+          userWord.remoreLearnedMark();
+          userWord.markHard();
+
+          await this.requestProcessor.process<void>(this.wordsAPI.updateUserWord, {
+            wordId: (this.word as IAggregatedWord).wordId,
+            body: userWord.getUserWordInfo(),
+          });
+        } else {
+          const userWord: UserWord = new UserWord();
+          userWord.remoreLearnedMark();
+          userWord.markHard();
+
+          await this.requestProcessor.process<void>(this.wordsAPI.createUserWord, {
+            wordId: (this.word as IAggregatedWord).wordId,
+            body: userWord.getUserWordInfo(),
+          });
+        }
+      }
+    });
     return buttonDifficult;
   }
 
-  private disableDifficult = (btn: Difficulty): void => {
+  private disableDifficult = (btn: string): void => {
     const button = <HTMLButtonElement>(
-      document.querySelector(`div[data-word-id = "${this.word.id}"] .${btn}-btn`)
+      document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .${btn}-btn`)
     );
 
     button.classList.remove('active');

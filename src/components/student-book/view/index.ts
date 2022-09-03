@@ -213,7 +213,8 @@ export default class StudentBookView {
     );
     const wordsSortedByDateOfMarkAsHard = words.sort(
       (currentWord: IAggregatedWord, nextWord: IAggregatedWord): number =>
-        currentWord.userWord.optional.dateOfMarkAsHard - nextWord.userWord.optional.dateOfMarkAsHard
+        (currentWord.userWord.optional.dateOfMarkAsHard as number) -
+        (nextWord.userWord.optional.dateOfMarkAsHard as number)
     );
     return this.createWordsCards(wordsSortedByDateOfMarkAsHard);
   }

@@ -189,6 +189,10 @@ export interface IUserWord {
   };
 }
 
+export interface IUserWordData extends IUserWord {
+  wordId?: string;
+}
+
 export interface IDailyChartDataByGame {
   gameLabel: string;
   data: {
@@ -234,6 +238,7 @@ export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
 export interface IAggregatedWord extends Omit<IWord, 'id'> {
   _id: string;
   userWord: IUserWord;
+  wordId: string;
 }
 
 export interface IAggregatedWordsElement {
