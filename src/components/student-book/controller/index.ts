@@ -115,4 +115,12 @@ export default class StudentBookController {
     localStorage.removeItem(STORAGE_KEYS.bookSection);
     localStorage.removeItem(STORAGE_KEYS.bookPage);
   }
+
+  public disableGameLinks(): void {
+    (document.querySelectorAll('.games__game-link') as NodeListOf<HTMLButtonElement>).forEach(
+      (gameLink: HTMLButtonElement): void => {
+        gameLink.setAttribute('disabled', '');
+      }
+    );
+  }
 }

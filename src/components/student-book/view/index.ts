@@ -61,9 +61,9 @@ export default class StudentBookView {
       this.createPageTitle(),
       this.createGamesContainer(section.group, page),
       this.createBookSectionsContainer(section.className),
-      this.createPaginationContainer(section, page),
-      await this.createWordsContainer(section, page)
+      this.createPaginationContainer(section, page)
     );
+    pageContainer.append(await this.createWordsContainer(section, page));
   }
 
   private createPageTitle(): HTMLHeadingElement {
@@ -127,8 +127,8 @@ export default class StudentBookView {
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
       wordsContainer.append(this.createLoader(newSection.className));
-      await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
       this.updateGamesButtons(newSection.group, Numbers.One);
+      await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
     });
     return bookSection;
   }
@@ -167,12 +167,12 @@ export default class StudentBookView {
       const wordsContainer = document.querySelector('.page__words') as HTMLDivElement;
       wordsContainer.innerHTML = NO_CONTENT;
       wordsContainer.append(this.createLoader(newSectionAndPage.section.className));
+      this.updateGamesButtons(newSectionAndPage.section.group, newSectionAndPage.page);
       await this.fillWordsContainer(
         newSectionAndPage.section,
         newSectionAndPage.page,
         wordsContainer
       );
-      this.updateGamesButtons(newSectionAndPage.section.group, newSectionAndPage.page);
     });
     return paginationButton;
   }
@@ -253,12 +253,14 @@ export default class StudentBookView {
       wordsContainer.classList.add('difficult-words');
       if (!this.authController.isUserAuthorized()) {
         wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.forUnauthorized;
+        this.bookController.disableGameLinks();
       } else {
         const difficultWordsCards = await this.createFilledWordsCards();
         if (difficultWordsCards.length) {
           wordsContainer.append(...difficultWordsCards);
         } else {
           wordsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords;
+          this.bookController.disableGameLinks();
         }
       }
     } else {
