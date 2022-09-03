@@ -61,7 +61,7 @@ export default class AudiocallController {
         questionBookWordInfo,
         ...this.randomizer.getRandomItemsFromArray(
           bookWordsInfoArray.filter(
-            (wordInfo: IWord): boolean => questionBookWordInfo !== wordInfo
+            (wordInfo: IWord): boolean => questionBookWordInfo.id !== wordInfo.id
           ),
           AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
         ),
@@ -69,7 +69,7 @@ export default class AudiocallController {
         questionDifficultWordInfo,
         ...this.randomizer.getRandomItemsFromArray(
           difficultWordsInfoArray.filter(
-            (wordInfo: IAggregatedWord): boolean => questionDifficultWordInfo !== wordInfo
+            (wordInfo: IAggregatedWord): boolean => questionDifficultWordInfo._id !== wordInfo._id
           ),
           AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
         ),
