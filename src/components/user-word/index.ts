@@ -150,4 +150,14 @@ export default class UserWord {
       },
     };
   }
+
+  public getStatisticInfoByGames(dateKey: string): IUserWordDataByGame {
+    const dateInfo: WordDataByGame | undefined = this.dataByDates.find(
+      (dataItem: WordDataByGame): boolean => dataItem.getDateKey() === dateKey
+    );
+    if (dateInfo) {
+      return dateInfo.getInfo().data;
+    }
+    return new WordDataByGame(dateKey).getInfo().data;
+  }
 }
