@@ -4,7 +4,7 @@ import {
   GAME_INFO_HEADINGS,
   NO_CONTENT,
 } from '../../../constants';
-import { IGameCorrectAnswer, IGameQuestionResult } from '../../../types';
+import { GameName, IGameCorrectAnswer, IGameQuestionResult, Numbers } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudioElement from '../../audio/audio-element';
 
@@ -13,9 +13,15 @@ export default class GameFinalPage {
 
   private container: HTMLDivElement;
 
-  constructor() {
+  private gameName: GameName;
+
+  private currentLevel: number;
+
+  constructor(gameName: GameName) {
     this.elementCreator = new UIElementsConstructor();
     this.container = this.createFinalPageContainer();
+    this.gameName = gameName;
+    this.currentLevel = Numbers.Zero;
   }
 
   public renderResults(gameContainer: HTMLDivElement, results: IGameQuestionResult[]) {
@@ -116,10 +122,12 @@ export default class GameFinalPage {
   }
 
   private createRepeatButton(): HTMLButtonElement {
-    return this.elementCreator.createUIElement<HTMLButtonElement>({
+    const repeatButton: HTMLButtonElement = this.elementCreator.createUIElement<HTMLButtonElement>({
       tag: 'button',
       classNames: ['final-page__repeat-button'],
     });
+    repeatButton.addEventListener('click', (): void => this.repeatHandler());
+    return repeatButton;
   }
 
   private createReturnButton(): HTMLButtonElement {
@@ -141,7 +149,21 @@ export default class GameFinalPage {
     }
   }
 
+  private repeatHandler(): void {
+    this.clearContainer();
+    (document.querySelector(`.${this.gameName}`) as HTMLDivElement).dispatchEvent(
+      new CustomEvent('level-selected', {
+        bubbles: true,
+        detail: { selectedLevel: this.currentLevel },
+      })
+    );
+  }
+
   private clearContainer(): void {
     this.container.innerHTML = NO_CONTENT;
+  }
+
+  public updateCurrentLevel(level: number): void {
+    this.currentLevel = level;
   }
 }

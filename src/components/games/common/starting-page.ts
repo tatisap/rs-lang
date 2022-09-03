@@ -61,7 +61,7 @@ export default class GameStartingPage {
     target.dispatchEvent(
       new CustomEvent('level-selected', {
         bubbles: true,
-        detail: { selectedLevel: level },
+        detail: { selectedLevel: `${Number(level) - Numbers.One}` },
       })
     );
   }
