@@ -206,6 +206,8 @@ export const ERRORS_MESSAGES = {
   unauthorized: 'Unauthorized',
 };
 
+export const AUDIOCALL_QUESTIONS_NUMBER = 20;
+
 export const SPRINT_INFO = {
   pointsTotal: 'Общее количество баллов:',
   pointsPerPage: '+10 баллов за слово',

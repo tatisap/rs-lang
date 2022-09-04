@@ -84,6 +84,7 @@ export interface ISignUpError {
 export interface IRequestParameters {
   userId: string;
   token: string;
+  group?: number;
   wordId?: string;
   body?: IUserWord | IUserStatistics;
 }

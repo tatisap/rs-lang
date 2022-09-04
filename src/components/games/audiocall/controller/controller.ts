@@ -1,6 +1,7 @@
 import WordsAPI from '../../../../api/words-api';
 import {
   AUDIOCALL_ANSWER_OPTIONS_NUMBER,
+  AUDIOCALL_QUESTIONS_NUMBER,
   BASE_URL,
   BOOK_SECTIONS,
   MAX_PAGES_IN_BOOK_SECTION,
@@ -13,6 +14,7 @@ import {
   Numbers,
 } from '../../../../types';
 import Randomizer from '../../../../utils/randomizer';
+import AuthController from '../../../auth/auth-controller';
 import RequestProcessor from '../../../request-processor';
 
 export default class AudiocallController {
@@ -22,59 +24,69 @@ export default class AudiocallController {
 
   private requestProcessor: RequestProcessor;
 
+  private authController: AuthController;
+
   constructor() {
     this.api = new WordsAPI();
     this.randomizer = new Randomizer();
     this.requestProcessor = new RequestProcessor();
+    this.authController = new AuthController();
   }
 
   public async getQuestionList(
     level: number,
-    levelPage = this.randomizer.getRandomIntegerFromOneToMax(MAX_PAGES_IN_BOOK_SECTION)
+    levelPage?: number
   ): Promise<IAudiocallQuestionInfo[]> {
-    let wordList: IWord[] | IAggregatedWord[];
+    let wordListForQuestions: IWord[] | IAggregatedWord[];
+    let wordListForOptions: IWord[];
+
     if (level === BOOK_SECTIONS.difficultWords.group) {
-      wordList = this.randomizer.shuffle<IAggregatedWord>(
+      wordListForQuestions = this.randomizer.shuffle<IAggregatedWord>(
         await this.requestProcessor.process<IAggregatedWord[]>(this.api.getDifficultWords)
       );
+      const randomDifficultWord: IAggregatedWord =
+        wordListForQuestions[
+          this.randomizer.getRandomIntegerFromOneToMax(wordListForQuestions.length) - Numbers.One
+        ];
+      wordListForOptions = await this.api.getWords(
+        randomDifficultWord.group,
+        randomDifficultWord.page
+      );
+    } else if (levelPage) {
+      wordListForOptions = await this.api.getWords(level, levelPage);
+      wordListForQuestions = this.authController.isUserAuthorized()
+        ? await this.pickUnlearnedWords(level, levelPage)
+        : wordListForOptions;
     } else {
-      wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(level, levelPage));
+      const randomPage: number =
+        this.randomizer.getRandomIntegerFromOneToMax(MAX_PAGES_IN_BOOK_SECTION);
+      wordListForQuestions = this.randomizer.shuffle<IWord>(
+        await this.api.getWords(level, randomPage)
+      );
+      wordListForOptions = wordListForQuestions;
     }
 
-    return wordList.map(
+    return wordListForQuestions.map(
       (questionWordInfo: IWord | IAggregatedWord): IAudiocallQuestionInfo =>
-        this.createQuestionInfo(questionWordInfo, wordList)
+        this.createQuestionInfo(questionWordInfo, wordListForOptions)
     );
   }
 
   private createQuestionInfo(
     questionWordInfo: IWord | IAggregatedWord,
-    wordsInfoArray: IWord[] | IAggregatedWord[]
+    wordsForOptions: IWord[]
   ): IAudiocallQuestionInfo {
-    const questionBookWordInfo: IWord = questionWordInfo as IWord;
-    const questionDifficultWordInfo: IAggregatedWord = questionWordInfo as IAggregatedWord;
-    const bookWordsInfoArray: IWord[] = wordsInfoArray as IWord[];
-    const difficultWordsInfoArray: IAggregatedWord[] = wordsInfoArray as IAggregatedWord[];
-
-    const wordsForAnswerOptions: IWord[] | IAggregatedWord[] = this.randomizer.shuffle(
-      [
-        questionBookWordInfo,
-        ...this.randomizer.getRandomItemsFromArray(
-          bookWordsInfoArray.filter(
-            (wordInfo: IWord): boolean => questionBookWordInfo !== wordInfo
-          ),
-          AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
+    const wordsForAnswerOptions: (IWord | IAggregatedWord)[] = this.randomizer.shuffle([
+      questionWordInfo,
+      ...this.randomizer.getRandomItemsFromArray(
+        wordsForOptions.filter(
+          (wordInfo: IWord): boolean =>
+            ((questionWordInfo as IWord).id || (questionWordInfo as IAggregatedWord)._id) !==
+            wordInfo.id
         ),
-      ] || [
-        questionDifficultWordInfo,
-        ...this.randomizer.getRandomItemsFromArray(
-          difficultWordsInfoArray.filter(
-            (wordInfo: IAggregatedWord): boolean => questionDifficultWordInfo !== wordInfo
-          ),
-          AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
-        ),
-      ]
-    );
+        AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
+      ),
+    ]);
     return {
       correctAnswer: {
         wordId: (questionWordInfo as IWord).id || (questionWordInfo as IAggregatedWord)._id,
@@ -92,5 +104,47 @@ export default class AudiocallController {
         }
       ),
     };
+  }
+
+  private async pickUnlearnedWords(level: number, levelPage: number): Promise<IWord[]> {
+    const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
+      this.api.getLearnedWords,
+      { group: level }
+    );
+
+    const pickedWords: IWord[] = await this.loadWordsAbovePage(
+      level,
+      levelPage,
+      AUDIOCALL_QUESTIONS_NUMBER,
+      learnedWords
+    );
+    return pickedWords;
+  }
+
+  private async loadWordsAbovePage(
+    level: number,
+    page: number,
+    numberOfWords: number,
+    comparedWords: IAggregatedWord[]
+  ): Promise<IWord[]> {
+    const words: IWord[] = await this.api.getWords(level, page);
+    const filteredWords: IWord[] = words.filter(
+      (word: IWord): boolean =>
+        !comparedWords.find(
+          (comparedWord: IAggregatedWord): boolean => word.id === comparedWord._id
+        )
+    );
+    if (page === Numbers.One) return filteredWords;
+    if (filteredWords.length < numberOfWords) {
+      filteredWords.push(
+        ...(await this.loadWordsAbovePage(
+          level,
+          page - Numbers.One,
+          numberOfWords - filteredWords.length,
+          comparedWords
+        ))
+      );
+    }
+    return filteredWords;
   }
 }

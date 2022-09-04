@@ -90,13 +90,15 @@ export default class StudentBookView {
     switch (gameClass) {
       case GAMES.audiocall.className:
         gameLinkElement.addEventListener('click', (): void => {
+          this.hideWordCards();
           this.gameSwitcher.startNewAudioCallGame(section, page);
         });
         break;
       case GAMES.sprint.className:
-        gameLinkElement.addEventListener('click', (): void =>
-          this.gameSwitcher.startNewSprintGame(section, page)
-        );
+        gameLinkElement.addEventListener('click', (): void =>{
+          this.hideWordCards();
+          this.gameSwitcher.startNewSprintGame(section, page);
+        });
         break;
       default:
         break;
@@ -285,5 +287,10 @@ export default class StudentBookView {
       this.createGameLink(GAMES.audiocall.className, GAMES.audiocall.name, section, page),
       this.createGameLink(GAMES.sprint.className, GAMES.sprint.name, section, page)
     );
+  }
+
+  private hideWordCards(): void {
+    (document.querySelector('.page__words') as HTMLDivElement).style.display =
+      DISPLAY_MODES.contentNotVisible;
   }
 }
