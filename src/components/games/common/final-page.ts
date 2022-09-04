@@ -157,7 +157,7 @@ export default class GameFinalPage {
         new GameSwitcher().startNewAudioCallGame(this.currentLevel);
         break;
       case 'sprint':
-        new GameSwitcher().startNewSprintGame();
+        new GameSwitcher().startNewSprintGame(this.currentLevel);
         break;
       default:
         break;
