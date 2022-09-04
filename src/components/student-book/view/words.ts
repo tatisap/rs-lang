@@ -1,6 +1,6 @@
 import WordsAPI from '../../../api/words-api';
-import { BASE_URL, NO_DATA } from '../../../constants';
-import { IWord, IAggregatedWord, IUserWord, IUserWordData, NoData } from '../../../types';
+import { BASE_URL } from '../../../constants';
+import { IWord, IAggregatedWord, IUserWord, IUserWordData } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AuthController from '../../auth/auth-controller';
@@ -22,8 +22,6 @@ export default class WordCard {
 
   private dateFormatter: DateFormatter;
 
-  private dateOfLearning: string | NoData;
-
   constructor(private word: IWord | IAggregatedWord) {
     this.elementCreator = new UIElementsConstructor();
     this.authController = new AuthController();
@@ -32,7 +30,6 @@ export default class WordCard {
     this.dateFormatter = new DateFormatter();
     this.difficult = 'easy';
     this.isLearned = false;
-    this.dateOfLearning = NO_DATA;
   }
 
   public createWordCard(): HTMLDivElement {
@@ -252,6 +249,8 @@ export default class WordCard {
         buttonLearned.classList.add('learned-btn__active');
         buttonLearned.disabled = true;
 
+        this.disableDifficult('difficult');
+
         const userWords: IUserWordData[] = await this.requestProcessor.process<IUserWordData[]>(
           this.wordsAPI.getUserWords
         );
@@ -275,7 +274,7 @@ export default class WordCard {
             body: userWord.getUserWordInfo(),
           });
           if (localStorage.getItem('group') === '6') {
-            this.disableDifficult('easy');
+            this.disableDifficult('learned');
           } else {
             this.disableDifficult('difficult');
           }
