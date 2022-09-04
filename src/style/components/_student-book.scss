@@ -165,13 +165,22 @@
           width: 35px;
           height: 35px;
           margin: 0 10px;
+          border-radius: 15px
         }
         .difficult-btn {
           @include image($hard);
         }
+        .difficult-btn__active {
+          box-shadow: $box-shadow-difficult;
+          transform: scale(1.2);
+        }
         .learned-btn {
           @extend .controls__difficult-btn;
           @include image($done);
+        }
+        .learned-btn__active {
+          box-shadow: $box-shadow-easy;
+          transform: scale(1.2);
         }
       }
 
