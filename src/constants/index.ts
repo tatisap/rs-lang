@@ -205,3 +205,15 @@ export const NO_DATA = 'no_data';
 export const ERRORS_MESSAGES = {
   unauthorized: 'Unauthorized',
 };
+
+export const SPRINT_INFO = {
+  pointsTotal: 'Общее количество баллов:',
+  pointsPerPage: '+10 баллов за слово',
+  maxSeconds: '60',
+  incorrect: 'Неверно',
+  correct: 'Верно',
+  crossMark: '✗',
+  checkMark: '✓',
+};
+
+export const FIVE_SECONDS = 5;
