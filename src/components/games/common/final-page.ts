@@ -65,7 +65,7 @@ export default class GameFinalPage {
   }
 
   private createResultsContainer(): HTMLDivElement {
-    return this.elementCreator.createUIElement({
+    return this.elementCreator.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['final-page__results'],
     });

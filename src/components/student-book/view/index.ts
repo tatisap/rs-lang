@@ -95,9 +95,10 @@ export default class StudentBookView {
         });
         break;
       case GAMES.sprint.className:
-        gameLinkElement.addEventListener('click', (): void =>
-          this.gameSwitcher.startNewSprintGame(section, page)
-        );
+        gameLinkElement.addEventListener('click', (): void =>{
+          this.hideWordCards();
+          this.gameSwitcher.startNewSprintGame(section, page);
+        });
         break;
       default:
         break;
