@@ -85,7 +85,7 @@ export interface IRequestParameters {
   userId: string;
   token: string;
   wordId?: string;
-  body?: IUserWord | IUserStatistics;
+  body?: Omit<IUserWord, 'wordId'> | IUserStatistics;
 }
 
 export enum Numbers {
@@ -187,11 +187,12 @@ export interface IUserWord {
     dateOfMarkAsHard: number | NoData;
     dataByDates: IUserWordGameDataByDate;
   };
+  wordId: string;
 }
 
-export interface IUserWordData extends IUserWord {
-  wordId?: string;
-}
+// export interface IUserWordData extends IUserWord {
+//   wordId?: string;
+// }
 
 export interface IDailyChartDataByGame {
   gameLabel: string;
