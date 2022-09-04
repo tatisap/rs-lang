@@ -46,28 +46,17 @@ export default class AudioCallGame {
     this.openGameContainer();
     if (this.auth.isUserAuthorized()) await this.resultProcessor.prepareUserStatistic();
 
-    if (level !== undefined && levelPage !== undefined) {
-      this.startingPage.open(
-        GAMES.audiocall.className as GameName,
-        this.container,
-        level.toString()
-      );
-      this.container.addEventListener('level-selected', async (): Promise<void> => {
-        this.clearGameContainer();
-        this.finalPage.updateCurrentLevel(level);
-        this.gameResults = [];
-        await this.questionSwitcher(level, levelPage);
-      });
-    } else {
-      this.startingPage.open(GAMES.audiocall.className as GameName, this.container);
-      this.container.addEventListener('level-selected', async (event: Event): Promise<void> => {
-        this.clearGameContainer();
-        const selectedLevel = Number((event as CustomEvent).detail?.selectedLevel as string);
-        this.finalPage.updateCurrentLevel(selectedLevel);
-        this.gameResults = [];
-        await this.questionSwitcher(selectedLevel);
-      });
-    }
+    this.startingPage.open(GAMES.audiocall.className as GameName, this.container, level, levelPage);
+
+    this.container.addEventListener('level-selected', async (event: Event): Promise<void> => {
+      this.clearGameContainer();
+      this.clearGameResults();
+      const selectedLevel: number = (event as CustomEvent).detail?.selectedLevel;
+      const selectedPage: number | undefined = (event as CustomEvent).detail?.selectedPage;
+      this.finalPage.updateCurrentLevel(selectedLevel);
+      await this.questionSwitcher(selectedLevel, selectedPage);
+    });
+
     this.container.addEventListener('question-answered', async (event: Event): Promise<void> => {
       if (this.auth.isUserAuthorized()) {
         await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
@@ -80,7 +69,6 @@ export default class AudioCallGame {
       level,
       levelPage
     );
-    console.log(questionInfoList);
 
     new AudiocallQuestion(questionInfoList[Numbers.Zero], Numbers.Zero).makeQuestion(
       this.container
@@ -126,6 +114,10 @@ export default class AudioCallGame {
 
   private clearGameContainer(): void {
     this.container.innerHTML = NO_CONTENT;
+  }
+
+  private clearGameResults(): void {
+    this.gameResults = [];
   }
 
   private closeGameContainer(): void {

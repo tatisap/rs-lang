@@ -33,55 +33,55 @@ export default class AudiocallController {
     level: number,
     levelPage?: number
   ): Promise<IAudiocallQuestionInfo[]> {
-    let wordList: IWord[] | IAggregatedWord[];
-    console.log(level, levelPage);
+    let wordListForQuestions: IWord[] | IAggregatedWord[];
+    let wordListForOptions: IWord[];
+
     if (level === BOOK_SECTIONS.difficultWords.group) {
-      wordList = this.randomizer.shuffle<IAggregatedWord>(
+      wordListForQuestions = this.randomizer.shuffle<IAggregatedWord>(
         await this.requestProcessor.process<IAggregatedWord[]>(this.api.getDifficultWords)
+      );
+      const randomDifficultWord: IAggregatedWord =
+        wordListForQuestions[
+          this.randomizer.getRandomIntegerFromOneToMax(wordListForQuestions.length) - Numbers.One
+        ];
+      wordListForOptions = await this.api.getWords(
+        randomDifficultWord.group,
+        randomDifficultWord.page
       );
     } else if (levelPage) {
       console.log(1.2);
-      wordList = await this.pickUnlearnedWords(level, levelPage);
+      wordListForQuestions = await this.pickUnlearnedWords(level, levelPage);
+      wordListForOptions = await this.api.getWords(level, levelPage);
     } else {
       const randomPage: number =
         this.randomizer.getRandomIntegerFromOneToMax(MAX_PAGES_IN_BOOK_SECTION);
-      wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(level, randomPage));
+      wordListForQuestions = this.randomizer.shuffle<IWord>(
+        await this.api.getWords(level, randomPage)
+      );
+      wordListForOptions = wordListForQuestions;
     }
 
-    return wordList.map(
+    return wordListForQuestions.map(
       (questionWordInfo: IWord | IAggregatedWord): IAudiocallQuestionInfo =>
-        this.createQuestionInfo(questionWordInfo, wordList)
+        this.createQuestionInfo(questionWordInfo, wordListForOptions)
     );
   }
 
   private createQuestionInfo(
     questionWordInfo: IWord | IAggregatedWord,
-    wordsInfoArray: IWord[] | IAggregatedWord[]
+    wordsForOptions: IWord[]
   ): IAudiocallQuestionInfo {
-    const questionBookWordInfo: IWord = questionWordInfo as IWord;
-    const questionDifficultWordInfo: IAggregatedWord = questionWordInfo as IAggregatedWord;
-    const bookWordsInfoArray: IWord[] = wordsInfoArray as IWord[];
-    const difficultWordsInfoArray: IAggregatedWord[] = wordsInfoArray as IAggregatedWord[];
-
-    const wordsForAnswerOptions: IWord[] | IAggregatedWord[] = this.randomizer.shuffle(
-      [
-        questionBookWordInfo,
-        ...this.randomizer.getRandomItemsFromArray(
-          bookWordsInfoArray.filter(
-            (wordInfo: IWord): boolean => questionBookWordInfo.id !== wordInfo.id
-          ),
-          AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
+    const wordsForAnswerOptions: (IWord | IAggregatedWord)[] = this.randomizer.shuffle([
+      questionWordInfo,
+      ...this.randomizer.getRandomItemsFromArray(
+        wordsForOptions.filter(
+          (wordInfo: IWord): boolean =>
+            ((questionWordInfo as IWord).id || (questionWordInfo as IAggregatedWord)._id) !==
+            wordInfo.id
         ),
-      ] || [
-        questionDifficultWordInfo,
-        ...this.randomizer.getRandomItemsFromArray(
-          difficultWordsInfoArray.filter(
-            (wordInfo: IAggregatedWord): boolean => questionDifficultWordInfo._id !== wordInfo._id
-          ),
-          AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
-        ),
-      ]
-    );
+        AUDIOCALL_ANSWER_OPTIONS_NUMBER - Numbers.One
+      ),
+    ]);
     return {
       correctAnswer: {
         wordId: (questionWordInfo as IWord).id || (questionWordInfo as IAggregatedWord)._id,
@@ -103,7 +103,8 @@ export default class AudiocallController {
 
   private async pickUnlearnedWords(level: number, levelPage: number): Promise<IWord[]> {
     const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
-      this.api.getLearnedWords
+      this.api.getLearnedWords,
+      { group: level }
     );
 
     const pickedWords: IWord[] = await this.loadWordsAbovePage(
