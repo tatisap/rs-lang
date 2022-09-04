@@ -1,5 +1,6 @@
 import { DISPLAY_MODES } from '../../constants';
 import AudioCallGame from './audiocall';
+import SprintGame from './sprint';
 
 export default class GameSwitcher {
   public startNewAudioCallGame(level?: number, levelPage?: number): void {
@@ -8,8 +9,10 @@ export default class GameSwitcher {
     audiocall.start(level, levelPage);
   }
 
-  public startNewSprintGame(): void {
+  public startNewSprintGame(level?: number, levelPage?: number): void {
     this.hideFooter();
+    const sprint: SprintGame = new SprintGame();
+    sprint.start(level, levelPage);
   }
 
   private hideFooter(): void {
