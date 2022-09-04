@@ -35,7 +35,7 @@ export default class StatisticCounter {
   ): number {
     return userWords.reduce((counter: number, userWord: IUserWord): number => {
       const numberOfCorrectAnswers: number =
-        userWord.optional.dataByDates[dateKey]?.[gameName]?.correctAnswersCounter || Numbers.Zero;
+        userWord.optional.dataByDates?.[dateKey]?.[gameName]?.correctAnswersCounter || Numbers.Zero;
       return counter + numberOfCorrectAnswers;
     }, Numbers.Zero);
   }
@@ -47,9 +47,10 @@ export default class StatisticCounter {
   ): number {
     return userWords.reduce((counter: number, userWord: IUserWord): number => {
       const numberOfCorrectAnswers: number =
-        userWord.optional.dataByDates[dateKey]?.[gameName]?.correctAnswersCounter || Numbers.Zero;
+        userWord.optional.dataByDates?.[dateKey]?.[gameName]?.correctAnswersCounter || Numbers.Zero;
       const numberOfIncorrectAnswers: number =
-        userWord.optional.dataByDates[dateKey]?.[gameName]?.incorrectAnswersCounter || Numbers.Zero;
+        userWord.optional.dataByDates?.[dateKey]?.[gameName]?.incorrectAnswersCounter ||
+        Numbers.Zero;
       return counter + numberOfCorrectAnswers + numberOfIncorrectAnswers;
     }, Numbers.Zero);
   }

@@ -15,31 +15,80 @@
       weight: 700;
     }
   }
-  .result-list__title {
-    margin: 0 0 10px;
-  }
-  .result-list {
-    @extend %normalized-list;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 10px;
-    border-radius: 10px;
-    &.result-list_correct {
-      background-color: $green-tab-color;
+  .final-page__results {
+    overflow: auto;
+    .result-list__title {
+      margin: 0 0 10px;
     }
-    &.result-list_incorrect {
-      background-color: $red-tab-color;
-    }
-    .result-list__item {
+    .result-list {
+      @extend %normalized-list;
       display: flex;
-      gap: 10px;
-      .audio-wrapper {
-        @include image($audio);
-        width: 20px;
-        height: 20px;
-        border-radius: 20px;
+      flex-direction: column;
+      gap: 5px;
+      padding: 10px;
+      border-radius: 10px;
+      &.result-list_correct {
+        background-color: $green-tab-color;
+      }
+      &.result-list_incorrect {
+        background-color: $red-tab-color;
+      }
+      .result-list__item {
+        display: flex;
+        gap: 10px;
+        .audio-wrapper {
+          @include image($audio);
+          width: 20px;
+          height: 20px;
+          border-radius: 20px;
+        }
       }
     }
   }
+  .final-page__controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    .final-page__repeat-button,
+    .final-page__return-button {
+      @extend %normalized-button;
+      @extend %interactive;
+      position: relative;
+      width: 100px;
+      height: 40px;
+      border: 1px solid $black;
+      border-radius: 10px;
+      &:hover {
+        transform: scale(1.05);
+      }
+      &::before{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+      }
+    }
+    .final-page__repeat-button::before {
+      content: 'Играть еще';
+    }
+  }
 }
+
+.page_games {
+  .final-page__return-button::before {
+    content: 'К списку игр';
+  }
+}
+
+.page_student-book {
+  .final-page__return-button::before {
+    content: 'Вернуться в учебник';
+  }
+}
+

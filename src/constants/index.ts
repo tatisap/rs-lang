@@ -205,3 +205,5 @@ export const NO_DATA = 'no_data';
 export const ERRORS_MESSAGES = {
   unauthorized: 'Unauthorized',
 };
+
+export const AUDIOCALL_QUESTIONS_NUMBER = 20;

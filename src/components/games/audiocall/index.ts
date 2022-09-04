@@ -37,7 +37,7 @@ export default class AudioCallGame {
     this.auth = new AuthController();
     this.container = this.createGameContainer();
     this.startingPage = new GameStartingPage();
-    this.finalPage = new GameFinalPage();
+    this.finalPage = new GameFinalPage('audiocall');
     this.resultProcessor = new GameResultProcessor();
     this.gameResults = [];
   }
@@ -46,30 +46,22 @@ export default class AudioCallGame {
     this.openGameContainer();
     if (this.auth.isUserAuthorized()) await this.resultProcessor.prepareUserStatistic();
 
-    if (level !== undefined && levelPage !== undefined) {
-      this.startingPage.open(
-        GAMES.audiocall.className as GameName,
-        this.container,
-        level.toString()
-      );
-      this.container.addEventListener('level-selected', async (): Promise<void> => {
-        this.clearGameContainer();
-        await this.questionSwitcher(level, levelPage);
-      });
-    } else {
-      this.startingPage.open(GAMES.audiocall.className as GameName, this.container);
-      this.container.addEventListener('level-selected', async (event: Event): Promise<void> => {
-        this.clearGameContainer();
-        const selectedLevel: number =
-          Number((event as CustomEvent).detail?.selectedLevel as string) - Numbers.One;
-        await this.questionSwitcher(selectedLevel);
-      });
-      this.container.addEventListener('question-answered', async (event: Event): Promise<void> => {
-        if (this.auth.isUserAuthorized()) {
-          await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
-        }
-      });
-    }
+    this.startingPage.open(GAMES.audiocall.className as GameName, this.container, level, levelPage);
+
+    this.container.addEventListener('level-selected', async (event: Event): Promise<void> => {
+      this.clearGameContainer();
+      this.clearGameResults();
+      const selectedLevel: number = (event as CustomEvent).detail?.selectedLevel;
+      const selectedPage: number | undefined = (event as CustomEvent).detail?.selectedPage;
+      this.finalPage.updateCurrentLevel(selectedLevel);
+      await this.questionSwitcher(selectedLevel, selectedPage);
+    });
+
+    this.container.addEventListener('question-answered', async (event: Event): Promise<void> => {
+      if (this.auth.isUserAuthorized()) {
+        await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
+      }
+    });
   }
 
   private async questionSwitcher(level: number, levelPage?: number): Promise<void> {
@@ -122,6 +114,10 @@ export default class AudioCallGame {
 
   private clearGameContainer(): void {
     this.container.innerHTML = NO_CONTENT;
+  }
+
+  private clearGameResults(): void {
+    this.gameResults = [];
   }
 
   private closeGameContainer(): void {
