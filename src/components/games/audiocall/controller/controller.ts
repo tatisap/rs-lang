@@ -14,6 +14,7 @@ import {
   Numbers,
 } from '../../../../types';
 import Randomizer from '../../../../utils/randomizer';
+import AuthController from '../../../auth/auth-controller';
 import RequestProcessor from '../../../request-processor';
 
 export default class AudiocallController {
@@ -23,10 +24,13 @@ export default class AudiocallController {
 
   private requestProcessor: RequestProcessor;
 
+  private authController: AuthController;
+
   constructor() {
     this.api = new WordsAPI();
     this.randomizer = new Randomizer();
     this.requestProcessor = new RequestProcessor();
+    this.authController = new AuthController();
   }
 
   public async getQuestionList(
@@ -50,8 +54,11 @@ export default class AudiocallController {
       );
     } else if (levelPage) {
       console.log(1.2);
-      wordListForQuestions = await this.pickUnlearnedWords(level, levelPage);
       wordListForOptions = await this.api.getWords(level, levelPage);
+
+      wordListForQuestions = this.authController.isUserAuthorized()
+        ? await this.pickUnlearnedWords(level, levelPage)
+        : wordListForOptions;
     } else {
       const randomPage: number =
         this.randomizer.getRandomIntegerFromOneToMax(MAX_PAGES_IN_BOOK_SECTION);
