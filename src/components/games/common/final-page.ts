@@ -7,6 +7,8 @@ import {
 import { GameName, IGameCorrectAnswer, IGameQuestionResult, Numbers } from '../../../types';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudioElement from '../../audio/audio-element';
+// eslint-disable-next-line import/no-cycle
+import GameSwitcher from '../game-switcher';
 
 export default class GameFinalPage {
   private elementCreator: UIElementsConstructor;
@@ -135,12 +137,12 @@ export default class GameFinalPage {
       tag: 'button',
       classNames: ['final-page__return-button'],
     });
-    returnButton.addEventListener('click', this.returnHandler);
+    returnButton.addEventListener('click', (): void => this.returnHandler());
     return returnButton;
   }
 
   private returnHandler(): void {
-    (document.querySelector('.game') as HTMLDivElement).remove();
+    this.closeEndedGame();
     (document.querySelector('.footer') as HTMLElement).style.display =
       DISPLAY_MODES.contentFlexVisible;
     if ((document.getElementById('app') as HTMLElement).classList.contains('page_student-book')) {
@@ -150,13 +152,17 @@ export default class GameFinalPage {
   }
 
   private repeatHandler(): void {
-    this.clearContainer();
-    (document.querySelector(`.${this.gameName}`) as HTMLDivElement).dispatchEvent(
-      new CustomEvent('level-selected', {
-        bubbles: true,
-        detail: { selectedLevel: this.currentLevel },
-      })
-    );
+    switch (this.gameName) {
+      case 'audiocall':
+        new GameSwitcher().startNewAudioCallGame(this.currentLevel);
+        break;
+      case 'sprint':
+        new GameSwitcher().startNewSprintGame();
+        break;
+      default:
+        break;
+    }
+    this.closeEndedGame();
   }
 
   private clearContainer(): void {
@@ -165,5 +171,9 @@ export default class GameFinalPage {
 
   public updateCurrentLevel(level: number): void {
     this.currentLevel = level;
+  }
+
+  private closeEndedGame(): void {
+    (document.querySelector('.game') as HTMLDivElement).remove();
   }
 }
