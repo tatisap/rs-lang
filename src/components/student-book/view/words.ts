@@ -84,7 +84,9 @@ export default class WordCard {
       tag: 'div',
       classNames: ['info__controls', 'controls'],
     });
-    controlsButton.append(this.createLearnedWordButton(), this.createDifficultWordButton());
+    if (this.authController.isUserAuthorized()) {
+      controlsButton.append(this.createLearnedWordButton(), this.createDifficultWordButton());
+    }
     return controlsButton;
   }
 
@@ -138,6 +140,33 @@ export default class WordCard {
     textExampleContainer.append(textExample, textExampleTranslate);
 
     return textExampleContainer;
+  }
+
+  private async checkHardLearnedWord() {
+    const userWords: IUserWordData[] = await this.requestProcessor.process<IUserWordData[]>(
+      this.wordsAPI.getUserWords
+    );
+
+    userWords.forEach(() => {
+      if (this.difficult === 'hard') {
+        const difficultWordButton: HTMLDivElement = <HTMLDivElement>(
+          document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .difficult-btn`)
+        );
+        difficultWordButton.classList.add('difficult-btn__active');
+        difficultWordButton.setAttribute('disabled', 'true');
+      }
+      if (this.difficult === 'easy') {
+        const learnedWordButton: HTMLDivElement = <HTMLDivElement>(
+          document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .learned-btn`)
+        );
+        const difficultWordButton: HTMLDivElement = <HTMLDivElement>(
+          document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .difficult-btn`)
+        );
+        learnedWordButton.classList.add('difficult-btn__active');
+        difficultWordButton.setAttribute('disabled', 'true');
+        learnedWordButton.setAttribute('disabled', 'true');
+      }
+    });
   }
 
   private createDifficultWordButton(): HTMLButtonElement {
@@ -195,14 +224,14 @@ export default class WordCard {
     return buttonDifficult;
   }
 
-  private disableDifficult = (btn: string): void => {
+  private disableDifficult(btn: string): void {
     const button = <HTMLButtonElement>(
       document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .${btn}-btn`)
     );
 
     button.classList.remove('difficult-btn__active');
     button.removeAttribute('disabled');
-  };
+  }
 
   private createLearnedWordButton(): HTMLButtonElement {
     const buttonLearned: HTMLButtonElement = this.elementCreator.createUIElement<HTMLButtonElement>(
@@ -269,7 +298,7 @@ export default class WordCard {
   }
 
   private disableLearned(btn: HTMLButtonElement): void {
-    btn.classList.remove('active');
+    btn.classList.remove('learned-btn__active');
     btn.removeAttribute('disabled');
   }
 }

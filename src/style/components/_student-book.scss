@@ -10,6 +10,8 @@
     position: relative;
     display: block;
     padding: 10px 10px 10px 37px;
+    background: none;
+    border: none;
     font-family: $balsamiq;
     font-size: 20px;
     &::before {
@@ -24,6 +26,13 @@
     &:hover,
     &:active {
       transform: scale(1.05);
+    }
+    &:disabled:hover,
+    &:disabled:active {
+      transform: none;
+    }
+    &:disabled {
+      cursor: not-allowed;
     }
   }
 }

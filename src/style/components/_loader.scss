@@ -13,27 +13,27 @@
   &.loader-a1 {
     @include loader-background($red-tab-color);
   }
-  
+
   &.loader-a2 {
     @include loader-background($orange-tab-color);
   }
-  
+
   &.loader-b1 {
     @include loader-background($yellow-tab-color);
   }
-  
+
   &.loader-b2 {
     @include loader-background($green-tab-color);
   }
-  
+
   &.loader-c1 {
     @include loader-background($blue-tab-color);
   }
-  
+
   &.loader-c2 {
     @include loader-background($indigo-tab-color);
   }
-  
+
   &.loader-superhero {
     @include loader-background($violet-tab-color);
   }

@@ -95,12 +95,10 @@ export const GAMES = {
   audiocall: {
     name: 'Аудиовызов',
     className: 'audiocall',
-    link: '',
   },
   sprint: {
     name: 'Спринт',
     className: 'sprint',
-    link: '',
   },
 };
 
@@ -208,3 +206,7 @@ export const NUMBER_OF_CORRECT_ANSWERS_TO_LEARN = {
 };
 
 export const NO_DATA = 'no_data';
+
+export const ERRORS_MESSAGES = {
+  unauthorized: 'Unauthorized',
+};

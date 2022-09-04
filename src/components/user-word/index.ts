@@ -1,5 +1,13 @@
-import { NO_DATA, NUMBER_OF_CORRECT_ANSWERS_TO_LEARN } from '../../constants';
-import { GameName, IUserWord, IUserWordDataByGame, NoData, Numbers } from '../../types';
+import { GAMES, NO_DATA, NUMBER_OF_CORRECT_ANSWERS_TO_LEARN } from '../../constants';
+import {
+  GameName,
+  IAnswerCounter,
+  IUserWord,
+  IUserWordDataByGame,
+  IUserWordGameDataByDate,
+  NoData,
+  Numbers,
+} from '../../types';
 import WordDataByGame from './word-data-by-game';
 
 export default class UserWord {
@@ -145,13 +153,42 @@ export default class UserWord {
         gameNameOfFirstUse: this.gameOfFirstUse,
         dateOfFirstUse: this.dateOfFirstUse,
         dateOfMarkAsHard: this.dateOfMarkAsHard,
-        dataByDates: Object.fromEntries(
-          this.dataByDates.map((dataItem: WordDataByGame): [string, IUserWordDataByGame] => {
-            const dataByGames: { dateKey: string; data: IUserWordDataByGame } = dataItem.getInfo();
-            return [dataByGames.dateKey, dataByGames.data];
-          })
-        ),
+        dataByDates: this.getDataByDates(),
       },
     };
+  }
+
+  public getProgress(): IUserWordDataByGame {
+    const dateKeys: string[] = this.dataByDates.map((dataItem: WordDataByGame): string =>
+      dataItem.getDateKey()
+    );
+    const gamesDataByDates: IUserWordGameDataByDate = this.getDataByDates();
+    const progressEntries: [GameName, IAnswerCounter][] = (Object.keys(GAMES) as GameName[]).map(
+      (game: GameName): [GameName, IAnswerCounter] => {
+        const totalCounter: IAnswerCounter = {
+          correctAnswersCounter: dateKeys.reduce(
+            (sum: number, dateKey: string): number =>
+              sum + gamesDataByDates[dateKey][game].correctAnswersCounter,
+            Numbers.Zero
+          ),
+          incorrectAnswersCounter: dateKeys.reduce(
+            (sum: number, dateKey: string): number =>
+              sum + gamesDataByDates[dateKey][game].incorrectAnswersCounter,
+            Numbers.Zero
+          ),
+        };
+        return [game, totalCounter];
+      }
+    );
+    return Object.fromEntries(progressEntries) as IUserWordDataByGame;
+  }
+
+  private getDataByDates(): IUserWordGameDataByDate {
+    return Object.fromEntries(
+      this.dataByDates.map((dataItem: WordDataByGame): [string, IUserWordDataByGame] => {
+        const dataByGames: { dateKey: string; data: IUserWordDataByGame } = dataItem.getInfo();
+        return [dataByGames.dateKey, dataByGames.data];
+      })
+    );
   }
 }

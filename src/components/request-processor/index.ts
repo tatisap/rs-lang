@@ -1,3 +1,4 @@
+import { ERRORS_MESSAGES } from '../../constants';
 import { IRequestParameters } from '../../types';
 import AuthController from '../auth/auth-controller';
 
@@ -16,10 +17,13 @@ export default class RequestProcessor {
     let token: string = this.authController.getAccessToken();
     try {
       return await request({ userId, token, ...args });
-    } catch {
-      this.authController.updateTokens();
-      token = this.authController.getAccessToken();
-      return await request({ userId, token, ...args });
+    } catch (error) {
+      if (error instanceof Error && error.message === ERRORS_MESSAGES.unauthorized) {
+        await this.authController.updateTokens();
+        token = this.authController.getAccessToken();
+        return await request({ userId, token, ...args });
+      }
+      throw error;
     }
   }
 }
