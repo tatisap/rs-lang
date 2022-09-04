@@ -53,6 +53,23 @@ export default class WordsAPI {
     return difficultWords;
   }
 
+  public async getLearnedWords({ userId, token }: IRequestParameters): Promise<IAggregatedWord[]> {
+    const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.aggregatedWords}?${QUERY_KEYS.wordsPerPage}=${MAX_WORDS_IN_BOOK}&${QUERY_KEYS.filter}={"userWord.optional.isLearned":true}`;
+    const response: Response = await fetch(url, {
+      method: HttpMethods.GET,
+      headers: {
+        [REQUEST_HEADERS.authorization]: `Bearer ${token}`,
+        [REQUEST_HEADERS.accept]: 'application/json',
+      },
+    });
+    if (response.status === StatusCode.Unauthorized) {
+      throw new Error(ERRORS_MESSAGES.unauthorized);
+    }
+    const data: IAggregatedWordsData = await response.json();
+    const learnedWords: IAggregatedWord[] = data[Numbers.Zero].paginatedResults;
+    return learnedWords;
+  }
+
   public async getUserWords({ userId, token }: IRequestParameters): Promise<IUserWord[]> {
     const url = `${BASE_URL}/${PATHS.users}/${userId}/${PATHS.words}`;
     const response: Response = await fetch(url, {
