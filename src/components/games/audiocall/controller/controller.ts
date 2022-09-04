@@ -53,7 +53,6 @@ export default class AudiocallController {
         randomDifficultWord.page
       );
     } else if (levelPage) {
-      console.log(1.2);
       wordListForOptions = await this.api.getWords(level, levelPage);
 
       wordListForQuestions = this.authController.isUserAuthorized()
@@ -130,14 +129,12 @@ export default class AudiocallController {
     comparedWords: IAggregatedWord[]
   ): Promise<IWord[]> {
     const words: IWord[] = await this.api.getWords(level, page);
-    console.log(comparedWords);
     const filteredWords: IWord[] = words.filter(
       (word: IWord): boolean =>
         !comparedWords.find(
           (comparedWord: IAggregatedWord): boolean => word.id === comparedWord._id
         )
     );
-    console.log(filteredWords);
     if (page === Numbers.One) return filteredWords;
     if (filteredWords.length < numberOfWords) {
       filteredWords.push(
