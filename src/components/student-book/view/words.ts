@@ -82,7 +82,12 @@ export default class WordCard {
       classNames: ['info__controls', 'controls'],
     });
     if (this.authController.isUserAuthorized()) {
-      controlsButton.append(this.createLearnedWordButton(), this.createDifficultWordButton());
+      controlsButton.append(
+        this.createLearnedWordButton(),
+        localStorage.getItem('group') === '6'
+          ? this.createEasyWordButton()
+          : this.createDifficultWordButton()
+      );
     }
     return controlsButton;
   }
@@ -299,5 +304,31 @@ export default class WordCard {
   private disableLearned(btn: HTMLButtonElement): void {
     btn.classList.remove('learned-btn__active');
     btn.removeAttribute('disabled');
+  }
+
+  private createEasyWordButton(): HTMLButtonElement {
+    const buttonEasy: HTMLButtonElement = this.elementCreator.createUIElement<HTMLButtonElement>({
+      tag: 'button',
+      classNames: ['controls__easy-btn', 'easy-btn'],
+    });
+
+    buttonEasy.addEventListener('click', async () => {
+      buttonEasy.classList.add('easy-btn__active');
+      buttonEasy.disabled = true;
+
+      const userWordInfo: IUserWord = await this.requestProcessor.process<IUserWord>(
+        this.wordsAPI.getUserWord,
+        {
+          wordId: (this.word as IWord).id,
+        }
+      );
+
+      const userWord: UserWord = new UserWord().update(userWordInfo);
+      await this.requestProcessor.process<void>(this.wordsAPI.updateUserWord, {
+        wordId: (this.word as IWord).id,
+        body: userWord.getUserWordInfo(),
+      });
+    });
+    return buttonEasy;
   }
 }

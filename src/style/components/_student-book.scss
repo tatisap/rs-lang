@@ -191,6 +191,14 @@
           box-shadow: $box-shadow-easy;
           transform: scale(1.2);
         }
+        .easy-btn {
+          @extend .controls__difficult-btn;
+          @include image($easy);
+        }
+        .easy-btn__active {
+          box-shadow: $box-shadow-easy;
+          transform: scale(1.2);
+        }
       }
 
       .info__text-meaning {
