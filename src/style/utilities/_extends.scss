@@ -20,3 +20,10 @@
   cursor: pointer;
   transition: 0.5s;
 }
+
+%flex-vertical-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
