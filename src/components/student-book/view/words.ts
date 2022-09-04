@@ -1,5 +1,5 @@
 import WordsAPI from '../../../api/words-api';
-import { BASE_URL } from '../../../constants';
+import { BASE_URL, BOOK_SECTIONS } from '../../../constants';
 import { IWord, IAggregatedWord, IUserWord, IUserWordData } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
@@ -91,13 +91,10 @@ export default class WordCard {
     audio.init().addClassWithModifier('word-card');
     controlsButton.append(audio.getAudioElement());
 
-    if (this.authController.isUserAuthorized()) {
-      controlsButton.append(
-        this.createLearnedWordButton(),
-        localStorage.getItem('group') === '6'
-          ? this.createEasyWordButton()
-          : this.createDifficultWordButton()
-      );
+    if (this.word.group === 6 && this.authController.isUserAuthorized()) {
+      controlsButton.append(this.createLearnedWordButton(), this.createEasyWordButton());
+    } else {
+      controlsButton.append(this.createLearnedWordButton(), this.createDifficultWordButton());
     }
     return controlsButton;
   }
@@ -334,6 +331,8 @@ export default class WordCard {
       );
 
       const userWord: UserWord = new UserWord().update(userWordInfo);
+      userWord.markAsEasy();
+
       await this.requestProcessor.process<void>(this.wordsAPI.updateUserWord, {
         wordId: (this.word as IWord).id,
         body: userWord.getUserWordInfo(),
