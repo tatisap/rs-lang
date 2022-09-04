@@ -28,6 +28,7 @@ export const REQUEST_HEADERS = {
 export const MODAL_TITLES = {
   signIn: 'Вход',
   signUp: 'Регистрация',
+  learningProgress: 'Прогресс изучения',
 };
 
 export const AUTH_FORM = {
@@ -210,3 +211,5 @@ export const NO_DATA = 'no_data';
 export const ERRORS_MESSAGES = {
   unauthorized: 'Unauthorized',
 };
+
+export const PROGRESS_TABLE_HEADINGS = ['Игра', 'Верные ответы', 'Неверные ответы'];
