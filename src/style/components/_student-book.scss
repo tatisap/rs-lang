@@ -168,36 +168,82 @@
       }
 
       .info__controls {
-        .controls__difficult-btn {
-          @extend %normalized-button;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        border-bottom: 1px solid $black;
+        .audio-wrapper_word-card,
+        button {
           @extend %interactive;
-          width: 35px;
-          height: 35px;
-          margin: 0 10px;
-          border-radius: 15px
+          position: relative;
+          width: 45px;
+          height: 45px;
+          border-radius: 45px;
+          &:hover {
+            outline: 1px solid $black;
+            &::after {
+              display: block;
+            }
+          }
+          &::after {
+            position: absolute;
+            display: none;
+            bottom: -20px;
+            right: -105px;
+            z-index: 10;
+            width: 100px;
+            padding: 5px;
+            border-radius: 10px;
+            background-color: $grey-background-color;
+            font-size: 10px;
+            font-weight: 700;
+            animation: fade-in 1s;
+          }
         }
-        .difficult-btn {
-          @include image($hard);
+        .audio-wrapper_word-card {
+          &::after {
+            content: 'Воспроизвести';
+          }
+          &.audio-wrapper_audio-playing::after {
+            content: 'Остановить';
+          }
         }
-        .difficult-btn__active {
-          box-shadow: $box-shadow-difficult;
-          transform: scale(1.2);
-        }
-        .learned-btn {
-          @extend .controls__difficult-btn;
-          @include image($done);
-        }
-        .learned-btn__active {
-          box-shadow: $box-shadow-easy;
-          transform: scale(1.2);
-        }
-        .easy-btn {
-          @extend .controls__difficult-btn;
-          @include image($easy);
-        }
-        .easy-btn__active {
-          box-shadow: $box-shadow-easy;
-          transform: scale(1.2);
+        button {
+          @extend %normalized-button;
+          display: block;
+          background-color: $app-background-color;
+          background-size: 80% !important;
+          background-position: center;
+          &.difficult-btn {
+            @include image($hard);
+            &::after {
+              content: 'Пометить как сложное'
+            }
+          }
+          &.learned-btn {
+            @include image($done);
+            &::after {
+              content: 'Пометить как изученное'
+            }
+          }
+          &.difficult-btn__active,
+          &.learned-btn__active {
+            border: 1px solid $black;
+            &:hover {
+              outline: 0;
+            }
+          }
+          &.difficult-btn__active {
+            &::after {
+              content: 'Сложное слово';
+            }
+          }
+          &.learned-btn__active {
+            &::after {
+              content: 'Слово изучено';
+            }
+          }
         }
       }
 

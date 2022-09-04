@@ -3,6 +3,7 @@ import { BASE_URL } from '../../../constants';
 import { IWord, IAggregatedWord, IUserWord, IUserWordData } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
+import AudioElement from '../../audio/audio-element';
 import AuthController from '../../auth/auth-controller';
 import RequestProcessor from '../../request-processor';
 import UserWord from '../../user-word';
@@ -81,6 +82,15 @@ export default class WordCard {
       tag: 'div',
       classNames: ['info__controls', 'controls'],
     });
+
+    const audio: AudioElement = new AudioElement([
+      `${BASE_URL}/${this.word.audio}`,
+      `${BASE_URL}/${this.word.audioMeaning}`,
+      `${BASE_URL}/${this.word.audioExample}`,
+    ]);
+    audio.init().addClassWithModifier('word-card');
+    controlsButton.append(audio.getAudioElement());
+
     if (this.authController.isUserAuthorized()) {
       controlsButton.append(
         this.createLearnedWordButton(),
