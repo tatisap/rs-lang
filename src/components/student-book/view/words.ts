@@ -91,7 +91,8 @@ export default class WordCard {
     audio.init().addClassWithModifier('word-card');
     controlsButton.append(audio.getAudioElement());
 
-    if (this.word.group === 6 && this.authController.isUserAuthorized()) {
+    const superhero = (document.querySelector('.superhero') as HTMLElement).classList.contains('active');
+    if (superhero && this.authController.isUserAuthorized()) {
       controlsButton.append(this.createLearnedWordButton(), this.createEasyWordButton());
     } else {
       controlsButton.append(this.createLearnedWordButton(), this.createDifficultWordButton());
