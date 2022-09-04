@@ -55,6 +55,7 @@ export default class AudioCallGame {
       this.container.addEventListener('level-selected', async (): Promise<void> => {
         this.clearGameContainer();
         this.finalPage.updateCurrentLevel(level);
+        this.gameResults = [];
         await this.questionSwitcher(level, levelPage);
       });
     } else {
@@ -63,14 +64,15 @@ export default class AudioCallGame {
         this.clearGameContainer();
         const selectedLevel = Number((event as CustomEvent).detail?.selectedLevel as string);
         this.finalPage.updateCurrentLevel(selectedLevel);
+        this.gameResults = [];
         await this.questionSwitcher(selectedLevel);
       });
-      this.container.addEventListener('question-answered', async (event: Event): Promise<void> => {
-        if (this.auth.isUserAuthorized()) {
-          await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
-        }
-      });
     }
+    this.container.addEventListener('question-answered', async (event: Event): Promise<void> => {
+      if (this.auth.isUserAuthorized()) {
+        await this.resultProcessor.processAnswer('audiocall', (event as CustomEvent).detail);
+      }
+    });
   }
 
   private async questionSwitcher(level: number, levelPage?: number): Promise<void> {
@@ -78,7 +80,7 @@ export default class AudioCallGame {
       level,
       levelPage
     );
-    console.log(level);
+    console.log(questionInfoList);
 
     new AudiocallQuestion(questionInfoList[Numbers.Zero], Numbers.Zero).makeQuestion(
       this.container

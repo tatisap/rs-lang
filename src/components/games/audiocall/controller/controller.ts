@@ -1,6 +1,7 @@
 import WordsAPI from '../../../../api/words-api';
 import {
   AUDIOCALL_ANSWER_OPTIONS_NUMBER,
+  AUDIOCALL_QUESTIONS_NUMBER,
   BASE_URL,
   BOOK_SECTIONS,
   MAX_PAGES_IN_BOOK_SECTION,
@@ -30,15 +31,21 @@ export default class AudiocallController {
 
   public async getQuestionList(
     level: number,
-    levelPage = this.randomizer.getRandomIntegerFromOneToMax(MAX_PAGES_IN_BOOK_SECTION)
+    levelPage?: number
   ): Promise<IAudiocallQuestionInfo[]> {
     let wordList: IWord[] | IAggregatedWord[];
+    console.log(level, levelPage);
     if (level === BOOK_SECTIONS.difficultWords.group) {
       wordList = this.randomizer.shuffle<IAggregatedWord>(
         await this.requestProcessor.process<IAggregatedWord[]>(this.api.getDifficultWords)
       );
+    } else if (levelPage) {
+      console.log(1.2);
+      wordList = await this.pickUnlearnedWords(level, levelPage);
     } else {
-      wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(level, levelPage));
+      const randomPage: number =
+        this.randomizer.getRandomIntegerFromOneToMax(MAX_PAGES_IN_BOOK_SECTION);
+      wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(level, randomPage));
     }
 
     return wordList.map(
@@ -92,5 +99,48 @@ export default class AudiocallController {
         }
       ),
     };
+  }
+
+  private async pickUnlearnedWords(level: number, levelPage: number): Promise<IWord[]> {
+    const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
+      this.api.getLearnedWords
+    );
+
+    const pickedWords: IWord[] = await this.loadWordsAbovePage(
+      level,
+      levelPage,
+      AUDIOCALL_QUESTIONS_NUMBER,
+      learnedWords
+    );
+    return pickedWords;
+  }
+
+  private async loadWordsAbovePage(
+    level: number,
+    page: number,
+    numberOfWords: number,
+    comparedWords: IAggregatedWord[]
+  ): Promise<IWord[]> {
+    const words: IWord[] = await this.api.getWords(level, page);
+    console.log(comparedWords);
+    const filteredWords: IWord[] = words.filter(
+      (word: IWord): boolean =>
+        !comparedWords.find(
+          (comparedWord: IAggregatedWord): boolean => word.id === comparedWord._id
+        )
+    );
+    console.log(filteredWords);
+    if (page === Numbers.One) return filteredWords;
+    if (filteredWords.length < numberOfWords) {
+      filteredWords.push(
+        ...(await this.loadWordsAbovePage(
+          level,
+          page - Numbers.One,
+          numberOfWords - filteredWords.length,
+          comparedWords
+        ))
+      );
+    }
+    return filteredWords;
   }
 }
