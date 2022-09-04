@@ -64,6 +64,10 @@
           margin: 0;
           padding: 10px;
           text-align: center;
+          font-weight: 200;
+          & b {
+            line-height: 200%;
+          }
           @media (max-width: 768px) {
             font-size: 0.8rem;
           }
