@@ -54,7 +54,6 @@ export default class AudiocallController {
       );
     } else if (levelPage) {
       wordListForOptions = await this.api.getWords(level, levelPage);
-
       wordListForQuestions = this.authController.isUserAuthorized()
         ? await this.pickUnlearnedWords(level, levelPage)
         : wordListForOptions;

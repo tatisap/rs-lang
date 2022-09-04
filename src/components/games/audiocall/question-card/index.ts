@@ -10,6 +10,8 @@ import {
 } from '../../../../types';
 import AudioElement from '../../../audio/audio-element';
 import QuestionCardConstructor from './card-constructor';
+import wrongAnswerAudio from '../../../../assets/mp3/wrong-answer.mp3';
+import correctAnswerAudio from '../../../../assets/mp3/correct-answer.mp3';
 
 export default class AudiocallQuestion {
   private uiConstructor: QuestionCardConstructor;
@@ -101,7 +103,7 @@ export default class AudiocallQuestion {
     this.processUserChoice();
   }
 
-  private processUserChoice(chosenOption?: HTMLLIElement): void {
+  private async processUserChoice(chosenOption?: HTMLLIElement): Promise<void> {
     if (this.skipButton.classList.contains('question__skip-button_answer-opened')) return;
     const options: HTMLLIElement[] = Array.from(
       this.optionsListElement.children
@@ -133,6 +135,12 @@ export default class AudiocallQuestion {
         } as IGameQuestionResult,
       })
     );
+
+    if (isUserAnswerCorrect) {
+      await new Audio(correctAnswerAudio).play();
+    } else {
+      await new Audio(wrongAnswerAudio).play();
+    }
 
     this.openAnswer();
   }
