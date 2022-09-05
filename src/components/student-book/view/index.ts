@@ -308,7 +308,6 @@ export default class StudentBookView {
           group: section,
         })),
       ];
-      console.log(userWords);
       const wordCards = document.querySelectorAll(
         '.words__word-section'
       ) as NodeListOf<HTMLDivElement>;

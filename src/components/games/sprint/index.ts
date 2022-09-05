@@ -88,7 +88,6 @@ export default class SprintGame {
       this.finalPage.renderReturnPage(this.container, level);
       return;
     }
-    console.log(level, levelPage, questionInfoList);
 
     this.mainView.renderMainElements();
     this.startTimer();
