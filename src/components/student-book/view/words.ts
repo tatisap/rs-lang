@@ -7,6 +7,7 @@ import AudioElement from '../../audio/audio-element';
 import AuthController from '../../auth/auth-controller';
 import RequestProcessor from '../../request-processor';
 import UserWord from '../../user-word';
+import StudentBookController from '../controller';
 import WordProgressModal from './progress-modal';
 
 export default class WordCard {
@@ -183,6 +184,7 @@ export default class WordCard {
         if (userWordInfo) {
           userWord.update(userWordInfo);
           userWord.markAsHard(Date.now());
+          userWord.resetCorrectAnswersInRow();
           userWord.removeLearnedMark();
           await this.requestProcessor.process<void>(this.wordsAPI.updateUserWord, {
             wordId: (this.word as IWord).id,
@@ -200,6 +202,7 @@ export default class WordCard {
         const learnedWordButton = <HTMLButtonElement>this.container.querySelector('.learned-btn');
         learnedWordButton.classList.remove('learned-btn_active');
       }
+      this.checkPageLearningStatus();
     });
     return buttonDifficult;
   }
@@ -268,6 +271,7 @@ export default class WordCard {
         );
         const userWord: UserWord = new UserWord().update(userWordInfo);
         userWord.removeLearnedMark();
+        userWord.resetCorrectAnswersInRow();
         await this.requestProcessor.process<void>(this.wordsAPI.updateUserWord, {
           wordId: (this.word as IWord).id,
           body: userWord.getUserWordInfo(),
@@ -275,6 +279,7 @@ export default class WordCard {
         buttonLearned.classList.remove('learned-btn__active');
         this.removeDisabledButton('difficult');
       }
+      this.checkPageLearningStatus();
     });
     return buttonLearned;
   }
@@ -295,6 +300,7 @@ export default class WordCard {
 
       const userWord: UserWord = new UserWord().update(userWordInfo);
       userWord.markAsEasy();
+      userWord.resetCorrectAnswersInRow();
 
       await this.requestProcessor.process<void>(this.wordsAPI.updateUserWord, {
         wordId: (this.word as IAggregatedWord)._id,
@@ -327,6 +333,34 @@ export default class WordCard {
     ) as HTMLDivElement;
     if (wordCardsContainer?.children?.length === Numbers.Zero) {
       wordCardsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords;
+    }
+  }
+
+  private checkPageLearningStatus(): void {
+    const wordCards: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.words__word-section') as NodeListOf<HTMLDivElement>
+    );
+
+    const isPageLearned: boolean = wordCards.every((wordCard: HTMLDivElement): boolean => {
+      const learnedButton = wordCard.querySelector('.learned-btn') as HTMLButtonElement;
+      const difficultButton = wordCard.querySelector('.difficult-btn') as HTMLButtonElement;
+      return (
+        learnedButton.classList.contains('learned-btn__active') ||
+        difficultButton.classList.contains('difficult-btn__active')
+      );
+    });
+
+    const wordsContainer = document.querySelector('.words') as HTMLDivElement;
+    const pageNumberElement = document.querySelector('.pagination__current-page') as HTMLDivElement;
+
+    if (isPageLearned) {
+      wordsContainer.classList.add('words_all-words-learned');
+      pageNumberElement.classList.add('current-page_all-words-learned');
+      new StudentBookController().disableGameLinks();
+    } else {
+      wordsContainer.classList.remove('words_all-words-learned');
+      pageNumberElement.classList.remove('current-page_all-words-learned');
+      new StudentBookController().enableGameLinks();
     }
   }
 }

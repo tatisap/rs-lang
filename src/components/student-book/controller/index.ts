@@ -124,4 +124,12 @@ export default class StudentBookController {
       }
     );
   }
+
+  public enableGameLinks(): void {
+    (document.querySelectorAll('.games__game-link') as NodeListOf<HTMLButtonElement>).forEach(
+      (gameLink: HTMLButtonElement): void => {
+        gameLink.removeAttribute('disabled');
+      }
+    );
+  }
 }
