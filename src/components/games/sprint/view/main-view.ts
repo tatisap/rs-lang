@@ -56,7 +56,7 @@ export default class SprintMainView {
     });
     gameCard.append(
       this.createCounterContainer(),
-      this.createQuestionCard(),
+      this.createQuestionCardWraper(),
       this.createAnswerCheckContainer(),
       this.createGameButtons()
     );
@@ -96,23 +96,14 @@ export default class SprintMainView {
     });
   }
 
-  private createQuestionCard(): HTMLDivElement {
-    const questionCard: HTMLDivElement = this.elementConstructor.createUIElement<HTMLDivElement>({
-      tag: 'div',
-      classNames: ['game-card__question-card', 'question-card'],
-    });
-    const word: HTMLParagraphElement =
-      this.elementConstructor.createUIElement<HTMLParagraphElement>({
-        tag: 'p',
-        classNames: ['question-card__word'],
+  private createQuestionCardWraper(): HTMLDivElement {
+    const questionCardWrapper: HTMLDivElement =
+      this.elementConstructor.createUIElement<HTMLDivElement>({
+        tag: 'div',
+        classNames: ['game-card__question-card-wrapper'],
       });
-    const answer: HTMLParagraphElement =
-      this.elementConstructor.createUIElement<HTMLParagraphElement>({
-        tag: 'p',
-        classNames: ['question-card__answer'],
-      });
-    questionCard.append(word, answer);
-    return questionCard;
+    questionCardWrapper.dataset.currentCorrectAnswers = `${Numbers.Zero}`;
+    return questionCardWrapper;
   }
 
   private createAnswerCheckContainer(): HTMLDivElement {
@@ -136,7 +127,7 @@ export default class SprintMainView {
     });
   }
 
-  private createGameButtons(): HTMLDivElement {
+  public createGameButtons(): HTMLDivElement {
     const gameButtons: HTMLDivElement = this.elementConstructor.createUIElement<HTMLDivElement>({
       tag: 'div',
       classNames: ['game-card__buttons', 'buttons'],
