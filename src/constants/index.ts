@@ -28,6 +28,7 @@ export const REQUEST_HEADERS = {
 export const MODAL_TITLES = {
   signIn: 'Вход',
   signUp: 'Регистрация',
+  learningProgress: 'Прогресс изучения',
 };
 
 export const AUTH_FORM = {
@@ -147,6 +148,11 @@ export const BOOK_SECTIONS = {
   },
 };
 
+export const CARD_BUTTON = {
+  difficulty: '#C55',
+  learned: '#53C60B',
+};
+
 export const PAGINATION_BUTTONS = {
   previous: {
     className: 'button-previous',
@@ -235,3 +241,5 @@ export const GAME_FINAL_PAGE_MESSAGES = {
   forBookSections:
     'Все слова с текущей и предыдущих страниц данного раздела изучены или являются сложными. Пожалуйста, вернитесь в учебник и выберите другой раздел.',
 };
+
+export const PROGRESS_TABLE_HEADINGS = ['Игра', 'Верные ответы', 'Неверные ответы'];

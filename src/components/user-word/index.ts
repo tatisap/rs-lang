@@ -53,7 +53,7 @@ export default class UserWord {
     this.dateOfLearning = date;
   }
 
-  public remoreLearnedMark(): void {
+  public removeLearnedMark(): void {
     this.isLearned = false;
     this.dateOfLearning = NO_DATA;
   }

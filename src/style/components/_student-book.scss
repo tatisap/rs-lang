@@ -167,6 +167,107 @@
         font-size: 16px;
       }
 
+      .info__controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        border-bottom: 1px solid $black;
+        .audio-wrapper_word-card,
+        button {
+          @extend %interactive;
+          position: relative;
+          width: 45px;
+          height: 45px;
+          border-radius: 45px;
+          &:hover {
+            outline: 1px solid $black;
+            &::after {
+              display: block;
+            }
+          }
+          &::after {
+            position: absolute;
+            display: none;
+            bottom: -20px;
+            right: -102px;
+            z-index: 10;
+            width: 100px;
+            padding: 5px;
+            border-radius: 10px;
+            background-color: $app-background-color;
+            font-size: 10px;
+            font-weight: 700;
+            animation: fade-in 1s;
+          }
+        }
+        .audio-wrapper_word-card {
+          &::after {
+            content: 'Воспроизвести';
+          }
+          &.audio-wrapper_audio-playing::after {
+            content: 'Остановить';
+          }
+        }
+        button {
+          @extend %normalized-button;
+          display: block;
+          background-color: $app-background-color;
+          background-size: 80% !important;
+          background-position: center;
+          &.difficult-btn {
+            @include image($hard);
+            &::after {
+              content: 'Пометить как сложное'
+            }
+          }
+          &.learned-btn {
+            @include image($done);
+            &::after {
+              content: 'Пометить как изученное'
+            }
+          }
+          &.easy-btn {
+            @include image($easy);
+            &::after {
+              content: 'Удалить из сложных'
+            }
+          }
+          &.difficult-btn__active,
+          &.learned-btn__active,
+          &.easy-btn__active {
+            border: 1px solid $black;
+            &:hover {
+              outline: 0;
+            }
+          }
+          &.difficult-btn__active {
+            &::after {
+              content: 'Сложное слово';
+            }
+          }
+          &.learned-btn__active {
+            &::after {
+              content: 'Слово изучено';
+            }
+          }
+          &.controls__progress-button {
+            @include image($statistic);
+            &::after {
+              content: 'Прогресс изучения'
+            }
+          }
+          &.learned-btn__active ~ .difficult-btn {
+            &:hover {
+              outline: 0;
+              &::after {
+                content: 'Снимите отметку "Изучено", чтобы сделать сложным';
+              }
+            }
+          }
+        }
+      }
+
       .info__text-meaning {
         border-bottom: 1px dashed #c0c0c0;
         padding-bottom: 10px;

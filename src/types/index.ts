@@ -86,7 +86,7 @@ export interface IRequestParameters {
   token: string;
   group?: number;
   wordId?: string;
-  body?: IUserWord | IUserStatistics;
+  body?: Omit<IUserWord, 'wordId'> | IUserStatistics;
 }
 
 export enum Numbers {
@@ -203,6 +203,7 @@ export interface IUserWord {
     dateOfMarkAsHard: number | NoData;
     dataByDates: IUserWordGameDataByDate;
   };
+  wordId: string;
 }
 
 export interface IDailyChartDataByGame {
@@ -260,6 +261,7 @@ export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
 export interface IAggregatedWord extends Omit<IWord, 'id'> {
   _id: string;
   userWord: IUserWord;
+  wordId: string;
 }
 
 export interface IAggregatedWordsElement {
