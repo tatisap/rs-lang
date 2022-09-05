@@ -53,7 +53,7 @@ export default class UserWord {
     this.dateOfLearning = date;
   }
 
-  public remoreLearnedMark(): void {
+  public removeLearnedMark(): void {
     this.isLearned = false;
     this.dateOfLearning = NO_DATA;
   }
@@ -131,15 +131,17 @@ export default class UserWord {
       info.optional.dateOfFirstUse,
       info.optional.dateOfMarkAsHard,
     ];
-    const dateKeys: string[] = Object.keys(info.optional.dataByDates);
-    this.dataByDates = dateKeys.map(
-      (dateKey: string): WordDataByGame =>
-        new WordDataByGame(dateKey).update(info.optional.dataByDates[dateKey])
-    );
+    if (info.optional.dataByDates) {
+      const dateKeys: string[] = Object.keys(info.optional.dataByDates);
+      this.dataByDates = dateKeys.map(
+        (dateKey: string): WordDataByGame =>
+          new WordDataByGame(dateKey).update(info.optional.dataByDates[dateKey])
+      );
+    }
     return this;
   }
 
-  public getUserWordInfo(): IUserWord {
+  public getUserWordInfo(): Omit<IUserWord, 'wordId'> {
     return {
       difficulty: this.difficulty,
       optional: {
