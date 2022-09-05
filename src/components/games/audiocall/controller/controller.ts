@@ -108,7 +108,7 @@ export default class AudiocallController {
 
   private async pickUnlearnedWords(level: number, levelPage: number): Promise<IWord[]> {
     const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
-      this.api.getLearnedWords,
+      this.api.getDifficultAndLearnedWords,
       { group: level }
     );
 
