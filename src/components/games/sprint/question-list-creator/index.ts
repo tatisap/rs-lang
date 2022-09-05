@@ -66,10 +66,7 @@ export default class QuestionListCreator {
     iteration: number,
     page?: number
   ): Promise<void> {
-    let wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(section, iteration));
-    if (this.authController.isUserAuthorized() && page) {
-      wordList = await this.excludeLearnedWords(wordList, section);
-    }
+    const wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(section, iteration));
     let questionsInfo: ISprintQuestionInfo[];
     if (page) {
       questionsInfo = this.randomizer.shuffle<ISprintQuestionInfo>(
@@ -78,20 +75,30 @@ export default class QuestionListCreator {
     } else {
       questionsInfo = this.createMinQuestionInfo(wordList);
     }
+    if (this.authController.isUserAuthorized() && page) {
+      questionsInfo = await this.excludeLearnedWords(questionsInfo, section);
+    }
     questionsInfo.forEach((questionInfo: ISprintQuestionInfo): void => {
       resultingArray.push(questionInfo);
     });
   }
 
-  private async excludeLearnedWords(words: IWord[], section: number): Promise<IWord[]> {
-    const unlearnedWords: IWord[] = [];
+  private async excludeLearnedWords(
+    questionCards: ISprintQuestionInfo[],
+    section: number
+  ): Promise<ISprintQuestionInfo[]> {
+    const unlearnedWords: ISprintQuestionInfo[] = [];
     const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
       this.api.getLearnedWords,
       { group: section }
     );
-    words.forEach((word: IWord): void => {
-      if (!learnedWords.find((learnedWord: IAggregatedWord) => learnedWord._id === word.id)) {
-        unlearnedWords.push(word);
+    questionCards.forEach((questionCard: ISprintQuestionInfo): void => {
+      if (
+        !learnedWords.find(
+          (learnedWord: IAggregatedWord) => learnedWord._id === questionCard.correctAnswer.wordId
+        )
+      ) {
+        unlearnedWords.push(questionCard);
       }
     });
     return unlearnedWords;
