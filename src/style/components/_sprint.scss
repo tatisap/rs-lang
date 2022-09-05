@@ -103,6 +103,9 @@
           &.counter__item_answered {
             background-color: $black;
           }
+          &.counter__item_hidden {
+            display: none;
+          }
         }
       }
 
