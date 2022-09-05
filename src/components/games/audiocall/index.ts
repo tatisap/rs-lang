@@ -10,6 +10,7 @@ import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudiocallController from './controller/controller';
 import AudiocallQuestion from './question-card';
 import GameStartingPage from '../common/starting-page';
+// eslint-disable-next-line import/no-cycle
 import GameFinalPage from '../common/final-page';
 import GameResultProcessor from '../common/result-processor';
 import AuthController from '../../auth/auth-controller';
