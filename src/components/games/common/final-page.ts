@@ -1,6 +1,8 @@
 import {
+  BOOK_SECTIONS,
   DISPLAY_MODES,
   GAME_ANSWER_STATUS,
+  GAME_FINAL_PAGE_MESSAGES,
   GAME_INFO_HEADINGS,
   NO_CONTENT,
 } from '../../../constants';
@@ -19,11 +21,14 @@ export default class GameFinalPage {
 
   private currentLevel: number;
 
+  private currentPage: number;
+
   constructor(gameName: GameName) {
     this.elementCreator = new UIElementsConstructor();
     this.container = this.createFinalPageContainer();
     this.gameName = gameName;
     this.currentLevel = Numbers.Zero;
+    this.currentPage = Numbers.One;
   }
 
   public renderResults(gameContainer: HTMLDivElement, results: IGameQuestionResult[]) {
@@ -47,6 +52,30 @@ export default class GameFinalPage {
       this.createButtonsContainer()
     );
     gameContainer.append(this.container);
+  }
+
+  public renderReturnPage(gameContainer: HTMLDivElement, currentLevel: number) {
+    this.clearContainer();
+
+    if (currentLevel === BOOK_SECTIONS.difficultWords.group) {
+      this.container.append(
+        this.createMessageForReturn(GAME_FINAL_PAGE_MESSAGES.forDifficuldWords)
+      );
+    } else {
+      this.container.append(this.createMessageForReturn(GAME_FINAL_PAGE_MESSAGES.forBookSections));
+    }
+
+    this.container.append(this.createReturnButton());
+
+    gameContainer.append(this.container);
+  }
+
+  private createMessageForReturn(content: string): HTMLDivElement {
+    return this.elementCreator.createUIElement<HTMLDivElement>({
+      tag: 'div',
+      classNames: ['final-page__return'],
+      innerText: content,
+    });
   }
 
   private createFinalPageContainer(): HTMLDivElement {
@@ -137,27 +166,19 @@ export default class GameFinalPage {
       tag: 'button',
       classNames: ['final-page__return-button'],
     });
-    returnButton.addEventListener('click', (): void => this.returnHandler());
+    returnButton.addEventListener('click', (): void => {
+      document.location.reload();
+    });
     return returnButton;
-  }
-
-  private returnHandler(): void {
-    this.closeEndedGame();
-    (document.querySelector('.footer') as HTMLElement).style.display =
-      DISPLAY_MODES.contentFlexVisible;
-    if ((document.getElementById('app') as HTMLElement).classList.contains('page_student-book')) {
-      (document.querySelector('.words') as HTMLElement).style.display =
-        DISPLAY_MODES.contentFlexVisible;
-    }
   }
 
   private repeatHandler(): void {
     switch (this.gameName) {
       case 'audiocall':
-        new GameSwitcher().startNewAudioCallGame(this.currentLevel);
+        new GameSwitcher().startNewAudioCallGame(this.currentLevel, this.currentPage);
         break;
       case 'sprint':
-        new GameSwitcher().startNewSprintGame();
+        new GameSwitcher().startNewSprintGame(this.currentLevel, this.currentPage);
         break;
       default:
         break;
@@ -169,8 +190,9 @@ export default class GameFinalPage {
     this.container.innerHTML = NO_CONTENT;
   }
 
-  public updateCurrentLevel(level: number): void {
+  public updateCurrentLevel(level: number, page: number): void {
     this.currentLevel = level;
+    this.currentPage = page;
   }
 
   private closeEndedGame(): void {
