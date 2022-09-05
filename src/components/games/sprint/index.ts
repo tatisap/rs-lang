@@ -8,9 +8,8 @@ import {
   Numbers,
   StringifiedBoolean,
   ISprintQuestionInfo,
-  MilliSeconds,
 } from '../../../types';
-import { FIVE_SECONDS, GAMES, NO_CONTENT } from '../../../constants';
+import { FIVE_SECONDS, GAMES, NO_CONTENT, ONE_SECOND } from '../../../constants';
 import GameResultProcessor from '../common/result-processor';
 import QuestionListCreator from './question-list-creator';
 import AuthController from '../../auth/auth-controller';
@@ -62,8 +61,8 @@ export default class SprintGame {
       this.clearGameContainer();
       this.clearGameResults();
       const selectedLevel: number = (event as CustomEvent).detail?.selectedLevel;
-      const selectedPage: number | undefined = (event as CustomEvent).detail?.selectedPage;
-      this.finalPage.updateCurrentLevel(selectedLevel);
+      const selectedPage: number = (event as CustomEvent).detail?.selectedPage;
+      this.finalPage.updateCurrentLevel(selectedLevel, selectedPage);
       await this.questionSwitcher(selectedLevel, selectedPage);
     });
 
@@ -79,9 +78,12 @@ export default class SprintGame {
       level,
       levelPage
     );
-    console.log(level, levelPage, questionInfoList);
 
-    console.log(questionInfoList);
+    if (!questionInfoList.length) {
+      this.finalPage.renderReturnPage(this.container, level);
+      return;
+    }
+    console.log(level, levelPage, questionInfoList);
 
     this.mainView.renderMainElements();
     this.startTimer();
@@ -113,7 +115,7 @@ export default class SprintGame {
         setTimeout((): void => {
           this.clearGameContainer();
           this.finalPage.renderResults(this.container, this.gameResults);
-        }, MilliSeconds.One);
+        }, ONE_SECOND);
       } else {
         this.clearQuestionAndButtonsContainers();
         const nextQuestionNumber: number = questionNumber + Numbers.One;
@@ -145,14 +147,14 @@ export default class SprintGame {
         }
         timerId = setTimeout(async (): Promise<void> => {
           await tick(that);
-        }, MilliSeconds.One);
+        }, ONE_SECOND);
         if (newTime === Numbers.Zero) {
           that.clearGameContainer();
           that.finalPage.renderResults(that.container, that.gameResults);
           clearTimeout(timerId);
         }
       },
-      MilliSeconds.One,
+      ONE_SECOND,
       this
     );
   }

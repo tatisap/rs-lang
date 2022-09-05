@@ -53,8 +53,8 @@ export default class AudioCallGame {
       this.clearGameContainer();
       this.clearGameResults();
       const selectedLevel: number = (event as CustomEvent).detail?.selectedLevel;
-      const selectedPage: number | undefined = (event as CustomEvent).detail?.selectedPage;
-      this.finalPage.updateCurrentLevel(selectedLevel);
+      const selectedPage: number = (event as CustomEvent).detail?.selectedPage;
+      this.finalPage.updateCurrentLevel(selectedLevel, selectedPage);
       await this.questionSwitcher(selectedLevel, selectedPage);
     });
 
@@ -70,6 +70,11 @@ export default class AudioCallGame {
       level,
       levelPage
     );
+
+    if (!questionInfoList.length) {
+      this.finalPage.renderReturnPage(this.container, level);
+      return;
+    }
 
     new AudiocallQuestion(questionInfoList[Numbers.Zero], Numbers.Zero).makeQuestion(
       this.container
@@ -119,9 +124,5 @@ export default class AudioCallGame {
 
   private clearGameResults(): void {
     this.gameResults = [];
-  }
-
-  private closeGameContainer(): void {
-    this.container.remove();
   }
 }

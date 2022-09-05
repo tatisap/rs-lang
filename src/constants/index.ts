@@ -228,3 +228,10 @@ export const SPRINT_BREAKPOINTS = {
 };
 
 export const ONE_SECOND = 1000;
+
+export const GAME_FINAL_PAGE_MESSAGES = {
+  forDifficuldWords:
+    'У вас нет сложных слов. Пожалуйста, вернитесь в учебник и выберите другой раздел.',
+  forBookSections:
+    'Все слова с текущей и предыдущих страниц данного раздела изучены или являются сложными. Пожалуйста, вернитесь в учебник и выберите другой раздел.',
+};

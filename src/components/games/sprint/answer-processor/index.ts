@@ -1,5 +1,4 @@
 import {
-  MilliSeconds,
   Numbers,
   SprintPointsPerAnswer,
   ISprintQuestionInfo,
@@ -9,7 +8,7 @@ import {
 import wrongAnswerAudio from '../../../../assets/mp3/wrong-answer.mp3';
 import correctAnswerAudio from '../../../../assets/mp3/correct-answer.mp3';
 import higherPointsAudio from '../../../../assets/mp3/higher-points.mp3';
-import { SPRINT_BREAKPOINTS, SPRINT_INFO } from '../../../../constants';
+import { SPRINT_BREAKPOINTS, SPRINT_INFO, ONE_SECOND } from '../../../../constants';
 
 export default class AnswerProcessor {
   public async init(
@@ -148,7 +147,7 @@ export default class AnswerProcessor {
     setTimeout((): void => {
       gameCard.classList.remove(gameCardStylesClass);
       checker.classList.remove('visible');
-    }, MilliSeconds.One);
+    }, ONE_SECOND);
   }
 
   private updateCounterItems(answerNumber: number): void {
