@@ -271,10 +271,6 @@ export type IAggregatedWordsData = IAggregatedWordsElement[];
 
 export type NoData = 'no_data';
 
-export enum MilliSeconds {
-  One = 1000,
-}
-
 export enum SprintPointsPerAnswer {
   Ten = 10,
   Twenty = 20,

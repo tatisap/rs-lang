@@ -226,3 +226,5 @@ export const SPRINT_BREAKPOINTS = {
   forFourtyPoints: 8,
   forEightyPoints: 12,
 };
+
+export const ONE_SECOND = 1000;
