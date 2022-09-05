@@ -10,7 +10,7 @@ import { IAggregatedWord, ISprintQuestionInfo, IWord, Numbers, PageName } from '
 import Randomizer from '../../../../utils/randomizer';
 import RequestProcessor from '../../../request-processor';
 
-export default class SprintController {
+export default class QuestionListCreator {
   private api: WordsAPI;
 
   private randomizer: Randomizer;

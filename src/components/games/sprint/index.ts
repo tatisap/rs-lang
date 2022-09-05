@@ -12,7 +12,7 @@ import {
 } from '../../../types';
 import { FIVE_SECONDS, GAMES, NO_CONTENT } from '../../../constants';
 import GameResultProcessor from '../common/result-processor';
-import SprintController from './controller';
+import QuestionListCreator from './question-list-creator';
 import AuthController from '../../auth/auth-controller';
 import SprintMainView from './view/main-view';
 import QuestionCardConstructor from './view/card-constructor';
@@ -31,7 +31,7 @@ export default class SprintGame {
 
   private resultProcessor: GameResultProcessor;
 
-  private controller: SprintController;
+  private questionListCreator: QuestionListCreator;
 
   private auth: AuthController;
 
@@ -46,7 +46,7 @@ export default class SprintGame {
     this.gameResults = [];
     this.container = this.createGameContainer();
     this.resultProcessor = new GameResultProcessor();
-    this.controller = new SprintController();
+    this.questionListCreator = new QuestionListCreator();
     this.auth = new AuthController();
     this.mainView = new SprintMainView();
     this.questionCardConstructor = new QuestionCardConstructor();
@@ -75,7 +75,7 @@ export default class SprintGame {
   }
 
   private async questionSwitcher(level: number, levelPage?: number): Promise<void> {
-    const questionInfoList: ISprintQuestionInfo[] = await this.controller.getQuestionList(
+    const questionInfoList: ISprintQuestionInfo[] = await this.questionListCreator.getQuestionList(
       level,
       levelPage
     );
