@@ -9,13 +9,14 @@ import {
 import wrongAnswerAudio from '../../../../assets/mp3/wrong-answer.mp3';
 import correctAnswerAudio from '../../../../assets/mp3/correct-answer.mp3';
 import higherPointsAudio from '../../../../assets/mp3/higher-points.mp3';
+import { SPRINT_BREAKPOINTS, SPRINT_INFO } from '../../../../constants';
 
 export default class AnswerProcessor {
   public async init(
     questionInfo: ISprintQuestionInfo,
     event: MouseEvent | KeyboardEvent
   ): Promise<void> {
-    let isUserAnswerCorrect = true;
+    let isUserAnswerCorrect = false;
     const isQuestionCorrect: boolean = questionInfo.answerOption.isCorrect;
 
     if (event.type === 'click') {
@@ -26,8 +27,6 @@ export default class AnswerProcessor {
           (event.target as HTMLButtonElement).classList.contains('buttons__incorrect'))
       ) {
         isUserAnswerCorrect = true;
-      } else {
-        isUserAnswerCorrect = false;
       }
     }
 
@@ -37,8 +36,6 @@ export default class AnswerProcessor {
         (!isQuestionCorrect && (event as KeyboardEvent).code === KeyboardCode.ArrowLeft)
       ) {
         isUserAnswerCorrect = true;
-      } else {
-        isUserAnswerCorrect = false;
       }
     }
 
@@ -73,21 +70,22 @@ export default class AnswerProcessor {
       correctAnswers += Numbers.One;
       this.updateMainForCorrect();
       switch (true) {
-        case correctAnswers >= Numbers.One && correctAnswers <= Numbers.Three:
+        case correctAnswers < SPRINT_BREAKPOINTS.forTwentyPoints:
           this.updateTotalScore(SprintPointsPerAnswer.Ten);
           this.updateCounterItems(correctAnswers - Numbers.One);
           break;
-        case correctAnswers === Numbers.Four:
+        case correctAnswers === SPRINT_BREAKPOINTS.forTwentyPoints:
           await new Audio(higherPointsAudio).play();
           this.updateTotalScore(SprintPointsPerAnswer.Twenty);
           this.updatePointsInfo(SprintPointsPerAnswer.Twenty, 'counter-info_first-points-increase');
           this.resetCounterItems();
           break;
-        case correctAnswers > Numbers.Four && correctAnswers <= Numbers.Seven:
+        case correctAnswers > SPRINT_BREAKPOINTS.forTwentyPoints &&
+          correctAnswers < SPRINT_BREAKPOINTS.forFourtyPoints:
           this.updateTotalScore(SprintPointsPerAnswer.Twenty);
           this.updateCounterItems(correctAnswers - Numbers.Five);
           break;
-        case correctAnswers === Numbers.Eight:
+        case correctAnswers === SPRINT_BREAKPOINTS.forFourtyPoints:
           await new Audio(higherPointsAudio).play();
           this.updateTotalScore(SprintPointsPerAnswer.Fourty);
           this.updatePointsInfo(
@@ -96,17 +94,18 @@ export default class AnswerProcessor {
           );
           this.resetCounterItems();
           break;
-        case correctAnswers > Numbers.Eight && correctAnswers <= Numbers.Eleven:
+        case correctAnswers > SPRINT_BREAKPOINTS.forFourtyPoints &&
+          correctAnswers < SPRINT_BREAKPOINTS.forEightyPoints:
           this.updateTotalScore(SprintPointsPerAnswer.Fourty);
           this.updateCounterItems(correctAnswers - Numbers.Nine);
           break;
-        case correctAnswers === Numbers.Twelve:
+        case correctAnswers === SPRINT_BREAKPOINTS.forEightyPoints:
           await new Audio(higherPointsAudio).play();
           this.updateTotalScore(SprintPointsPerAnswer.Eighty);
           this.updatePointsInfo(SprintPointsPerAnswer.Eighty, 'counter-info_third-points-increase');
           this.hideExtraCounterItems();
           break;
-        case correctAnswers > Numbers.Twelve:
+        case correctAnswers > SPRINT_BREAKPOINTS.forEightyPoints:
           this.updateTotalScore(SprintPointsPerAnswer.Eighty);
           break;
         default:
@@ -131,35 +130,24 @@ export default class AnswerProcessor {
     const pointPerAnswerContainer: HTMLParagraphElement = document.querySelector(
       '.counter-info__points-per-answer'
     ) as HTMLParagraphElement;
-    const pointPerAnswerText = pointPerAnswerContainer.textContent as string;
-    pointPerAnswerContainer.textContent = `+${SprintPointsPerAnswer.Ten}${pointPerAnswerText.slice(
-      Numbers.Three
-    )}`;
+    pointPerAnswerContainer.textContent = SPRINT_INFO.defaultPointsPerWord;
 
-    const gameCard: HTMLDivElement = document.querySelector('.sprint__game-card') as HTMLDivElement;
-    gameCard.classList.add('sprint__game-card_incorrect');
-    const checkerIncorrect: HTMLDivElement = document.querySelector(
-      '.answer-check__incorrect'
-    ) as HTMLDivElement;
-    checkerIncorrect.classList.add('visible');
-
-    setTimeout((): void => {
-      gameCard.classList.remove('sprint__game-card_incorrect');
-      checkerIncorrect.classList.remove('visible');
-    }, MilliSeconds.One);
+    this.styleOnAnswer('sprint__game-card_incorrect', 'answer-check__incorrect');
   }
 
   private updateMainForCorrect(): void {
+    this.styleOnAnswer('sprint__game-card_correct', 'answer-check__correct');
+  }
+
+  private styleOnAnswer(gameCardStylesClass: string, checkerClass: string): void {
     const gameCard: HTMLDivElement = document.querySelector('.sprint__game-card') as HTMLDivElement;
-    gameCard.classList.add('sprint__game-card_correct');
-    const checkerCorrect: HTMLDivElement = document.querySelector(
-      '.answer-check__correct'
-    ) as HTMLDivElement;
-    checkerCorrect.classList.add('visible');
+    gameCard.classList.add(gameCardStylesClass);
+    const checker: HTMLDivElement = document.querySelector(`.${checkerClass}`) as HTMLDivElement;
+    checker.classList.add('visible');
 
     setTimeout((): void => {
-      gameCard.classList.remove('sprint__game-card_correct');
-      checkerCorrect.classList.remove('visible');
+      gameCard.classList.remove(gameCardStylesClass);
+      checker.classList.remove('visible');
     }, MilliSeconds.One);
   }
 
@@ -215,9 +203,6 @@ export default class AnswerProcessor {
     const pointPerAnswerContainer: HTMLParagraphElement = document.querySelector(
       '.counter-info__points-per-answer'
     ) as HTMLParagraphElement;
-    const pointPerAnswerText = pointPerAnswerContainer.textContent as string;
-    pointPerAnswerContainer.textContent = `+${pointsForCorrect}${pointPerAnswerText.slice(
-      Numbers.Three
-    )}`;
+    pointPerAnswerContainer.textContent = `+${pointsForCorrect} ${SPRINT_INFO.pointsPerWord}`;
   }
 }

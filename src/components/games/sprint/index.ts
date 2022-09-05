@@ -111,7 +111,7 @@ export default class SprintGame {
 
       if (questionNumber === questionInfoList.length - Numbers.One) {
         setTimeout((): void => {
-          (document.querySelector('.game.sprint') as HTMLDivElement).innerHTML = NO_CONTENT;
+          this.clearGameContainer();
           this.finalPage.renderResults(this.container, this.gameResults);
         }, MilliSeconds.One);
       } else {
@@ -147,7 +147,7 @@ export default class SprintGame {
           await tick(that);
         }, MilliSeconds.One);
         if (newTime === Numbers.Zero) {
-          (document.querySelector('.game.sprint') as HTMLDivElement).innerHTML = NO_CONTENT;
+          that.clearGameContainer();
           that.finalPage.renderResults(that.container, that.gameResults);
           clearTimeout(timerId);
         }

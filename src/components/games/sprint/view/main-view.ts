@@ -56,7 +56,7 @@ export default class SprintMainView {
     });
     gameCard.append(
       this.createCounterContainer(),
-      this.createQuestionCardWraper(),
+      this.createQuestionCardWrapper(),
       this.createAnswerCheckContainer(),
       this.createGameButtons()
     );
@@ -74,7 +74,7 @@ export default class SprintMainView {
       this.elementConstructor.createUIElement<HTMLParagraphElement>({
         tag: 'p',
         classNames: ['counter-info__points-per-answer'],
-        innerText: SPRINT_INFO.pointsPerPage,
+        innerText: SPRINT_INFO.defaultPointsPerWord,
       });
     counterContainer.append(this.createCounters(), pointsInfo);
     return counterContainer;
@@ -96,7 +96,7 @@ export default class SprintMainView {
     });
   }
 
-  private createQuestionCardWraper(): HTMLDivElement {
+  private createQuestionCardWrapper(): HTMLDivElement {
     const questionCardWrapper: HTMLDivElement =
       this.elementConstructor.createUIElement<HTMLDivElement>({
         tag: 'div',

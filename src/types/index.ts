@@ -94,13 +94,8 @@ export enum Numbers {
   One,
   Two,
   Three,
-  Four,
-  Five,
-  Seven = 7,
-  Eight,
-  Nine,
-  Eleven = 11,
-  Twelve,
+  Five = 5,
+  Nine = 9,
 }
 
 export enum StringifiedBoolean {

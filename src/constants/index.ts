@@ -210,7 +210,8 @@ export const AUDIOCALL_QUESTIONS_NUMBER = 20;
 
 export const SPRINT_INFO = {
   pointsTotal: 'Общее количество баллов:',
-  pointsPerPage: '+10 баллов за слово',
+  defaultPointsPerWord: '+10 баллов за слово',
+  pointsPerWord: 'баллов за слово',
   maxSeconds: '60',
   incorrect: 'Неверно',
   correct: 'Верно',
@@ -219,3 +220,9 @@ export const SPRINT_INFO = {
 };
 
 export const FIVE_SECONDS = 5;
+
+export const SPRINT_BREAKPOINTS = {
+  forTwentyPoints: 4,
+  forFourtyPoints: 8,
+  forEightyPoints: 12,
+};
