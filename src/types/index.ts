@@ -93,6 +93,14 @@ export enum Numbers {
   Zero = 0,
   One,
   Two,
+  Three,
+  Four,
+  Five,
+  Seven = 7,
+  Eight,
+  Nine,
+  Eleven = 11,
+  Twelve,
 }
 
 export enum StringifiedBoolean {
@@ -270,4 +278,11 @@ export type NoData = 'no_data';
 
 export enum MilliSeconds {
   One = 1000,
+}
+
+export enum SprintPointsPerAnswer {
+  Ten = 10,
+  Twenty = 20,
+  Fourty = 40,
+  Eighty = 80,
 }
