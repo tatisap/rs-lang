@@ -48,10 +48,6 @@ export default class UserWord {
     this.dateOfMarkAsHard = timestamp;
   }
 
-  public markHard(): void {
-    this.difficulty = 'hard';
-  }
-
   public markAsLearned(date: string): void {
     this.isLearned = true;
     this.dateOfLearning = date;

@@ -227,8 +227,15 @@
               content: 'Пометить как изученное'
             }
           }
+          &.easy-btn {
+            @include image($easy);
+            &::after {
+              content: 'Удалить из сложных'
+            }
+          }
           &.difficult-btn__active,
-          &.learned-btn__active {
+          &.learned-btn__active,
+          &.easy-btn__active {
             border: 1px solid $black;
             &:hover {
               outline: 0;

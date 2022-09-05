@@ -92,12 +92,19 @@ export default class WordCard {
     audio.init().addClassWithModifier('word-card');
     controlsButton.append(audio.getAudioElement());
 
-    if (this.authController.isUserAuthorized()) {
+    if (
+      (document.querySelector('.superhero') as HTMLElement).classList.contains('active') &&
+      this.authController.isUserAuthorized()
+    ) {
       controlsButton.append(
         this.createLearnedWordButton(),
-        localStorage.getItem('group') === '6'
-          ? this.createEasyWordButton()
-          : this.createDifficultWordButton(),
+        this.createEasyWordButton(),
+        this.createProgressButton()
+      );
+    } else {
+      controlsButton.append(
+        this.createLearnedWordButton(),
+        this.createDifficultWordButton(),
         this.createProgressButton()
       );
     }
@@ -290,7 +297,7 @@ export default class WordCard {
             wordId: (this.word as IWord).id,
             body: userWord.getUserWordInfo(),
           });
-          if (localStorage.getItem('group') === '6') {
+          if ((document.querySelector('.superhero') as HTMLElement).classList.contains('active')) {
             this.disableDifficult('learned');
           } else {
             this.disableDifficult('difficult');
@@ -336,6 +343,9 @@ export default class WordCard {
       );
 
       const userWord: UserWord = new UserWord().update(userWordInfo);
+      userWord.markAsEasy();
+      userWord.remoreLearnedMark();
+
       await this.requestProcessor.process<void>(this.wordsAPI.updateUserWord, {
         wordId: (this.word as IWord).id,
         body: userWord.getUserWordInfo(),
