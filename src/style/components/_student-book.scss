@@ -190,12 +190,12 @@
             position: absolute;
             display: none;
             bottom: -20px;
-            right: -105px;
+            right: -100px;
             z-index: 10;
             width: 100px;
             padding: 5px;
             border-radius: 10px;
-            background-color: $grey-background-color;
+            background-color: $app-background-color;
             font-size: 10px;
             font-weight: 700;
             animation: fade-in 1s;
@@ -254,6 +254,12 @@
           &.easy-btn__active {
             &::after {
               content: 'Слово изучено';
+            }
+          }
+          &.controls__progress-button {
+            @include image($statistic);
+            &::after {
+              content: 'Прогресс изучения'
             }
           }
         }

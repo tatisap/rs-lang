@@ -143,7 +143,7 @@ export default class UserWord {
     return this;
   }
 
-  public getUserWordInfo(): IUserWord {
+  public getUserWordInfo(): Omit<IUserWord, 'wordId'> {
     return {
       difficulty: this.difficulty,
       optional: {

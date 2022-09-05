@@ -1,12 +1,13 @@
 import WordsAPI from '../../../api/words-api';
-import { BASE_URL, BOOK_SECTIONS } from '../../../constants';
-import { IWord, IAggregatedWord, IUserWord, IUserWordData } from '../../../types';
+import { BASE_URL } from '../../../constants';
+import { IWord, IAggregatedWord, IUserWord } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import AudioElement from '../../audio/audio-element';
 import AuthController from '../../auth/auth-controller';
 import RequestProcessor from '../../request-processor';
 import UserWord from '../../user-word';
+import WordProgressModal from './progress-modal';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
@@ -91,11 +92,14 @@ export default class WordCard {
     audio.init().addClassWithModifier('word-card');
     controlsButton.append(audio.getAudioElement());
 
-    const superhero = (document.querySelector('.superhero') as HTMLElement).classList.contains('active');
-    if (superhero && this.authController.isUserAuthorized()) {
-      controlsButton.append(this.createLearnedWordButton(), this.createEasyWordButton());
-    } else {
-      controlsButton.append(this.createLearnedWordButton(), this.createDifficultWordButton());
+    if (this.authController.isUserAuthorized()) {
+      controlsButton.append(
+        this.createLearnedWordButton(),
+        (document.querySelector('.superhero') as HTMLElement).classList.contains('active')
+          ? this.createEasyWordButton()
+          : this.createDifficultWordButton(),
+        this.createProgressButton()
+      );
     }
     return controlsButton;
   }
@@ -153,7 +157,7 @@ export default class WordCard {
   }
 
   private async checkHardLearnedWord() {
-    const userWords: IUserWordData[] = await this.requestProcessor.process<IUserWordData[]>(
+    const userWords: IUserWord[] = await this.requestProcessor.process<IUserWord[]>(
       this.wordsAPI.getUserWords
     );
 
@@ -199,7 +203,7 @@ export default class WordCard {
         );
         this.disableLearned(learnedWordButton);
 
-        const userWords: IUserWordData[] = await this.requestProcessor.process<IUserWordData[]>(
+        const userWords: IUserWord[] = await this.requestProcessor.process<IUserWord[]>(
           this.wordsAPI.getUserWords
         );
 
@@ -264,7 +268,7 @@ export default class WordCard {
 
         this.disableDifficult('difficult');
 
-        const userWords: IUserWordData[] = await this.requestProcessor.process<IUserWordData[]>(
+        const userWords: IUserWord[] = await this.requestProcessor.process<IUserWord[]>(
           this.wordsAPI.getUserWords
         );
 
@@ -340,5 +344,20 @@ export default class WordCard {
       });
     });
     return buttonEasy;
+  }
+
+  private createProgressButton(): HTMLButtonElement {
+    const progressButton: HTMLButtonElement =
+      this.elementCreator.createUIElement<HTMLButtonElement>({
+        tag: 'button',
+        classNames: ['controls__progress-button'],
+      });
+    progressButton.addEventListener('click', async (event: Event): Promise<void> => {
+      const { wordId } = (
+        (event.target as HTMLButtonElement).closest('.words__word-section') as HTMLDivElement
+      ).dataset;
+      new WordProgressModal().open(wordId as string);
+    });
+    return progressButton;
   }
 }
