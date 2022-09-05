@@ -300,14 +300,12 @@ export default class StudentBookView {
   private async updateWordCardButtonsStatus(section: number): Promise<void> {
     if (this.authController.isUserAuthorized()) {
       if (section === BOOK_SECTIONS.difficultWords.group) return;
-      const userWords: IAggregatedWord[] = [
-        ...(await this.requestProcessor.process<IAggregatedWord[]>(
-          this.wordsAPI.getDifficultWords
-        )),
-        ...(await this.requestProcessor.process<IAggregatedWord[]>(this.wordsAPI.getLearnedWords, {
+      const userWords: IAggregatedWord[] = await this.requestProcessor.process<IAggregatedWord[]>(
+        this.wordsAPI.getDifficultAndLearnedWords,
+        {
           group: section,
-        })),
-      ];
+        }
+      );
       console.log(userWords);
       const wordCards = document.querySelectorAll(
         '.words__word-section'

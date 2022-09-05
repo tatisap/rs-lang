@@ -89,7 +89,7 @@ export default class QuestionListCreator {
   ): Promise<ISprintQuestionInfo[]> {
     const unlearnedWords: ISprintQuestionInfo[] = [];
     const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
-      this.api.getLearnedWords,
+      this.api.getDifficultAndLearnedWords,
       { group: section }
     );
     questionCards.forEach((questionCard: ISprintQuestionInfo): void => {
