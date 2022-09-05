@@ -45,7 +45,7 @@ export default class MainPageView {
       this.elementCreator.createUIElement<HTMLParagraphElement>({
         tag: 'p',
         classNames: ['member__description'],
-        innerText: teamMember.description,
+        innerHTML: teamMember.description,
       });
     const memberElement: HTMLLIElement = this.elementCreator.createUIElement<HTMLLIElement>({
       tag: 'li',
