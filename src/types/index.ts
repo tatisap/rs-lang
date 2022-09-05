@@ -93,6 +93,9 @@ export enum Numbers {
   Zero = 0,
   One,
   Two,
+  Three,
+  Five = 5,
+  Nine = 9,
 }
 
 export enum StringifiedBoolean {
@@ -123,6 +126,8 @@ export enum StatusCode {
 export enum KeyboardCode {
   Space = 'Space',
   Enter = 'Enter',
+  ArrowLeft = 'ArrowLeft',
+  ArrowRight = 'ArrowRight',
 }
 
 export interface IBookSectionInfo {
@@ -157,6 +162,16 @@ export interface IAudiocallAnswerOption {
 export interface IAudiocallQuestionInfo {
   correctAnswer: IGameCorrectAnswer;
   answerOptions: IAudiocallAnswerOption[];
+}
+
+export interface ISprintAnswerOption {
+  wordTranslation: string;
+  isCorrect: boolean;
+}
+
+export interface ISprintQuestionInfo {
+  correctAnswer: IGameCorrectAnswer;
+  answerOption: ISprintAnswerOption;
 }
 
 export interface IGameQuestionResult {
@@ -257,3 +272,10 @@ export interface IAggregatedWordsElement {
 export type IAggregatedWordsData = IAggregatedWordsElement[];
 
 export type NoData = 'no_data';
+
+export enum SprintPointsPerAnswer {
+  Ten = 10,
+  Twenty = 20,
+  Fourty = 40,
+  Eighty = 80,
+}
