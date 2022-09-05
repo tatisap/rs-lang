@@ -9,6 +9,7 @@ import {
 import { IAggregatedWord, ISprintQuestionInfo, IWord, Numbers, PageName } from '../../../../types';
 import Randomizer from '../../../../utils/randomizer';
 import RequestProcessor from '../../../request-processor';
+import AuthController from '../../../auth/auth-controller';
 
 export default class QuestionListCreator {
   private api: WordsAPI;
@@ -17,10 +18,13 @@ export default class QuestionListCreator {
 
   private requestProcessor: RequestProcessor;
 
+  private authController: AuthController;
+
   constructor() {
     this.api = new WordsAPI();
     this.randomizer = new Randomizer();
     this.requestProcessor = new RequestProcessor();
+    this.authController = new AuthController();
   }
 
   public async getQuestionList(level: number, levelPage?: number): Promise<ISprintQuestionInfo[]> {
@@ -62,7 +66,10 @@ export default class QuestionListCreator {
     iteration: number,
     page?: number
   ): Promise<void> {
-    const wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(section, iteration));
+    let wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(section, iteration));
+    if (this.authController.isUserAuthorized()) {
+      wordList = await this.excludeLearnedWords(wordList, section);
+    }
     let questionsInfo: ISprintQuestionInfo[];
     if (page) {
       questionsInfo = this.randomizer.shuffle<ISprintQuestionInfo>(
@@ -74,6 +81,20 @@ export default class QuestionListCreator {
     questionsInfo.forEach((questionInfo: ISprintQuestionInfo): void => {
       resultingArray.push(questionInfo);
     });
+  }
+
+  private async excludeLearnedWords(words: IWord[], section: number): Promise<IWord[]> {
+    const unlearnedWords: IWord[] = [];
+    const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
+      this.api.getLearnedWords,
+      { group: section }
+    );
+    words.forEach((word: IWord): void => {
+      if (!learnedWords.find((learnedWord: IAggregatedWord) => learnedWord._id === word.id)) {
+        unlearnedWords.push(word);
+      }
+    });
+    return unlearnedWords;
   }
 
   private createMinQuestionInfo(
