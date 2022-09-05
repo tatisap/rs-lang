@@ -109,14 +109,14 @@ export default class SprintGame {
             .isUserAnswerCorrect === StringifiedBoolean.True,
       });
 
-      this.clearQuestionAndButtonsContainers();
-
       if (questionNumber === questionInfoList.length - Numbers.One) {
-        (document.querySelector('.game.sprint') as HTMLDivElement).innerHTML = NO_CONTENT;
-        this.finalPage.renderResults(this.container, this.gameResults);
+        setTimeout((): void => {
+          (document.querySelector('.game.sprint') as HTMLDivElement).innerHTML = NO_CONTENT;
+          this.finalPage.renderResults(this.container, this.gameResults);
+        }, MilliSeconds.One);
       } else {
+        this.clearQuestionAndButtonsContainers();
         const nextQuestionNumber: number = questionNumber + Numbers.One;
-        console.log(nextQuestionNumber);
         const buttons: HTMLDivElement = this.mainView.createGameButtons();
         (document.querySelector('.sprint__game-card') as HTMLDivElement).append(buttons);
         this.questionCardConstructor.createQuestionCardWraper(
