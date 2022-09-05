@@ -42,7 +42,9 @@ export default class AnswerProcessor {
       }
     }
 
-    console.log(isUserAnswerCorrect);
+    (
+      document.querySelector('.game-card__question-card-wrapper') as HTMLDivElement
+    ).dataset.isUserAnswerCorrect = `${isUserAnswerCorrect}`;
 
     (document.querySelector('.game.sprint') as HTMLDivElement).dispatchEvent(
       new CustomEvent('question-answered', {
@@ -67,7 +69,6 @@ export default class AnswerProcessor {
       '.game-card__question-card-wrapper'
     ) as HTMLDivElement;
     let correctAnswers = Number(questionWrapper.dataset.currentCorrectAnswers as string);
-    questionWrapper.dataset.isUserAnswerCorrect = `${answer}`;
     if (answer) {
       correctAnswers += Numbers.One;
       this.updateMainForCorrect();
@@ -115,7 +116,6 @@ export default class AnswerProcessor {
       correctAnswers = Numbers.Zero;
       this.updateForIncorrect();
     }
-    console.log(correctAnswers);
     questionWrapper.dataset.currentCorrectAnswers = `${correctAnswers}`;
   }
 
