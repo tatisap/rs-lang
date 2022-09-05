@@ -51,18 +51,12 @@
         }
       }
       &:nth-child(3) {
-        @include image($vocabulary);
-        &::after {
-          content: 'Словарь';
-        }
-      }
-      &:nth-child(4) {
         @include image($game);
         &::after {
           content: 'Игры';
         }
       }
-      &:nth-child(5) {
+      &:nth-child(4) {
         @include image($statistic);
         &::after {
           content: 'Статистика';

@@ -10,6 +10,8 @@
     position: relative;
     display: block;
     padding: 10px 10px 10px 37px;
+    background: none;
+    border: none;
     font-family: $balsamiq;
     font-size: 20px;
     &::before {
@@ -24,6 +26,13 @@
     &:hover,
     &:active {
       transform: scale(1.05);
+    }
+    &:disabled:hover,
+    &:disabled:active {
+      transform: none;
+    }
+    &:disabled {
+      cursor: not-allowed;
     }
   }
 }
@@ -86,14 +95,20 @@
 }
 
 .page__words {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
-  min-height: 50vh;
+  min-height: 100vh;
   margin: 20px 0 0 0;
   padding: 20px;
   border-radius: 5px;
+  text-align: center;
+
+  &.difficult-words {
+    min-height: 50vh;
+  }
 
   .words__word-section {
     display: flex;
@@ -105,6 +120,7 @@
     background: rgb(255, 255, 255, 0.5);
     border-radius: 10px;
     font-family: $lexend;
+    animation: fade-in 1s;
     @media (max-width: 1300px) {
       width: 30%;
     }
@@ -142,32 +158,98 @@
       .info__title-container {
         display: flex;
         align-items: center;
-        gap: 20px;
       }
 
       .info__title {
         display: flex;
-        gap: 20px;
-        font-size: 16px;
-        margin: 0;
+        margin: 0 auto;
         padding: 13px 0 10px;
+        font-size: 16px;
       }
 
       .info__controls {
         display: flex;
-        gap:10px;
-        .controls__difficult-btn {
-          @extend %normalized-button;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+        border-bottom: 1px solid $black;
+        .audio-wrapper_word-card,
+        button {
           @extend %interactive;
-          width: 35px;
-          height: 35px;
+          position: relative;
+          width: 45px;
+          height: 45px;
+          border-radius: 45px;
+          &:hover {
+            outline: 1px solid $black;
+            &::after {
+              display: block;
+            }
+          }
+          &::after {
+            position: absolute;
+            display: none;
+            bottom: -20px;
+            right: -100px;
+            z-index: 10;
+            width: 100px;
+            padding: 5px;
+            border-radius: 10px;
+            background-color: $app-background-color;
+            font-size: 10px;
+            font-weight: 700;
+            animation: fade-in 1s;
+          }
         }
-        .difficult-btn {
-          @include image($hard);
+        .audio-wrapper_word-card {
+          &::after {
+            content: 'Воспроизвести';
+          }
+          &.audio-wrapper_audio-playing::after {
+            content: 'Остановить';
+          }
         }
-        .learned-btn {
-          @extend .controls__difficult-btn;
-          @include image($done);
+        button {
+          @extend %normalized-button;
+          display: block;
+          background-color: $app-background-color;
+          background-size: 80% !important;
+          background-position: center;
+          &.difficult-btn {
+            @include image($hard);
+            &::after {
+              content: 'Пометить как сложное'
+            }
+          }
+          &.learned-btn {
+            @include image($done);
+            &::after {
+              content: 'Пометить как изученное'
+            }
+          }
+          &.difficult-btn__active,
+          &.learned-btn__active {
+            border: 1px solid $black;
+            &:hover {
+              outline: 0;
+            }
+          }
+          &.difficult-btn__active {
+            &::after {
+              content: 'Сложное слово';
+            }
+          }
+          &.learned-btn__active {
+            &::after {
+              content: 'Слово изучено';
+            }
+          }
+          &.controls__progress-button {
+            @include image($statistic);
+            &::after {
+              content: 'Прогресс изучения'
+            }
+          }
         }
       }
 

@@ -8,3 +8,10 @@
   border: 2px solid $color;
   background-color: $color;
 }
+
+@mixin loader-background($color) {
+  background-image: linear-gradient(to right, $black 10%, $color 50%);
+  &::after {
+    background: $color;
+  }
+}

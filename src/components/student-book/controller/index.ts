@@ -2,6 +2,7 @@ import {
   BOOK_SECTIONS,
   DISPLAY_MODES,
   MAX_PAGES_IN_BOOK_SECTION,
+  NO_CONTENT,
   STORAGE_KEYS,
 } from '../../../constants';
 import { IBookSectionInfo, Numbers } from '../../../types';
@@ -114,5 +115,13 @@ export default class StudentBookController {
   public removeSectionAndPageFromStorage(): void {
     localStorage.removeItem(STORAGE_KEYS.bookSection);
     localStorage.removeItem(STORAGE_KEYS.bookPage);
+  }
+
+  public disableGameLinks(): void {
+    (document.querySelectorAll('.games__game-link') as NodeListOf<HTMLButtonElement>).forEach(
+      (gameLink: HTMLButtonElement): void => {
+        gameLink.setAttribute('disabled', NO_CONTENT);
+      }
+    );
   }
 }

@@ -13,6 +13,8 @@ $blue-tab-color: #DDFBFF;
 $indigo-tab-color: #D5EAFE;
 $violet-tab-color: #E2DDFF;
 $blackout: rgba(33, 33, 33, 0.5);
+$box-shadow-difficult: 0px 5px 10px 0px rgba(233, 47, 47, 0.5);
+$box-shadow-easy: 0px 5px 10px 0px rgba(106, 233, 47, 0.5);
 
 $fedoka: 'Fedoka One', sans-serif;
 $balsamiq: 'Balsamiq Sans', cursive;
@@ -42,8 +44,8 @@ $statistic: url('./assets/svg/statistic.svg');
 $student-book: url('./assets/svg/student-book.svg');
 $tati: url('./assets/svg/tati.svg');
 $vadim: url('./assets/svg/vadim.svg');
-$vocabulary: url('./assets/svg/vocabulary.svg');
 
 $main-page-img: url('./assets/img/main-page.png');
 $game-page-img: url('./assets/img/game-page.png');
-$game-landscape: url('./assets/img/game-landscape.jpg');
+$game-landscape: url('./assets/img/game-landscape.jpeg');
+$game-waterfall: url('./assets/img/game-waterfall.jpeg');

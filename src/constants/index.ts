@@ -28,6 +28,7 @@ export const REQUEST_HEADERS = {
 export const MODAL_TITLES = {
   signIn: 'Вход',
   signUp: 'Регистрация',
+  learningProgress: 'Прогресс изучения',
 };
 
 export const AUTH_FORM = {
@@ -95,12 +96,10 @@ export const GAMES = {
   audiocall: {
     name: 'Аудиовызов',
     className: 'audiocall',
-    link: '',
   },
   sprint: {
     name: 'Спринт',
     className: 'sprint',
-    link: '',
   },
 };
 
@@ -149,6 +148,11 @@ export const BOOK_SECTIONS = {
   },
 };
 
+export const CARD_BUTTON = {
+  difficulty: '#C55',
+  learned: '#53C60B',
+};
+
 export const PAGINATION_BUTTONS = {
   previous: {
     className: 'button-previous',
@@ -188,3 +192,24 @@ export const DATE_KEY_SEPARATOR = '/';
 export const MS_PER_DAY = 86400000;
 
 export const UNAUTHORIZED_MESSAGE = 'Для просмотра этой страницы необходимо авторизироваться';
+
+export const DIFFICULT_WORDS_CONTAINER_MESSAGES = {
+  forUnauthorized: 'Доступно только авторизованным пользователям',
+  noWords:
+    'Вы ещё не отмечали слова как сложные. Для того, чтобы сделать это, нажмите на кнопку "Добавить в сложные" рядом со словом',
+};
+
+export const MAX_WORDS_IN_BOOK = 3600;
+
+export const NUMBER_OF_CORRECT_ANSWERS_TO_LEARN = {
+  forEasyWords: 3,
+  forHardWords: 5,
+};
+
+export const NO_DATA = 'no_data';
+
+export const ERRORS_MESSAGES = {
+  unauthorized: 'Unauthorized',
+};
+
+export const PROGRESS_TABLE_HEADINGS = ['Игра', 'Верные ответы', 'Неверные ответы'];

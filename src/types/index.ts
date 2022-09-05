@@ -85,7 +85,7 @@ export interface IRequestParameters {
   userId: string;
   token: string;
   wordId?: string;
-  body?: IUserWord;
+  body?: Omit<IUserWord, 'wordId'> | IUserStatistics;
 }
 
 export enum Numbers {
@@ -133,7 +133,7 @@ export interface IBookSectionInfo {
 
 export type PageName = 'main' | 'studentBook' | 'games' | 'statistic';
 
-export type GameName = 'audiocall';
+export type GameName = 'audiocall' | 'sprint';
 
 export interface IGameInfo {
   name: string;
@@ -163,11 +163,13 @@ export interface IGameQuestionResult {
   correctAnswer: IGameCorrectAnswer;
 }
 
+export interface IAnswerCounter {
+  correctAnswersCounter: number;
+  incorrectAnswersCounter: number;
+}
+
 export type IUserWordDataByGame = {
-  [game in GameName]: {
-    correctAnswersCounter: number;
-    incorrectAnswersCounter: number;
-  };
+  [game in GameName]: IAnswerCounter;
 };
 
 export interface IUserWordGameDataByDate {
@@ -178,13 +180,19 @@ export interface IUserWord {
   difficulty: 'hard' | 'easy';
   optional: {
     isLearned: boolean;
-    dateOfLearning: string;
+    dateOfLearning: string | NoData;
     correctAnswersInRow: number;
-    gameNameOfFirstUse: GameName;
-    dateOfFirstUse: string;
+    gameNameOfFirstUse: GameName | NoData;
+    dateOfFirstUse: string | NoData;
+    dateOfMarkAsHard: number | NoData;
     dataByDates: IUserWordGameDataByDate;
   };
+  wordId: string;
 }
+
+// export interface IUserWordData extends IUserWord {
+//   wordId?: string;
+// }
 
 export interface IDailyChartDataByGame {
   gameLabel: string;
@@ -218,12 +226,37 @@ export interface IProcessedStatisticInfo {
 
 export interface IUserStatistics {
   optional: {
-    [date: string]: {
-      maxCorrectAnswerSeries: {
-        [game in GameName]: number;
-      };
+    currentCorrectAnswerSeries: number;
+    dataByDate: IUserStatisticsByDate;
+  };
+}
+
+export interface IUserStatisticsByDate {
+  [date: string]: {
+    maxCorrectAnswerSeries: {
+      [game in GameName]: number;
     };
   };
 }
 
+export interface IUserDayStatistic {
+  dateKey: string;
+  maxCorrectAnswerSeries: IUserStatisticsByDate['date']['maxCorrectAnswerSeries'];
+}
+
 export type StatisticalDateKeysType = 'dateOfLearning' | 'dateOfFirstUse';
+
+export interface IAggregatedWord extends Omit<IWord, 'id'> {
+  _id: string;
+  userWord: IUserWord;
+  wordId: string;
+}
+
+export interface IAggregatedWordsElement {
+  paginatedResults: IAggregatedWord[];
+  totalCount: { count: number }[];
+}
+
+export type IAggregatedWordsData = IAggregatedWordsElement[];
+
+export type NoData = 'no_data';
