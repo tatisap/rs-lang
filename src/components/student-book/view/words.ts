@@ -169,22 +169,18 @@ export default class WordCard {
     );
 
     userWords.forEach(() => {
-      if (this.difficult === 'hard') {
+      if (this.difficult) {
         const difficultWordButton: HTMLDivElement = <HTMLDivElement>(
           document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .difficult-btn`)
         );
         difficultWordButton.classList.add('difficult-btn__active');
         difficultWordButton.setAttribute('disabled', 'true');
       }
-      if (this.difficult === 'easy') {
+      if (!this.difficult) {
         const learnedWordButton: HTMLDivElement = <HTMLDivElement>(
           document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .learned-btn`)
         );
-        const difficultWordButton: HTMLDivElement = <HTMLDivElement>(
-          document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .difficult-btn`)
-        );
         learnedWordButton.classList.add('difficult-btn__active');
-        difficultWordButton.setAttribute('disabled', 'true');
         learnedWordButton.setAttribute('disabled', 'true');
       }
     });
