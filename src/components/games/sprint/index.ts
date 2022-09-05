@@ -74,10 +74,15 @@ export default class SprintGame {
   }
 
   private async questionSwitcher(level: number, levelPage?: number): Promise<void> {
+    const waitingMessageContainer: HTMLHeadingElement =
+      this.mainView.createWaitingMessageContainer();
+    this.container.append(waitingMessageContainer);
+
     const questionInfoList: ISprintQuestionInfo[] = await this.questionListCreator.getQuestionList(
       level,
       levelPage
     );
+    waitingMessageContainer.remove();
 
     if (!questionInfoList.length) {
       this.finalPage.renderReturnPage(this.container, level);
