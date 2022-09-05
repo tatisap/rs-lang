@@ -1,5 +1,5 @@
 import WordsAPI from '../../../api/words-api';
-import { BASE_URL, DIFFICULT_WORDS_CONTAINER_MESSAGES } from '../../../constants';
+import { BASE_URL, DIFFICULT_WORDS_CONTAINER_MESSAGES, NO_CONTENT } from '../../../constants';
 import { IWord, IAggregatedWord, IUserWord, Numbers } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
@@ -171,7 +171,7 @@ export default class WordCard {
       });
 
     buttonDifficult.addEventListener('click', async () => {
-      if (!buttonDifficult.classList.contains('learned-btn__active')) {
+      if (!buttonDifficult.classList.contains('difficult-btn__active')) {
         const userWords: IUserWord[] = await this.requestProcessor.process<IUserWord[]>(
           this.wordsAPI.getUserWords
         );
@@ -206,7 +206,7 @@ export default class WordCard {
 
   private disableButton(buttonType: string): void {
     const button = <HTMLButtonElement>this.container.querySelector(`.${buttonType}-btn`);
-    button.setAttribute('disabled', 'true');
+    button.setAttribute('disabled', NO_CONTENT);
   }
 
   private removeDisabledButton(buttonType: string): void {

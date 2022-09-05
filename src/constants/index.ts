@@ -243,4 +243,3 @@ export const GAME_FINAL_PAGE_MESSAGES = {
 };
 
 export const PROGRESS_TABLE_HEADINGS = ['Игра', 'Верные ответы', 'Неверные ответы'];
-
