@@ -106,6 +106,24 @@
   border-radius: 5px;
   text-align: center;
 
+  &.words_all-words-learned {
+    &::after {
+      position: absolute;
+      top: -40px;
+      right: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 30px;
+      border: 1px solid $black;
+      border-radius: 10px;
+      background-color: $app-background-color;
+      content: 'Эта страница изучена';
+      font-weight: 700;
+    }
+  }
+
   &.difficult-words {
     min-height: 50vh;
   }
@@ -302,11 +320,15 @@
   margin: 20px 0;
 
   .pagination__current-page {
+    position: relative;
     width: 32px;
     height: 28px;
     font-family: $balsamiq;
     text-align: center;
     font-size: 28px;
+    &.current-page_all-words-learned {
+      text-shadow: $shadow-grey;
+    }
   }
 
   .pagination__button {
