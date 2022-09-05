@@ -7,6 +7,7 @@ import AudioElement from '../../audio/audio-element';
 import AuthController from '../../auth/auth-controller';
 import RequestProcessor from '../../request-processor';
 import UserWord from '../../user-word';
+import StudentBookController from '../controller';
 import WordProgressModal from './progress-modal';
 
 export default class WordCard {
@@ -355,9 +356,11 @@ export default class WordCard {
     if (isPageLearned) {
       wordsContainer.classList.add('words_all-words-learned');
       pageNumberElement.classList.add('current-page_all-words-learned');
+      new StudentBookController().disableGameLinks();
     } else {
       wordsContainer.classList.remove('words_all-words-learned');
       pageNumberElement.classList.remove('current-page_all-words-learned');
+      new StudentBookController().enableGameLinks();
     }
   }
 }
