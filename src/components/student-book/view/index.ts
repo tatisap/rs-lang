@@ -64,7 +64,7 @@ export default class StudentBookView {
       this.createPaginationContainer(section, page)
     );
     pageContainer.append(await this.createWordsContainer(section, page));
-    this.updateWordCardButtonsStatus(section.group);
+    await this.updateWordCardButtonsStatus(section.group);
   }
 
   private createPageTitle(): HTMLHeadingElement {
@@ -132,6 +132,7 @@ export default class StudentBookView {
       wordsContainer.append(this.createLoader(newSection.className));
       this.updateGamesButtons(newSection.group, Numbers.One);
       await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
+      await this.updateWordCardButtonsStatus(newSection.group);
     });
     return bookSection;
   }
@@ -159,10 +160,10 @@ export default class StudentBookView {
         classNames: ['pagination__button', buttonClass],
       });
     if (page === Numbers.One && buttonClass === PAGINATION_BUTTONS.previous.className) {
-      paginationButton.setAttribute('disabled', '');
+      paginationButton.setAttribute('disabled', NO_CONTENT);
     }
     if (page === MAX_PAGES_IN_BOOK_SECTION && buttonClass === PAGINATION_BUTTONS.next.className) {
-      paginationButton.setAttribute('disabled', '');
+      paginationButton.setAttribute('disabled', NO_CONTENT);
     }
     paginationButton.addEventListener('click', async (event: Event): Promise<void> => {
       const newSectionAndPage: { page: number; section: IBookSectionInfo } =
@@ -176,6 +177,7 @@ export default class StudentBookView {
         newSectionAndPage.page,
         wordsContainer
       );
+      await this.updateWordCardButtonsStatus(newSectionAndPage.section.group);
     });
     return paginationButton;
   }
@@ -327,7 +329,7 @@ export default class StudentBookView {
             );
             (wordCard.querySelector('.difficult-btn') as HTMLButtonElement).setAttribute(
               'disabled',
-              'true'
+              NO_CONTENT
             );
           }
         }

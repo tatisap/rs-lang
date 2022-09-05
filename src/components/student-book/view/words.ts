@@ -1,5 +1,5 @@
 import WordsAPI from '../../../api/words-api';
-import { BASE_URL, DIFFICULT_WORDS_CONTAINER_MESSAGES } from '../../../constants';
+import { BASE_URL, DIFFICULT_WORDS_CONTAINER_MESSAGES, NO_CONTENT } from '../../../constants';
 import { IWord, IAggregatedWord, IUserWord, Numbers } from '../../../types';
 import DateFormatter from '../../../utils/date-formatter';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
@@ -174,14 +174,14 @@ export default class WordCard {
           document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .difficult-btn`)
         );
         difficultWordButton.classList.add('difficult-btn__active');
-        difficultWordButton.setAttribute('disabled', 'true');
+        difficultWordButton.setAttribute('disabled', NO_CONTENT);
       }
       if (!this.difficult) {
         const learnedWordButton: HTMLDivElement = <HTMLDivElement>(
           document.querySelector(`div[data-word-id = "${(this.word as IWord).id}"] .learned-btn`)
         );
         learnedWordButton.classList.add('difficult-btn__active');
-        learnedWordButton.setAttribute('disabled', 'true');
+        learnedWordButton.setAttribute('disabled', NO_CONTENT);
       }
     });
   }
@@ -229,7 +229,7 @@ export default class WordCard {
 
   private disableButton(buttonType: string): void {
     const button = <HTMLButtonElement>this.container.querySelector(`.${buttonType}-btn`);
-    button.setAttribute('disabled', 'true');
+    button.setAttribute('disabled', NO_CONTENT);
   }
 
   private removeDisabledButton(buttonType: string): void {
