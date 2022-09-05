@@ -190,7 +190,7 @@
             position: absolute;
             display: none;
             bottom: -20px;
-            right: -100px;
+            right: -102px;
             z-index: 10;
             width: 100px;
             padding: 5px;
@@ -255,6 +255,14 @@
             @include image($statistic);
             &::after {
               content: 'Прогресс изучения'
+            }
+          }
+          &.learned-btn__active ~ .difficult-btn {
+            &:hover {
+              outline: 0;
+              &::after {
+                content: 'Снимите отметку "Изучено", чтобы сделать сложным';
+              }
             }
           }
         }

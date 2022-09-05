@@ -98,7 +98,7 @@ export default class GameResultProcessor {
       const userWord: UserWord = new UserWord().update(userWordInfo);
       userWord.resetCorrectAnswersInRow();
       if (userWord.getLearningStatus()) {
-        userWord.remoreLearnedMark();
+        userWord.removeLearnedMark();
       }
       if (!userWord.wasUsed()) {
         userWord.setFirstUseInfo(gameName, dateKey);
