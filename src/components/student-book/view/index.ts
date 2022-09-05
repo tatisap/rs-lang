@@ -325,6 +325,10 @@ export default class StudentBookView {
             (wordCard.querySelector('.learned-btn') as HTMLButtonElement).classList.add(
               'learned-btn__active'
             );
+            (wordCard.querySelector('.difficult-btn') as HTMLButtonElement).setAttribute(
+              'disabled',
+              'true'
+            );
           }
         }
       });
