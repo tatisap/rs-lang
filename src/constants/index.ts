@@ -213,3 +213,5 @@ export const ERRORS_MESSAGES = {
 };
 
 export const PROGRESS_TABLE_HEADINGS = ['Игра', 'Верные ответы', 'Неверные ответы'];
+
+export const AUDIOCALL_QUESTIONS_NUMBER = 20;

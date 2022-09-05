@@ -1,13 +1,7 @@
-import {
-  BOOK_SECTIONS,
-  GAME_INFO_HEADINGS,
-  NO_CONTENT,
-  STORAGE_KEYS,
-  DEFAULT_PAGE_NAME,
-} from '../../../constants';
+import { BOOK_SECTIONS, GAME_INFO_HEADINGS, NO_CONTENT } from '../../../constants';
 import UIElementsConstructor from '../../../utils/ui-elements-creator';
 import gamesInfo from '../../../data/games-info.json';
-import { GameName, Numbers, PageName } from '../../../types';
+import { GameName, Numbers } from '../../../types';
 
 export default class GameStartingPage {
   private elementCreator: UIElementsConstructor;
@@ -19,17 +13,20 @@ export default class GameStartingPage {
     this.container = this.createStartingPageContainer();
   }
 
-  public open(gameName: GameName, gameContainer: HTMLDivElement, level?: string): void {
+  public open(
+    gameName: GameName,
+    gameContainer: HTMLDivElement,
+    level?: number,
+    levelPage?: number
+  ): void {
     this.clearContainer();
-    const currentPage =
-      (localStorage.getItem(STORAGE_KEYS.currentPage) as PageName) || DEFAULT_PAGE_NAME;
 
     this.container.append(
       this.createStartingPageTitle(gamesInfo[gameName].ruName),
       this.createRules(gamesInfo[gameName].rules)
     );
 
-    if (currentPage === 'games') {
+    if (level === undefined) {
       const levels: number[] = Object.values(BOOK_SECTIONS).map(
         (_, index: number): number => index + Numbers.One
       );
@@ -40,13 +37,12 @@ export default class GameStartingPage {
         this.levelSelectionHandler(event)
       );
       this.container.append(levelSelection);
-    } else if (currentPage === 'studentBook') {
+    } else {
       const startGameButton: HTMLButtonElement = this.createStartGameButton();
       startGameButton.addEventListener('click', (event: Event): void =>
-        this.dispatchLevelSelectedEvent(event.target as HTMLButtonElement, level as string)
+        this.dispatchLevelSelectedEvent(event.target as HTMLButtonElement, level, levelPage)
       );
       this.container.append(startGameButton);
-      (document.querySelector('.page__words') as HTMLDivElement).style.display = 'none';
     }
     gameContainer.append(this.container);
   }
@@ -54,14 +50,14 @@ export default class GameStartingPage {
   private levelSelectionHandler(event: Event): void {
     const option: HTMLLIElement = event.target as HTMLLIElement;
     if (!option.classList.contains('level-selection__option')) return;
-    this.dispatchLevelSelectedEvent(option, option.textContent as string);
+    this.dispatchLevelSelectedEvent(option, Number(option.textContent) - Numbers.One);
   }
 
-  private dispatchLevelSelectedEvent(target: HTMLElement, level: string): void {
+  private dispatchLevelSelectedEvent(target: HTMLElement, level: number, page?: number): void {
     target.dispatchEvent(
       new CustomEvent('level-selected', {
         bubbles: true,
-        detail: { selectedLevel: level },
+        detail: { selectedLevel: level, selectedPage: page },
       })
     );
   }
