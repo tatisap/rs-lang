@@ -67,7 +67,7 @@ export default class QuestionListCreator {
     page?: number
   ): Promise<void> {
     let wordList = this.randomizer.shuffle<IWord>(await this.api.getWords(section, iteration));
-    if (this.authController.isUserAuthorized()) {
+    if (this.authController.isUserAuthorized() && page) {
       wordList = await this.excludeLearnedWords(wordList, section);
     }
     let questionsInfo: ISprintQuestionInfo[];
