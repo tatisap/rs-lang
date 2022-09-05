@@ -194,7 +194,7 @@ export default class WordCard {
       });
 
     buttonDifficult.addEventListener('click', async () => {
-      if (!buttonDifficult.classList.contains('learned-btn__active')) {
+      if (!buttonDifficult.classList.contains('difficult-btn__active')) {
         const userWords: IUserWord[] = await this.requestProcessor.process<IUserWord[]>(
           this.wordsAPI.getUserWords
         );
