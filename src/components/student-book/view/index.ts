@@ -8,6 +8,7 @@ import {
   DISPLAY_MODES,
   NO_CONTENT,
   DIFFICULT_WORDS_CONTAINER_MESSAGES,
+  WORDS_PER_PAGE,
 } from '../../../constants';
 import { IBookSectionInfo, Numbers, IWord, IAggregatedWord } from '../../../types';
 import StudentBookController from '../controller';
@@ -321,7 +322,7 @@ export default class StudentBookView {
       const userWordsOnCurrentPage: IAggregatedWord[] = userWords.filter(
         (word: IAggregatedWord): boolean => word.page === page - Numbers.One
       );
-      if (userWordsOnCurrentPage.length === 20) {
+      if (userWordsOnCurrentPage.length === WORDS_PER_PAGE) {
         wordsContainer.classList.add('words_all-words-learned');
         pageNumberElement.classList.add('current-page_all-words-learned');
         this.bookController.disableGameLinks();
