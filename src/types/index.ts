@@ -191,10 +191,6 @@ export interface IUserWord {
   wordId: string;
 }
 
-// export interface IUserWordData extends IUserWord {
-//   wordId?: string;
-// }
-
 export interface IDailyChartDataByGame {
   gameLabel: string;
   data: {

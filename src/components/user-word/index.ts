@@ -48,16 +48,12 @@ export default class UserWord {
     this.dateOfMarkAsHard = timestamp;
   }
 
-  public markHard(): void {
-    this.difficulty = 'hard';
-  }
-
   public markAsLearned(date: string): void {
     this.isLearned = true;
     this.dateOfLearning = date;
   }
 
-  public remoreLearnedMark(): void {
+  public removeLearnedMark(): void {
     this.isLearned = false;
     this.dateOfLearning = NO_DATA;
   }
@@ -135,11 +131,13 @@ export default class UserWord {
       info.optional.dateOfFirstUse,
       info.optional.dateOfMarkAsHard,
     ];
-    const dateKeys: string[] = Object.keys(info.optional.dataByDates);
-    this.dataByDates = dateKeys.map(
-      (dateKey: string): WordDataByGame =>
-        new WordDataByGame(dateKey).update(info.optional.dataByDates[dateKey])
-    );
+    if (info.optional.dataByDates) {
+      const dateKeys: string[] = Object.keys(info.optional.dataByDates);
+      this.dataByDates = dateKeys.map(
+        (dateKey: string): WordDataByGame =>
+          new WordDataByGame(dateKey).update(info.optional.dataByDates[dateKey])
+      );
+    }
     return this;
   }
 
