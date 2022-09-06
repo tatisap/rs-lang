@@ -9,6 +9,7 @@ import RequestProcessor from '../../request-processor';
 import UserWord from '../../user-word';
 import StudentBookController from '../controller';
 import WordProgressModal from './progress-modal';
+import StudentBookController from '../controller';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
@@ -19,13 +20,11 @@ export default class WordCard {
 
   readonly requestProcessor: RequestProcessor;
 
-  private difficult: 'easy' | 'hard';
-
-  private isLearned: boolean;
-
   private dateFormatter: DateFormatter;
 
   private container: HTMLDivElement;
+
+  private studentBookController: StudentBookController;
 
   constructor(private word: IWord | IAggregatedWord) {
     this.elementCreator = new UIElementsConstructor();
@@ -33,9 +32,8 @@ export default class WordCard {
     this.wordsAPI = new WordsAPI();
     this.requestProcessor = new RequestProcessor();
     this.dateFormatter = new DateFormatter();
-    this.difficult = 'easy';
-    this.isLearned = false;
     this.container = this.createWordCardContainer();
+    this.studentBookController = new StudentBookController();
   }
 
   public createWordCard(): HTMLDivElement {
@@ -333,6 +331,7 @@ export default class WordCard {
     ) as HTMLDivElement;
     if (wordCardsContainer?.children?.length === Numbers.Zero) {
       wordCardsContainer.textContent = DIFFICULT_WORDS_CONTAINER_MESSAGES.noWords;
+      this.studentBookController.disableGameLinks();
     }
   }
 

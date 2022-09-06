@@ -37,7 +37,6 @@ export default class QuestionCardConstructor {
     questionCard.append(word, answer);
     this.addHandlersToElements(questionInfo);
     parentContainer.append(questionCard);
-    /* console.log(questionInfo); */
   }
 
   private addHandlersToElements(questionInfo: ISprintQuestionInfo): void {

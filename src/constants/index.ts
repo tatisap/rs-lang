@@ -223,6 +223,7 @@ export const SPRINT_INFO = {
   correct: 'Верно',
   crossMark: '✗',
   checkMark: '✓',
+  waitMessage: 'Идёт загрузка слов ...',
 };
 
 export const FIVE_SECONDS = 5;

@@ -147,4 +147,12 @@ export default class SprintMainView {
     gameButtons.append(incorrectButton, correctButton);
     return gameButtons;
   }
+
+  public createWaitingMessageContainer(): HTMLHeadingElement {
+    return this.elementConstructor.createUIElement<HTMLHeadingElement>({
+      tag: 'h3',
+      classNames: ['sprint__wait-message'],
+      innerHTML: SPRINT_INFO.waitMessage,
+    });
+  }
 }
