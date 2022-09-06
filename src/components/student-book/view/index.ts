@@ -8,6 +8,7 @@ import {
   DISPLAY_MODES,
   NO_CONTENT,
   DIFFICULT_WORDS_CONTAINER_MESSAGES,
+  WORDS_PER_PAGE,
 } from '../../../constants';
 import { IBookSectionInfo, Numbers, IWord, IAggregatedWord } from '../../../types';
 import StudentBookController from '../controller';
@@ -64,7 +65,7 @@ export default class StudentBookView {
       this.createPaginationContainer(section, page)
     );
     pageContainer.append(await this.createWordsContainer(section, page));
-    await this.updateWordCardButtonsStatus(section.group);
+    await this.updateWordCardButtonsStatus(section.group, page);
   }
 
   private createPageTitle(): HTMLHeadingElement {
@@ -132,7 +133,7 @@ export default class StudentBookView {
       wordsContainer.append(this.createLoader(newSection.className));
       this.updateGamesButtons(newSection.group, Numbers.One);
       await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
-      await this.updateWordCardButtonsStatus(newSection.group);
+      await this.updateWordCardButtonsStatus(newSection.group, Numbers.One);
     });
     return bookSection;
   }
@@ -177,7 +178,10 @@ export default class StudentBookView {
         newSectionAndPage.page,
         wordsContainer
       );
-      await this.updateWordCardButtonsStatus(newSectionAndPage.section.group);
+      await this.updateWordCardButtonsStatus(
+        newSectionAndPage.section.group,
+        newSectionAndPage.page
+      );
     });
     return paginationButton;
   }
@@ -297,17 +301,32 @@ export default class StudentBookView {
       DISPLAY_MODES.contentNotVisible;
   }
 
-  private async updateWordCardButtonsStatus(section: number): Promise<void> {
+  private async updateWordCardButtonsStatus(section: number, page: number): Promise<void> {
     if (this.authController.isUserAuthorized()) {
       if (section === BOOK_SECTIONS.difficultWords.group) return;
-      const userWords: IAggregatedWord[] = [
-        ...(await this.requestProcessor.process<IAggregatedWord[]>(
-          this.wordsAPI.getDifficultWords
-        )),
-        ...(await this.requestProcessor.process<IAggregatedWord[]>(this.wordsAPI.getLearnedWords, {
+      const wordsContainer = document.querySelector('.words') as HTMLDivElement;
+      const pageNumberElement = document.querySelector(
+        '.pagination__current-page'
+      ) as HTMLDivElement;
+      wordsContainer.classList.remove('words_all-words-learned');
+      pageNumberElement.classList.remove('current-page_all-words-learned');
+      this.bookController.enableGameLinks();
+
+      const userWords: IAggregatedWord[] = await this.requestProcessor.process<IAggregatedWord[]>(
+        this.wordsAPI.getDifficultAndLearnedWords,
+        {
           group: section,
-        })),
-      ];
+        }
+      );
+      console.log(userWords);
+      const userWordsOnCurrentPage: IAggregatedWord[] = userWords.filter(
+        (word: IAggregatedWord): boolean => word.page === page - Numbers.One
+      );
+      if (userWordsOnCurrentPage.length === WORDS_PER_PAGE) {
+        wordsContainer.classList.add('words_all-words-learned');
+        pageNumberElement.classList.add('current-page_all-words-learned');
+        this.bookController.disableGameLinks();
+      }
       const wordCards = document.querySelectorAll(
         '.words__word-section'
       ) as NodeListOf<HTMLDivElement>;

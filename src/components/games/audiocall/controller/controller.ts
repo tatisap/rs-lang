@@ -44,19 +44,24 @@ export default class AudiocallController {
       wordListForQuestions = this.randomizer.shuffle<IAggregatedWord>(
         await this.requestProcessor.process<IAggregatedWord[]>(this.api.getDifficultWords)
       );
+      if (wordListForQuestions.length > AUDIOCALL_QUESTIONS_NUMBER) {
+        wordListForQuestions.length = AUDIOCALL_QUESTIONS_NUMBER;
+      }
       const randomDifficultWord: IAggregatedWord =
         wordListForQuestions[
           this.randomizer.getRandomIntegerFromOneToMax(wordListForQuestions.length) - Numbers.One
         ];
       wordListForOptions = await this.api.getWords(
         randomDifficultWord.group,
-        randomDifficultWord.page
+        randomDifficultWord.page + Numbers.One
       );
     } else if (levelPage) {
       wordListForOptions = await this.api.getWords(level, levelPage);
-      wordListForQuestions = this.authController.isUserAuthorized()
-        ? await this.pickUnlearnedWords(level, levelPage)
-        : wordListForOptions;
+      wordListForQuestions = this.randomizer.shuffle<IWord>(
+        this.authController.isUserAuthorized()
+          ? await this.pickUnlearnedWords(level, levelPage)
+          : wordListForOptions
+      );
     } else {
       const randomPage: number =
         this.randomizer.getRandomIntegerFromOneToMax(MAX_PAGES_IN_BOOK_SECTION);
@@ -108,7 +113,7 @@ export default class AudiocallController {
 
   private async pickUnlearnedWords(level: number, levelPage: number): Promise<IWord[]> {
     const learnedWords: IAggregatedWord[] = await this.requestProcessor.process(
-      this.api.getLearnedWords,
+      this.api.getDifficultAndLearnedWords,
       { group: level }
     );
 
