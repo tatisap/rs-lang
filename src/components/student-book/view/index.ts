@@ -318,7 +318,6 @@ export default class StudentBookView {
           group: section,
         }
       );
-      console.log(userWords);
       const userWordsOnCurrentPage: IAggregatedWord[] = userWords.filter(
         (word: IAggregatedWord): boolean => word.page === page - Numbers.One
       );

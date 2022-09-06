@@ -236,19 +236,19 @@
           &.difficult-btn {
             @include image($hard);
             &::after {
-              content: 'Пометить как сложное'
+              content: 'Пометить как сложное';
             }
           }
           &.learned-btn {
             @include image($done);
             &::after {
-              content: 'Пометить как изученное'
+              content: 'Пометить как изученное';
             }
           }
           &.easy-btn {
             @include image($easy);
             &::after {
-              content: 'Удалить из сложных'
+              content: 'Удалить из сложных';
             }
           }
           &.difficult-btn__active,
@@ -272,7 +272,7 @@
           &.controls__progress-button {
             @include image($statistic);
             &::after {
-              content: 'Прогресс изучения'
+              content: 'Прогресс изучения';
             }
           }
           &.learned-btn__active ~ .difficult-btn {

@@ -57,32 +57,32 @@
     gap: 10px;
   }
   .final-page__repeat-button,
-    .final-page__return-button {
-      @extend %normalized-button;
-      @extend %interactive;
-      position: relative;
-      width: 100px;
-      height: 40px;
-      border: 1px solid $black;
-      border-radius: 10px;
-      &:hover {
-        transform: scale(1.05);
-      }
-      &::before{
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: 700;
-      }
+  .final-page__return-button {
+    @extend %normalized-button;
+    @extend %interactive;
+    position: relative;
+    width: 100px;
+    height: 40px;
+    border: 1px solid $black;
+    border-radius: 10px;
+    &:hover {
+      transform: scale(1.05);
     }
-    .final-page__repeat-button::before {
-      content: 'Играть еще';
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
     }
+  }
+  .final-page__repeat-button::before {
+    content: 'Играть еще';
+  }
 }
 
 .page_games {
@@ -96,4 +96,3 @@
     content: 'Вернуться в учебник';
   }
 }
-
