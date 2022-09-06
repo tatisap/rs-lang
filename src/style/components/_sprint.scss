@@ -1,0 +1,205 @@
+.sprint {
+  @extend %flex-vertical-centered;
+  padding: 20px;
+  overflow: auto;
+
+  .sprint__game-points,
+  .sprint__timer,
+  .sprint__game-card {
+    font-family: $balsamiq;
+    font-size: 1.2rem;
+  }
+
+  .sprint__wait-message {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 253, 242, 0.9);
+    font-family: $balsamiq;
+  }
+
+  .sprint__game-points {
+    display: flex;
+    justify-content: center;
+    padding: 0 5px;
+    border-radius: 10px;
+    background-color: rgba(255, 253, 242, 0.9);
+
+    .game-points__description,
+    .game-points__amount {
+      margin: 10px 0;
+    }
+
+    .game-points__description {
+      padding-right: 5px;
+    }
+
+    .game-points__amount {
+      min-width: 50px;
+      border-bottom: 1px solid $black;
+      text-align: center;
+      @media (max-width: 344px) {
+        line-height: 45px;
+      }
+    }
+  }
+
+  .sprint__timer {
+    width: 50px;
+    height: 50px;
+    margin: 15px 10px 10px 10px;
+    border-radius: 50%;
+    background-color: rgba(33, 33, 33, 0.7);
+    font-size: 28px;
+    text-align: center;
+    line-height: 53px;
+    color: $app-background-color;
+    animation: pulsing 1s infinite;
+
+    &.sprint__timer_ending-soon {
+      background-color: rgba(255, 0, 0, 0.7);
+    }
+  }
+
+  .sprint__game-card {
+    @extend %flex-vertical-centered;
+    width: 280px;
+    padding: 10px;
+    border: 5px solid transparent;
+    border-radius: 10px;
+    background-color: rgba(255, 253, 242, 0.9);
+    background-clip: padding-box;
+
+    &.sprint__game-card_correct {
+      animation: border-green 1s;
+    }
+
+    &.sprint__game-card_incorrect {
+      animation: border-red 1s;
+    }
+
+    .game-card__counter-info {
+      @extend %flex-vertical-centered;
+      width: 100%;
+      border-bottom: 2px dashed $black;
+      border-radius: 10px;
+      background-clip: content-box;
+
+      &.counter-info_first-points-increase {
+        background-color: $light-blue;
+      }
+
+      &.counter-info_second-points-increase {
+        background-color: $blue;
+      }
+
+      &.counter-info_third-points-increase {
+        background-color: $dark-blue;
+      }
+
+      .counter-info__counters {
+        display: flex;
+        justify-content: center;
+
+        .counter__item {
+          width: 14px;
+          height: 14px;
+          margin: 6px 4px 4px 4px;
+          border: 2px solid $black;
+          border-radius: 50%;
+
+          &.counter__item_answered {
+            background-color: $black;
+          }
+          &.counter__item_hidden {
+            display: none;
+          }
+        }
+      }
+
+      .counter-info__points-per-answer {
+        min-width: 188px;
+        margin: 4px auto;
+        padding: 0 5px;
+        text-align: center;
+      }
+    }
+
+    .game-card__question-card {
+      margin: 15px auto;
+      text-align: center;
+
+      .question-card__word,
+      .question-card__answer {
+        margin: 5px auto;
+        padding: 0;
+      }
+
+      .question-card__word {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .question-card__answer {
+        font-family: $lexend;
+      }
+    }
+
+    .game-card__answer-check {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 30px;
+
+      .answer-check__incorrect,
+      .answer-check__correct {
+        position: absolute;
+        left: calc(50% - 15px);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-weight: 1000;
+        text-align: center;
+        color: $app-background-color;
+        opacity: 0;
+
+        &.visible {
+          animation: fade-in-out 1s infinite;
+        }
+      }
+
+      .answer-check__incorrect {
+        background-color: $red;
+      }
+
+      .answer-check__correct {
+        background-color: $green;
+      }
+    }
+
+    .game-card__buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+
+      .buttons__incorrect,
+      .buttons__correct {
+        @extend %interactive;
+        width: 82px;
+        padding: 5px;
+        border: none;
+        border-radius: 10px;
+        font-family: $balsamiq;
+        font-size: 1rem;
+        color: $app-background-color;
+      }
+
+      .buttons__incorrect {
+        background-color: $red;
+      }
+
+      .buttons__correct {
+        background-color: $green;
+      }
+    }
+  }
+}

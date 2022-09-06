@@ -1,0 +1,67 @@
+.game__starting-page {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: $app-background-color;
+  overflow: auto;
+  .starting-page__title {
+    align-self: center;
+    margin: 0;
+    font: {
+      family: $balsamiq;
+      size: 1.5rem;
+      weight: 700;
+    }
+  }
+  .starting-page__rules-list {
+    @extend %normalized-list;
+    .starting-page__rule {
+      margin: 10px;
+      text-align: justify;
+    }
+  }
+  .level-selection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .level-selection__option-list {
+      @extend %normalized-list;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      .level-selection__option {
+        @extend %interactive;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        border: 1px solid $black;
+        border-radius: 30px;
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+  .game__start-game-button {
+    @extend %normalized-button;
+    @extend %interactive;
+    align-self: center;
+    width: 120px;
+    height: 40px;
+    border: 1px solid $black;
+    border-radius: 10px;
+    font: {
+      size: 1rem;
+      weight: 700;
+    }
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}

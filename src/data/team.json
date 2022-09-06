@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Татьяна Сапун",
+    "github": "https://github.com/tatisap",
+    "description": "<b>TeamLead</b><br>Реализовала авторизацию, статистику и игру Аудиовызов"
+  },
+  {
+    "name": "Ирина Косьянчук",
+    "github": "https://github.com/KosIrina",
+    "description": "<b>Frontend Developer</b><br>Реализовала электронный учебник и игру Cпринт"
+  },
+  {
+    "name": "Вадим Конёк",
+    "github": "https://github.com/vadimkonyok",
+    "description": "<b>Frontend Developer</b><br>Реализовал карточки со словами и их функциональность"
+  }
+]

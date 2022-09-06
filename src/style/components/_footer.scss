@@ -1,0 +1,44 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  background-color: $grey-background-color;
+  @media (max-width: 768px) {
+    padding: 10px;
+    flex-direction: column;
+  }
+  .footer__left-side {
+    display: flex;
+    gap: 10px;
+    .github-link__list {
+      @extend %normalized-list;
+      display: flex;
+      gap: 8px;
+      .github-link {
+        @extend %normalized-link;
+        @extend %interactive;
+        outline: none;
+        &:hover,
+        &:active {
+          border-bottom: 1px solid $black;
+        }
+      }
+    }
+  }
+  .footer__right-side {
+    .rs-link {
+      @extend %interactive;
+      @include image($rsschool);
+      display: block;
+      width: 90px;
+      height: 40px;
+      &:hover,
+      &:active {
+        @extend %interactive;
+        transform: scale(1.05);
+      }
+    }
+  }
+}

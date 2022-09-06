@@ -1,0 +1,81 @@
+.page_games,
+.page_student-book {
+  position: relative;
+  .game.audiocall,
+  .game.sprint {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    background-position: center;
+    background-size: cover;
+  }
+  .audiocall {
+    @include image($game-landscape);
+  }
+  .sprint {
+    @include image($game-waterfall);
+  }
+  .game-catalog {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    gap: 30px;
+    @media (max-width: 768px) {
+      gap: 20px;
+    }
+    .game-catalog__title {
+      margin: 20px 0 0;
+      font: {
+        size: 1.3rem;
+        weight: 700;
+      }
+    }
+    .game-catalog__list {
+      @extend %normalized-list;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      .game-catalog__list-item {
+        @extend %interactive;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 250px;
+        height: 60px;
+        padding-left: 95px;
+        border: 1px solid $black;
+        border-radius: 10px;
+        background-position: top left 30px;
+        font: {
+          size: 1.2rem;
+          weight: 700;
+        }
+        &:hover {
+          border-radius: 100px;
+          background-position: top left 40px;
+          transform: scale(1.1);
+        }
+        &.audiocall-game {
+          @include image($audio);
+        }
+        &.sprint-game {
+          @include image($sprint);
+        }
+      }
+    }
+  }
+  .page__image {
+    @include image($game-page-img);
+    width: 70%;
+    min-height: 30vh;
+    margin: 20px auto 0;
+    background-position: center;
+  }
+}

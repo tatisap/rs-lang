@@ -1,0 +1,10 @@
+.progress-table {
+  border-collapse: collapse;
+  .progress-table__cell {
+    padding: 5px;
+    border: 1px solid $black;
+  }
+  td.progress-table__cell {
+    text-align: center;
+  }
+}

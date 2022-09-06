@@ -1,0 +1,29 @@
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  margin: 0;
+  background-color: $grey-background-color;
+  font-family: $lexend;
+  color: $black;
+}
+
+.page__title {
+  width: fit-content;
+  margin: 0 auto;
+  font-family: $balsamiq;
+  font-weight: 400;
+  font-size: 38px;
+}

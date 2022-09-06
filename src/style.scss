@@ -1,0 +1,25 @@
+@import 'https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&display=swap';
+@import '../node_modules/normalize-scss/sass/normalize';
+
+@import './style/utilities/typography';
+@import './style/utilities/mixins';
+@import './style/utilities/variables';
+@import './style/utilities/extends';
+@import './style/utilities/keyframes';
+
+@import './style/components/common';
+@import './style/components/header';
+@import './style/components/main';
+@import './style/components/modal';
+@import './style/components/auth-form';
+@import './style/components/student-book';
+@import './style/components/learning-progress';
+@import './style/components/about';
+@import './style/components/games-homepage';
+@import './style/components/game-starting-page';
+@import './style/components/game-final-page';
+@import './style/components/audiocall';
+@import './style/components/sprint';
+@import './style/components/statistic';
+@import './style/components/loader';
+@import './style/components/footer';
