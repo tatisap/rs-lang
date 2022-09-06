@@ -132,6 +132,7 @@ export default class StudentBookView {
       wordsContainer.innerHTML = NO_CONTENT;
       wordsContainer.append(this.createLoader(newSection.className));
       this.updateGamesButtons(newSection.group, Numbers.One);
+      this.removeAllWordsLearnedStatus();
       await this.fillWordsContainer(newSection, Numbers.One, wordsContainer);
       await this.updateWordCardButtonsStatus(newSection.group, Numbers.One);
     });
@@ -303,15 +304,9 @@ export default class StudentBookView {
 
   private async updateWordCardButtonsStatus(section: number, page: number): Promise<void> {
     if (this.authController.isUserAuthorized()) {
-      if (section === BOOK_SECTIONS.difficultWords.group) return;
-      const wordsContainer = document.querySelector('.words') as HTMLDivElement;
-      const pageNumberElement = document.querySelector(
-        '.pagination__current-page'
-      ) as HTMLDivElement;
-      wordsContainer.classList.remove('words_all-words-learned');
-      pageNumberElement.classList.remove('current-page_all-words-learned');
-      this.bookController.enableGameLinks();
+      this.removeAllWordsLearnedStatus();
 
+      if (section === BOOK_SECTIONS.difficultWords.group) return;
       const userWords: IAggregatedWord[] = await this.requestProcessor.process<IAggregatedWord[]>(
         this.wordsAPI.getDifficultAndLearnedWords,
         {
@@ -322,6 +317,10 @@ export default class StudentBookView {
         (word: IAggregatedWord): boolean => word.page === page - Numbers.One
       );
       if (userWordsOnCurrentPage.length === WORDS_PER_PAGE) {
+        const wordsContainer = document.querySelector('.words') as HTMLDivElement;
+        const pageNumberElement = document.querySelector(
+          '.pagination__current-page'
+        ) as HTMLDivElement;
         wordsContainer.classList.add('words_all-words-learned');
         pageNumberElement.classList.add('current-page_all-words-learned');
         this.bookController.disableGameLinks();
@@ -352,5 +351,13 @@ export default class StudentBookView {
         }
       });
     }
+  }
+
+  private removeAllWordsLearnedStatus(): void {
+    const wordsContainer = document.querySelector('.words') as HTMLDivElement;
+    const pageNumberElement = document.querySelector('.pagination__current-page') as HTMLDivElement;
+    wordsContainer.classList.remove('words_all-words-learned');
+    pageNumberElement.classList.remove('current-page_all-words-learned');
+    this.bookController.enableGameLinks();
   }
 }

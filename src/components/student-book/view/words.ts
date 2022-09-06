@@ -9,7 +9,6 @@ import RequestProcessor from '../../request-processor';
 import UserWord from '../../user-word';
 import StudentBookController from '../controller';
 import WordProgressModal from './progress-modal';
-import StudentBookController from '../controller';
 
 export default class WordCard {
   private elementCreator: UIElementsConstructor;
