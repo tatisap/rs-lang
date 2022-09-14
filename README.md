@@ -4,7 +4,7 @@
 
 ### Deploy: https://tatisap.github.io/rs-lang/  
 ### Backend repo: https://github.com/rolling-scopes-school/react-rslang-be  
-### Backend deploy (heroku): 
+### Backend deploy (heroku): https://rslang-backend.herokuapp.com/
 
 ### Stack used:
 - ***TypeScript***  
